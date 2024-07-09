@@ -65,6 +65,7 @@ export default function CanvasGame() {
     },
     [W, H]
   );
+
   const updateMinionPos = useCallback(
     (minionPos: ItemPos) => {
       const key = keyRef.current;
@@ -152,7 +153,7 @@ export default function CanvasGame() {
         };
       });
     !bananaRef.current &&
-      loadImage('img2.png').then((img) => {
+      loadImage('Pokeball.png').then((img) => {
         (bananaRef as any).current = img;
         bananaSizeRef.current.w = img.width;
         bananaSizeRef.current.h = img.height;
@@ -196,6 +197,7 @@ export default function CanvasGame() {
     };
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
+
     return () => {
       window.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('keyup', onKeyUp);

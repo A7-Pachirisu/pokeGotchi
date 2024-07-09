@@ -1,5 +1,4 @@
 import React from 'react';
-// Types
 import { AnswerObject } from '../page';
 
 type Props = {

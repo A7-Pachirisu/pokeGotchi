@@ -4,9 +4,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { fetchQuizQuestions } from './api';
-// Components
 import QuestionCard from './_components/QuestionCard';
-// types
 import { QuestionsState, Difficulty } from './api';
 
 export type AnswerObject = {
@@ -63,7 +61,7 @@ const Page: React.FC = () => {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <div className="relative h-[800px] max-h-full w-[600px] max-w-full">
+      <div className="relative h-[800px] w-[600px]">
         <Image
           src="/bg1.png"
           alt="Background Image"
