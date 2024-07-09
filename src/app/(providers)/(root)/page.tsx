@@ -22,19 +22,6 @@ const MOVEMENT_AREA = { width: 600, height: 1100 };
 export default function Home() {
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
 
-  useEffect(() => {
-    const fetchPokemon = async () => {
-      try {
-        const response = await api.get('/api/pokemons');
-        const data = response.data;
-        setPokemonData(data);
-      } catch (error) {
-        console.log('데이터 불러오는 도중 오류:', error);
-      }
-    };
-    fetchPokemon();
-  }, []);
-
   const getRandomPosition = () => {
     const x = Math.floor(Math.random() * (MOVEMENT_AREA.width - 100));
     const y = Math.floor(Math.random() * (MOVEMENT_AREA.height - 100));
@@ -48,6 +35,19 @@ export default function Home() {
       pokemonElement.style.transform = `translate(${x}px, ${y}px)`;
     }
   };
+
+  useEffect(() => {
+    const fetchPokemon = async () => {
+      try {
+        const response = await api.get('/api/pokemons');
+        const data = response.data;
+        setPokemonData(data);
+      } catch (error) {
+        console.log('데이터 불러오는 도중 오류:', error);
+      }
+    };
+    fetchPokemon();
+  }, []);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
