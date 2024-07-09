@@ -1,4 +1,5 @@
 "use client";
+import api from "@/lib/axios";
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -21,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const response = await axios.get("/api/pokemons");
+        const response = await api.get("/api/pokemons");
         const data = response.data;
         setPokemonData(data);
       } catch (error) {
