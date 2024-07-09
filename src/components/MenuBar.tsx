@@ -5,7 +5,7 @@ import { FaRegCircleUser } from 'react-icons/fa6';
 
 const MenuBar = () => {
   return (
-    <div className={`flex h-[70px] w-full items-center justify-around bg-[#39394A]`}>
+    <div className={`bg-bar-color flex h-[70px] w-full items-center justify-around`}>
       <button className="text-[35px] text-white hover:brightness-90 active:brightness-75">
         <AiOutlineMessage />
       </button>
