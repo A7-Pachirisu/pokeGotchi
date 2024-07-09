@@ -20,10 +20,10 @@ const Page: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-[600px] bg-white p-7 min-h-screen">
+    <div className="flex items-center justify-center bg-gray-100 overflow-hidden">
+      <div className="w-[600px] bg-white p-7">
         <div className="mb-8">
-          <div className="flex items-center justify-between rounded-md bg-gray-200 p-4">
+          <div className="flex items-center justify-between rounded-lg border border-gray-300 bg-white-200 p-4">
             <div className="flex items-center">
               <div className="w-24 h-24 relative">
                 <Image src={user.profileImage} alt="userImage" layout="fill" className="rounded-full object-cover" />
@@ -37,19 +37,22 @@ const Page: React.FC = () => {
                 ))}
               </div>
             </div>
-            <button className="rounded-md bg-gray-400 px-2 py-1">수정</button>
+            <button className="rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs">수정</button>
           </div>
         </div>
         <h2 className="mb-4 text-2xl font-bold">내 포켓몬</h2>
         <div className="mb-5 grid grid-cols-3 gap-8">
           {user.pokemons.map((mypokemon) => (
-            <div key={mypokemon.id} className="rounded-lg bg-gray-100 p-4 shadow-sm">
+            <div
+              key={mypokemon.id}
+              className="rounded-lg bg-white-100 p-4 shadow-sm transform transition duration-300 hover:shadow-lg hover:scale-105 border border-gray-300"
+            >
               <div className="flex flex-col items-center">
                 <div className="relative mb-4 w-24 h-24">
                   <Image src={mypokemon.image} alt={mypokemon.name} fill className="rounded-full object-cover" sizes="100%" />
                 </div>
-                <h3 className="mb-2 font-bold">{mypokemon.name}</h3>
-                <button className="rounded-md bg-gray-400 px-2 py-1">상세정보</button>
+                <h3 className="mb-2 font-bold text-sm">{mypokemon.name}</h3>
+                <button className="rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs">상세정보</button>
               </div>
             </div>
           ))}
