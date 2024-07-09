@@ -10,7 +10,7 @@ interface ItemPos {
   h: number;
 }
 
-export default function CanvasGame() {
+export default function PokeBallGamePage() {
   const [state, setState] = useState<'play' | 'pause' | 'stop'>('stop');
   const [score, setScore] = useState(0);
 
