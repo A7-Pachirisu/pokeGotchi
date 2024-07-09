@@ -4,11 +4,9 @@ import React from 'react';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto h-screen w-[600px]">
+    <div className="mx-auto flex h-screen w-[600px] flex-col">
       <Header />
-
-      <main className="h-screen">{children}</main>
-
+      <main className="grow overflow-auto">{children}</main>
       <MenuBar />
     </div>
   );
