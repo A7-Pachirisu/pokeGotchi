@@ -20,7 +20,7 @@ const Page: React.FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen justify-center bg-gray-100 py-10">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-[600px] rounded-lg bg-white p-7 shadow-lg">
         <div className="mb-8 mt-5">
           <div className="flex items-center justify-between rounded-md bg-gray-200 p-4">
