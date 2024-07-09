@@ -1,5 +1,6 @@
 import React from 'react';
 import LinkItem from './_components/LinkItem';
+import Link from 'next/link';
 
 const GameLobbyPage = () => {
   return (
@@ -16,6 +17,7 @@ const GameLobbyPage = () => {
           수박 게임
         </LinkItem>
       </div>
+      <Link href="/">GoHome</Link>
     </div>
   );
 };
