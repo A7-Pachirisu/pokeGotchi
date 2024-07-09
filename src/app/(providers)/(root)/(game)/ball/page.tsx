@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import PokeBallImage from '@/assets/default ball.png';
+import PokemonImage from '@/assets/pokemon2.png';
 
 interface ItemPos {
   x: number;
@@ -17,7 +19,7 @@ export default function PokeBallGamePage() {
   const ref = useRef<HTMLCanvasElement>(null);
   const minionRef = useRef<HTMLImageElement>(null);
   const bananaRef = useRef<HTMLImageElement>(null);
-  const bananaSizeRef = useRef({ w: 0, h: 0 });
+  const bananaSizeRef = useRef({ w: 50, h: 50 });
   const posRef = useRef<{
     bananas: ItemPos[];
     bananaAccel: number[];
@@ -46,8 +48,23 @@ export default function PokeBallGamePage() {
   const AVOID_BANANA_SCORE = 10;
 
   const drawImage = useCallback((ctx: CanvasRenderingContext2D, img: HTMLImageElement, { x, y, w, h }: ItemPos) => {
+    const maxWidth = 50;
+    const maxHeight = 50;
+    const aspectRatio = img.width / img.height;
+
+    if (w > maxWidth || h > maxHeight) {
+      if (aspectRatio > 1) {
+        w = maxWidth;
+        h = maxWidth / aspectRatio;
+      } else {
+        w = maxHeight * aspectRatio;
+        h = maxHeight;
+      }
+    }
+
     ctx.drawImage(img, x, y, w, h);
   }, []);
+
   const loadImage = useCallback(
     (src: string) =>
       new Promise<HTMLImageElement>((resolve) => {
@@ -141,10 +158,10 @@ export default function PokeBallGamePage() {
     state === 'stop' && ctx && initialGame(ctx);
     if (!cvs || !ctx || state !== 'play') return;
     !minionRef.current &&
-      loadImage('img1.png').then((img) => {
+      loadImage(PokemonImage.src).then((img) => {
         (minionRef as any).current = img;
-        const w = img.width;
-        const h = img.height;
+        const w = 50;
+        const h = 50;
         posRef.current.minion = {
           x: W / 2 - w / 2,
           y: H - h,
@@ -153,10 +170,10 @@ export default function PokeBallGamePage() {
         };
       });
     !bananaRef.current &&
-      loadImage('Pokeball.png').then((img) => {
+      loadImage(PokeBallImage.src).then((img) => {
         (bananaRef as any).current = img;
-        bananaSizeRef.current.w = img.width;
-        bananaSizeRef.current.h = img.height;
+        bananaSizeRef.current.w = 50;
+        bananaSizeRef.current.h = 50;
       });
     let timer: number | undefined;
     let rafTimer: number | undefined;

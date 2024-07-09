@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { fetchQuizQuestions } from './api';
 import QuestionCard from './_components/QuestionCard';
 import { QuestionsState, Difficulty } from './api';
+import backgroundImage from '@/assets/background.png';
 
 export type AnswerObject = {
   question: string;
@@ -63,7 +64,7 @@ const QuizGamePage: React.FC = () => {
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="relative h-[800px] w-[600px]">
         <Image
-          src="/bg1.png"
+          src={backgroundImage}
           alt="Background Image"
           layout="fill"
           objectFit="cover"
