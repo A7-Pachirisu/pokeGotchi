@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import img from '../assets/default ball.png';
+
 const Header = () => {
   return (
     <header className={`flex h-[70px] w-full items-center justify-center bg-[#39394A]`}>
