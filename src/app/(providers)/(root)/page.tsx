@@ -1,8 +1,9 @@
-"use client";
-import api from "@/lib/axios";
-import axios from "axios";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+'use client';
+import api from '@/lib/axios';
+import axios from 'axios';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 type Pokemon = {
   id: number;
@@ -22,23 +23,26 @@ export default function Home() {
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const response = await api.get("/api/pokemons");
+        const response = await api.get('/api/pokemons');
         const data = response.data;
         setPokemonData(data);
       } catch (error) {
-        console.log("데이터 불러오는 도중 오류:", error);
+        console.log('데이터 불러오는 도중 오류:', error);
       }
     };
     fetchPokemon();
   }, []);
 
-  return ( 
-  <div className="h-full w-full">
-    {pokemonData.map((pokemon,idx) => (
-      <div key={idx}>
-        <Image src={pokemon.sprites.front_default} alt="포켓몬 이미지" width={100} height={100} />
-      </div>
-    ))}
-  </div>
-  )
+  return (
+    <div className="h-full w-full">
+      {pokemonData.map((pokemon, idx) => (
+        <div key={idx}>
+          <Image src={pokemon.sprites.front_default} alt="포켓몬 이미지" width={100} height={100} />
+        </div>
+      ))}
+      <Link className="" href="/lobby">
+        GoLobby
+      </Link>
+    </div>
+  );
 }

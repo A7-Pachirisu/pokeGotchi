@@ -16,7 +16,7 @@ export type AnswerObject = {
 
 const TOTAL_QUESTIONS = 10;
 
-const Page: React.FC = () => {
+const QuizGamePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<QuestionsState[]>([]);
   const [number, setNumber] = useState(0);
@@ -111,4 +111,4 @@ const Page: React.FC = () => {
   );
 };
 
-export default Page;
+export default QuizGamePage;
