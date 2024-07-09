@@ -21,8 +21,8 @@ const Page: React.FC = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="w-[600px] rounded-lg bg-white p-7 shadow-lg">
-        <div className="mb-8 mt-5">
+      <div className="w-[600px] bg-white p-7 min-h-screen">
+        <div className="mb-8">
           <div className="flex items-center justify-between rounded-md bg-gray-200 p-4">
             <div className="flex items-center">
               <div className="w-24 h-24 relative">
