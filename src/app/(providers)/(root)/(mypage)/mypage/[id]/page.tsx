@@ -25,12 +25,14 @@ const Page: React.FC = () => {
         <div className="mb-8 mt-5">
           <div className="flex items-center justify-between rounded-md bg-gray-200 p-4">
             <div className="flex items-center">
-              <Image src={user.profileImage} alt="userImage" width={100} height={100} className="rounded-full" />
+              <div className="w-24 h-24 relative">
+                <Image src={user.profileImage} alt="userImage" layout="fill" className="rounded-full object-cover" />
+              </div>
               <div className="ml-5 flex flex-col">
                 <div className="text-lg font-bold mb-2">{user.name}</div>
                 {user.hashtags.map((hashtag) => (
                   <div key={hashtag.id}>
-                    <h4 className="font-ligter">#{hashtag.hashtag}</h4>
+                    <h4 className="font-lighter">#{hashtag.hashtag}</h4>
                   </div>
                 ))}
               </div>
@@ -43,8 +45,8 @@ const Page: React.FC = () => {
           {user.pokemons.map((mypokemon) => (
             <div key={mypokemon.id} className="rounded-lg bg-gray-100 p-4 shadow-sm">
               <div className="flex flex-col items-center">
-                <div className="relative mb-4 h-24 w-24">
-                  <Image src={mypokemon.image} alt={mypokemon.name} fill className="rounded-full object-cover" />
+                <div className="relative mb-4 w-24 h-24">
+                  <Image src={mypokemon.image} alt={mypokemon.name} fill className="rounded-full object-cover" sizes="100%" />
                 </div>
                 <h3 className="mb-2 font-bold">{mypokemon.name}</h3>
                 <button className="rounded-md bg-gray-400 px-2 py-1">상세정보</button>
