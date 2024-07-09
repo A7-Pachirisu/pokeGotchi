@@ -1,8 +1,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const LinkItem = ({ href, altText, children, className }) => {
+type LinkItemProps = {
+  href: string;
+  altText: string;
+  children: ReactNode;
+  className?: string;
+};
+
+const LinkItem: React.FC<LinkItemProps> = ({ href, altText, children, className }) => {
   return (
     <Link
       className={`mb-10 flex items-center rounded border border-black pr-20 text-4xl font-bold ${className}`}
