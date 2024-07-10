@@ -4,7 +4,8 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import users from './dumy';
-import {posts} from './dumy';
+import { posts } from './dumy';
+import { BiCoinStack } from 'react-icons/bi';
 
 const Page: React.FC = () => {
   const { id } = useParams();
@@ -50,7 +51,7 @@ const Page: React.FC = () => {
               <div className="relative h-24 w-24">
                 <Image src={user.profileImage} alt="userImage" layout="fill" className="rounded-full object-cover" />
               </div>
-              <div className="relative ml-5">
+              <div className="relative flex ml-5">
                 <div className="absolute left-0 top-0 text-lg font-bold">{user.name}</div>
                 <div className="mt-6">
                   {user.hashtags.map((hashtag) => (
@@ -58,6 +59,17 @@ const Page: React.FC = () => {
                       <h4 className="text-xs font-light">#{hashtag.hashtag}</h4>
                     </div>
                   ))}
+                </div>
+                <div className='flex'>
+                  <div className="mt-1 ml-4">
+                    <div className="text-sm font-bold">Game Scores</div>
+                    <div className="text-xs">Ball: {user.gameScore_ball}</div>
+                    <div className="text-xs">Quiz: {user.gameScore_quiz}</div>
+                    <div className="text-xs">Fruits: {user.gameScore_fruits}</div>
+                  </div>
+                  <div className="flex mt-auto text-sm font-bold">
+                    <BiCoinStack className="mt-1 text-yellow-400" /> {user.coins}
+                  </div>
                 </div>
               </div>
             </div>
@@ -147,7 +159,7 @@ const Page: React.FC = () => {
                           sizes="100%"
                         />
                       </div>
-                      <h3 className="mb-2 text-sm font-bold">{post.title}</h3>     
+                      <h3 className="mb-2 text-sm font-bold">{post.title}</h3>
                     </div>
                   </div>
                 ))}
