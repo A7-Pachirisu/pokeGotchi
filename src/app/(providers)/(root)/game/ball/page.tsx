@@ -17,17 +17,17 @@ export default function PokeBallGamePage() {
   const [score, setScore] = useState(0);
 
   const ref = useRef<HTMLCanvasElement>(null);
-  const minionRef = useRef<HTMLImageElement>(null);
-  const bananaRef = useRef<HTMLImageElement>(null);
-  const bananaSizeRef = useRef({ w: 50, h: 50 });
+  const pokemonRef = useRef<HTMLImageElement>(null);
+  const pokeBallRef = useRef<HTMLImageElement>(null);
+  const pokeBallSizeRef = useRef({ w: 50, h: 50 });
   const posRef = useRef<{
-    bananas: ItemPos[];
-    bananaAccel: number[];
-    minion: ItemPos;
+    pokeBalls: ItemPos[];
+    pokeBallAccel: number[];
+    pokemon: ItemPos;
   }>({
-    bananas: [],
-    bananaAccel: [],
-    minion: { x: 0, y: 0, w: 0, h: 0 }
+    pokeBalls: [],
+    pokeBallAccel: [],
+    pokemon: { x: 0, y: 0, w: 0, h: 0 }
   });
   const keyRef = useRef({
     isLeft: false,
@@ -37,15 +37,14 @@ export default function PokeBallGamePage() {
   const W = 500;
   const H = 600;
   const VELOCITY = {
-    minion: {
+    pokemon: {
       left: 6,
       right: 6
     },
-    bananaAccel: 0.02
+    pokeBallAccel: 0.02
   };
-  const CREATE_BANANA_TIME = 500;
-  const BANANA_SCORE = 50;
-  const AVOID_BANANA_SCORE = 10;
+  const CREATE_POKEBALL_TIME = 500;
+  const AVOID_POKEBALL_SCORE = 10;
 
   const drawImage = useCallback((ctx: CanvasRenderingContext2D, img: HTMLImageElement, { x, y, w, h }: ItemPos) => {
     const maxWidth = 50;
@@ -83,48 +82,48 @@ export default function PokeBallGamePage() {
     [W, H]
   );
 
-  const updateMinionPos = useCallback(
-    (minionPos: ItemPos) => {
+  const updatePokemonPos = useCallback(
+    (pokemonPos: ItemPos) => {
       const key = keyRef.current;
-      if (key.isLeft) minionPos.x -= VELOCITY.minion.left;
-      if (key.isRight) minionPos.x += VELOCITY.minion.right;
-      blockOverflowPos(minionPos);
+      if (key.isLeft) pokemonPos.x -= VELOCITY.pokemon.left;
+      if (key.isRight) pokemonPos.x += VELOCITY.pokemon.right;
+      blockOverflowPos(pokemonPos);
     },
     [blockOverflowPos]
   );
 
-  const createBanana = useCallback(() => {
-    if (!bananaRef.current) return;
-    const size = bananaSizeRef.current;
-    posRef.current.bananas.push({
+  const createPokeBall = useCallback(() => {
+    if (!pokeBallRef.current) return;
+    const size = pokeBallSizeRef.current;
+    posRef.current.pokeBalls.push({
       x: Math.random() * (W - size.w),
       y: -size.h,
       ...size
     });
-    posRef.current.bananaAccel.push(1);
+    posRef.current.pokeBallAccel.push(1);
   }, [W]);
 
-  const updateBananaPos = useCallback((bananaPos: ItemPos, index: number) => {
-    const y = bananaPos.y;
-    const accel = posRef.current.bananaAccel[index];
-    posRef.current.bananaAccel[index] = accel + accel * VELOCITY.bananaAccel;
-    bananaPos.y = y + accel;
+  const updatePokeBallPos = useCallback((pokeBallPos: ItemPos, index: number) => {
+    const y = pokeBallPos.y;
+    const accel = posRef.current.pokeBallAccel[index];
+    posRef.current.pokeBallAccel[index] = accel + accel * VELOCITY.pokeBallAccel;
+    pokeBallPos.y = y + accel;
   }, []);
 
-  const deleteBanana = useCallback((index: number) => {
-    posRef.current.bananas.splice(index, 1);
-    posRef.current.bananaAccel.splice(index, 1);
-    setScore((prevScore) => prevScore + AVOID_BANANA_SCORE);
+  const deletePokeBall = useCallback((index: number) => {
+    posRef.current.pokeBalls.splice(index, 1);
+    posRef.current.pokeBallAccel.splice(index, 1);
+    setScore((prevScore) => prevScore + AVOID_POKEBALL_SCORE);
   }, []);
 
-  const catchBanana = useCallback(
-    (bananaPos: ItemPos, index: number) => {
-      const minionPos = posRef.current.minion;
+  const catchPokeBall = useCallback(
+    (pokeBallPos: ItemPos, index: number) => {
+      const pokemonPos = posRef.current.pokemon;
       if (
-        minionPos.x + minionPos.w >= bananaPos.x &&
-        minionPos.x <= bananaPos.x + bananaPos.w &&
-        minionPos.y + minionPos.h >= bananaPos.y &&
-        minionPos.y <= bananaPos.y + bananaPos.h
+        pokemonPos.x + pokemonPos.w >= pokeBallPos.x &&
+        pokemonPos.x <= pokeBallPos.x + pokeBallPos.w &&
+        pokemonPos.y + pokemonPos.h >= pokeBallPos.y &&
+        pokemonPos.y <= pokeBallPos.y + pokeBallPos.h
       ) {
         alert(`점수: ${score}`);
         setState('stop');
@@ -136,10 +135,10 @@ export default function PokeBallGamePage() {
   const initialGame = useCallback(
     (ctx: CanvasRenderingContext2D) => {
       ctx.clearRect(0, 0, W, H);
-      const { w, h } = posRef.current.minion;
-      posRef.current.bananaAccel = [];
-      posRef.current.bananas = [];
-      posRef.current.minion = {
+      const { w, h } = posRef.current.pokemon;
+      posRef.current.pokeBallAccel = [];
+      posRef.current.pokeBalls = [];
+      posRef.current.pokemon = {
         x: W / 2 - w / 2,
         y: H - h,
         w,
@@ -157,52 +156,52 @@ export default function PokeBallGamePage() {
     const ctx = cvs?.getContext('2d');
     state === 'stop' && ctx && initialGame(ctx);
     if (!cvs || !ctx || state !== 'play') return;
-    !minionRef.current &&
+    !pokemonRef.current &&
       loadImage(PokemonImage.src).then((img) => {
-        (minionRef as any).current = img;
+        (pokemonRef as any).current = img;
         const w = 50;
         const h = 50;
-        posRef.current.minion = {
+        posRef.current.pokemon = {
           x: W / 2 - w / 2,
           y: H - h,
           w,
           h
         };
       });
-    !bananaRef.current &&
+    !pokeBallRef.current &&
       loadImage(PokeBallImage.src).then((img) => {
-        (bananaRef as any).current = img;
-        bananaSizeRef.current.w = 50;
-        bananaSizeRef.current.h = 50;
+        (pokeBallRef as any).current = img;
+        pokeBallSizeRef.current.w = 50;
+        pokeBallSizeRef.current.h = 50;
       });
     let timer: number | undefined;
     let rafTimer: number | undefined;
     const pos = posRef.current;
     const animate = () => {
-      const minion = minionRef.current;
-      const banana = bananaRef.current;
+      const pokemon = pokemonRef.current;
+      const pokeBall = pokeBallRef.current;
       ctx.clearRect(0, 0, W, H);
-      if (minion) {
-        updateMinionPos(pos.minion);
-        drawImage(ctx, minion, pos.minion);
+      if (pokemon) {
+        updatePokemonPos(pos.pokemon);
+        drawImage(ctx, pokemon, pos.pokemon);
       }
-      if (banana) {
-        pos.bananas.forEach((bananaPos, index) => {
-          updateBananaPos(bananaPos, index);
-          drawImage(ctx, banana, bananaPos);
+      if (pokeBall) {
+        pos.pokeBalls.forEach((pokeBallPos, index) => {
+          updatePokeBallPos(pokeBallPos, index);
+          drawImage(ctx, pokeBall, pokeBallPos);
         });
-        pos.bananas.forEach((bananaPos, index) => {
-          if (bananaPos.y >= H) {
-            deleteBanana(index);
+        pos.pokeBalls.forEach((pokeBallPos, index) => {
+          if (pokeBallPos.y >= H) {
+            deletePokeBall(index);
           } else {
-            catchBanana(bananaPos, index);
+            catchPokeBall(pokeBallPos, index);
           }
         });
       }
       rafTimer = requestAnimationFrame(animate);
     };
     rafTimer = requestAnimationFrame(animate);
-    timer = window.setInterval(createBanana, CREATE_BANANA_TIME);
+    timer = window.setInterval(createPokeBall, CREATE_POKEBALL_TIME);
     const onKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       keyRef.current.isLeft = key === 'a' || key === 'arrowleft';
@@ -226,11 +225,11 @@ export default function PokeBallGamePage() {
   }, [
     drawImage,
     loadImage,
-    updateMinionPos,
-    createBanana,
-    updateBananaPos,
-    deleteBanana,
-    catchBanana,
+    updatePokeBallPos,
+    createPokeBall,
+    updatePokeBallPos,
+    deletePokeBall,
+    catchPokeBall,
     state,
     initialGame
   ]);
