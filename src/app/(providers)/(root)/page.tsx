@@ -1,11 +1,10 @@
-'use client';
+"use client";
+import React, { useEffect, useRef, useState } from 'react';
 import api from '@/lib/axios';
 import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import backgroundImage from '@/assets/background.png';
 
-type Pokemon = {
+interface Pokemon {
   id: number;
   name: string;
   korean_name: string;
@@ -15,33 +14,65 @@ type Pokemon = {
   types: { type: { name: string; korean_name: string } }[];
   abilities: { ability: { name: string; korean_name: string } }[];
   moves: { move: { name: string; korean_name: string } }[];
+  x?: number;
+  y?: number;
 };
 
 const MOVEMENT_AREA = { width: 600, height: 1100 };
 
 export default function Home() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
 
-  const getRandomPosition = () => {
-    const x = Math.floor(Math.random() * (MOVEMENT_AREA.width - 100));
-    const y = Math.floor(Math.random() * (MOVEMENT_AREA.height - 100));
-    return { x, y };
-  };
-
-  const movePokemon = (pokemonId: string) => {
+  const movePokemon = (pokemonId: string, dx: number, dy: number) => {
     const pokemonElement = document.getElementById(pokemonId);
     if (pokemonElement) {
-      const { x, y } = getRandomPosition();
-      pokemonElement.style.transform = `translate(${x}px, ${y}px)`;
+      const transform = pokemonElement.style.transform || 'translate(0px, 0px)';
+      const translate = transform.match(/translate\((-?\d+)px,\s*(-?\d+)px\)/);
+      let x = 0, y = 0;
+      if (translate) {
+        x = parseInt(translate[1], 10);
+        y = parseInt(translate[2], 10);
+      }
+      pokemonElement.style.transform = `translate(${x + dx}px, ${y + dy}px)`;
+    }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'a':
+        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, -20, 0));
+        break;
+      case 'd':
+        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, 20, 0));
+        break;
+      case ' ':
+        pokemonData.forEach((_, idx) => {
+          movePokemon(`pokemon-${idx}`, 0, -50);
+          setTimeout(() => movePokemon(`pokemon-${idx}`, 0, 50), 500);
+        });
+        break;
     }
   };
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const response = await api.get('/api/pokemons');
+        const response = await api.get<Pokemon[]>('/api/pokemons');
         const data = response.data;
-        setPokemonData(data);
+        if (data.length > 0) {
+          const canvasWidth = canvasRef.current?.width || 800;
+          const canvasHeight = canvasRef.current?.height || 600;
+          const spacing = canvasWidth / (data.length + 1);
+
+          const updatedData = data.map((pokemon, index) => ({
+            ...pokemon,
+            x: spacing * (index + 1),
+            y: canvasHeight + 350,
+          }));
+
+          setPokemonData(updatedData);
+        }
       } catch (error) {
         console.log('데이터 불러오는 도중 오류:', error);
       }
@@ -50,13 +81,10 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      pokemonData.forEach((pokemon, idx) => {
-        movePokemon(`pokemon-${idx}`);
-      });
-    }, 3000);
-
-    return () => clearInterval(intervalId);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
   }, [pokemonData]);
 
   return (
@@ -71,7 +99,12 @@ export default function Home() {
       }}
     >
       {pokemonData.map((pokemon, idx) => (
-        <div key={idx} id={`pokemon-${idx}`} className="z-1 absolute transition-transform duration-1000">
+        <div
+          key={idx}
+          id={`pokemon-${idx}`}
+          className="z-1 transition-transform duration-1000"
+          style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
+        >
           <Image src={pokemon.sprites.front_default} alt="포켓몬 이미지" width={100} height={100} />
         </div>
       ))}
