@@ -1,6 +1,7 @@
 'use client';
 import Input from '@/components/Input';
 import useInput from '@/hooks/useInput';
+import { signUp } from '@/services/authService';
 import { validateForm } from '@/utils/validateForm';
 import Link from 'next/link';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,13 +11,17 @@ function SignUpPage() {
   const passwordInput = useInput('');
   const passwordCheckInput = useInput('');
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const email = emailInput.value;
     const password = passwordInput.value;
     const passwordCheck = passwordCheckInput.value;
 
-    if (validateForm({ email, password, passwordCheck })) {
-      console.log(email, password, passwordCheck);
+    const signUpFormData = { email, password, passwordCheck };
+    if (validateForm(signUpFormData)) {
+      try {
+        const data = await signUp(email, password);
+        console.log('>>>', data);
+      } catch {}
     }
   };
   return (

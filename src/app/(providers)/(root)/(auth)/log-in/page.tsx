@@ -1,6 +1,7 @@
 'use client';
 import Input from '@/components/Input';
 import useInput from '@/hooks/useInput';
+import { logIn } from '@/services/authService';
 import { validateForm } from '@/utils/validateForm';
 import Link from 'next/link';
 
@@ -8,12 +9,16 @@ function LogInPage() {
   const emailInput = useInput('');
   const passwordInput = useInput('');
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    if (validateForm({ email, password })) {
-      console.log(email, password);
+    const logInFormData = { email, password };
+    if (validateForm(logInFormData)) {
+      try {
+        const data = await logIn(email, password);
+        console.log('>>>', data);
+      } catch {}
     }
   };
   return (
