@@ -1,12 +1,13 @@
 import api from '@/lib/axios';
+import { logInForm } from '@/types/formType';
 
-export const signUp = async (email: string, password: string) => {
-  const response = await api.post('/api/auth/sign-up', { email, password });
+export const signUp = async (signUpData: logInForm) => {
+  const response = await api.post('/api/auth/sign-up', signUpData);
   return response.data;
 };
 
-export const logIn = async (email: string, password: string) => {
-  const response = await api.post('/api/auth/log-in', { email, password });
+export const logIn = async (logInData: logInForm) => {
+  const response = await api.post('/api/auth/log-in', logInData);
   return response.data;
 };
 

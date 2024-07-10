@@ -1,9 +1,9 @@
 import { createClient } from '@/supabase/server';
 import { NextResponse } from 'next/server';
 
-export async function POST() {
+export async function DELETE() {
   const supabase = createClient();
   await supabase.auth.signOut();
 
-  return NextResponse.json('로그아웃 완료');
+  return NextResponse.json({ msg: '로그아웃 완료' });
 }

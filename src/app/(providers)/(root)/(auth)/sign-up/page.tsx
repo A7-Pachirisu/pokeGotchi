@@ -2,11 +2,14 @@
 import Input from '@/components/Input';
 import useInput from '@/hooks/useInput';
 import { signUp } from '@/services/authService';
+import { performToast } from '@/utils/performToast';
 import { validateForm } from '@/utils/validateForm';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import 'react-toastify/dist/ReactToastify.css';
 
 function SignUpPage() {
+  const router = useRouter();
   const emailInput = useInput('');
   const passwordInput = useInput('');
   const passwordCheckInput = useInput('');
@@ -16,12 +19,15 @@ function SignUpPage() {
     const password = passwordInput.value;
     const passwordCheck = passwordCheckInput.value;
 
-    const signUpFormData = { email, password, passwordCheck };
-    if (validateForm(signUpFormData)) {
+    const signUpData = { email, password, passwordCheck };
+    if (validateForm(signUpData)) {
       try {
-        const data = await signUp(email, password);
-        console.log('>>>', data);
-      } catch {}
+        const data = await signUp(signUpData);
+        performToast({ msg: '회원가입이 성공하였습니다!', type: 'success' });
+        router.push('/log-in');
+      } catch {
+        return performToast({ msg: '잘못된 회원가입 정보입니다', type: 'error' });
+      }
     }
   };
   return (
