@@ -2,15 +2,19 @@
 
 import Link from 'next/link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 import PokeBallImage from '@/assets/default ball.png';
 import PokemonImage from '@/assets/pokemon2.png';
 
-interface ItemPos {
+const gameSwal = withReactContent(Swal);
+
+type ItemPos = {
   x: number;
   y: number;
   w: number;
   h: number;
-}
+};
 
 export default function PokeBallGamePage() {
   const [state, setState] = useState<'play' | 'pause' | 'stop'>('stop');
@@ -41,7 +45,7 @@ export default function PokeBallGamePage() {
       left: 6,
       right: 6
     },
-    pokeBallAccel: 0.02
+    pokeBallAccel: 0.03
   };
   const CREATE_POKEBALL_TIME = 500;
   const AVOID_POKEBALL_SCORE = 10;
@@ -114,6 +118,7 @@ export default function PokeBallGamePage() {
     posRef.current.pokeBalls.splice(index, 1);
     posRef.current.pokeBallAccel.splice(index, 1);
     setScore((prevScore) => prevScore + AVOID_POKEBALL_SCORE);
+    createPokeBall();
   }, []);
 
   const catchPokeBall = useCallback(
@@ -125,8 +130,15 @@ export default function PokeBallGamePage() {
         pokemonPos.y + pokemonPos.h >= pokeBallPos.y &&
         pokemonPos.y <= pokeBallPos.y + pokeBallPos.h
       ) {
-        alert(`점수: ${score}`);
-        setState('stop');
+        gameSwal
+          .fire({
+            title: `점수: ${score}`,
+            icon: 'success',
+            confirmButtonText: '게임 종료'
+          })
+          .then(() => {
+            setState('stop');
+          });
       }
     },
     [score]
