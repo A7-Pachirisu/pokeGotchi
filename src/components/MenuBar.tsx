@@ -11,7 +11,9 @@ const MenuBar = () => {
         <AiOutlineMessage />
       </button>
       <button className="text-[35px] text-white hover:brightness-90 active:brightness-75">
-        <BsShop />
+        <Link href={'/shop'}>
+          <BsShop />
+        </Link>
       </button>
       <Link href="/game">
         <button className="text-[40px] text-white hover:brightness-90 active:brightness-75">

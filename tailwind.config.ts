@@ -22,7 +22,8 @@ const config: Config = {
         'custom-grey': '#949494',
         'custom-white': '#f1f8f8',
         'custom-black': '#000000',
-        'bar-color': '#39394A'
+        'bar-color': '#39394A',
+        'custom-green': '#A8B820'
       }
     }
   },
