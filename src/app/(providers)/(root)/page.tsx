@@ -41,10 +41,10 @@ export default function Home() {
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'a':
-        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, -10, 0));
+        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, -20, 0));
         break;
       case 'd':
-        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, 10, 0));
+        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, 20, 0));
         break;
       case ' ':
         pokemonData.forEach((_, idx) => {
@@ -68,7 +68,7 @@ export default function Home() {
           const updatedData = data.map((pokemon, index) => ({
             ...pokemon,
             x: spacing * (index + 1),
-            y: canvasHeight,
+            y: canvasHeight + 350,
           }));
 
           setPokemonData(updatedData);
