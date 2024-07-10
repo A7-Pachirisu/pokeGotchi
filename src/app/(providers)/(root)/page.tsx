@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import api from '@/lib/axios';
 import Image from 'next/image';
@@ -10,20 +10,20 @@ interface Pokemon {
   korean_name: string;
   height: number;
   weight: number;
-  sprites: { 
-    front_default: string,
+  sprites: {
+    front_default: string;
     other: {
       showdown: {
         front_default: string;
-      }
-    }
-   };
+      };
+    };
+  };
   types: { type: { name: string; korean_name: string } }[];
   abilities: { ability: { name: string; korean_name: string } }[];
   moves: { move: { name: string; korean_name: string } }[];
   x?: number;
   y?: number;
-};
+}
 
 const MOVEMENT_AREA = { width: 600, height: 1100 };
 
@@ -36,7 +36,7 @@ export default function Home() {
   const moveSelectedPokemon = (dx: number, dy: number) => {
     if (!selectedPokemon) return;
 
-    setSelectedPokemonPos(prevPos => ({
+    setSelectedPokemonPos((prevPos) => ({
       x: prevPos.x + dx,
       y: prevPos.y + dy
     }));
@@ -63,10 +63,9 @@ export default function Home() {
     const newPokemonData = [...pokemonData];
     const clickedPokemon = newPokemonData[index];
 
-    // 이미지 교체
-    const tempSprite = clickedPokemon.sprites.front_default;
-    newPokemonData[index].sprites.front_default = selectedPokemon.sprites.front_default;
-    setSelectedPokemon({ ...selectedPokemon, sprites: { ...selectedPokemon.sprites, front_default: tempSprite } });
+    const tempId = clickedPokemon.id;
+    newPokemonData[index].id = selectedPokemon.id;
+    setSelectedPokemon({ ...selectedPokemon, id: tempId });
 
     setPokemonData(newPokemonData);
   };
@@ -75,7 +74,7 @@ export default function Home() {
     const fetchPokemon = async () => {
       try {
         const response = await api.get<Pokemon[]>('/api/pokemons');
-        const data = response.data.slice(0, 6); // 상단에 5마리, 아래 1마리만 필요
+        const data = response.data.slice(0, 6);
 
         if (data.length > 0) {
           const canvasWidth = canvasRef.current?.width || 800;
@@ -85,11 +84,11 @@ export default function Home() {
           const updatedData = data.map((pokemon, index) => ({
             ...pokemon,
             x: index < 5 ? spacing * (index + 1) - 150 : canvasWidth / 2 - 200,
-            y: index < 5 ? 50 : canvasHeight + 280,
+            y: index < 5 ? 50 : canvasHeight - 50
           }));
 
           setPokemonData(updatedData);
-          setSelectedPokemon(updatedData[5]); // 6번째 포켓몬을 선택
+          setSelectedPokemon(updatedData[5]);
           setSelectedPokemonPos({ x: updatedData[5].x!, y: updatedData[5].y! });
         }
       } catch (error) {
@@ -108,10 +107,8 @@ export default function Home() {
 
   return (
     <div
-      className="relative h-full w-full"
+      className="w-150 relative h-full"
       style={{
-        width: MOVEMENT_AREA.width,
-        height: MOVEMENT_AREA.height,
         backgroundImage: `url(${backgroundImage.src})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
@@ -121,21 +118,31 @@ export default function Home() {
         <div
           key={idx}
           id={`pokemon-${idx}`}
-          className="absolute z-1 transition-transform duration-1000 cursor-pointer"
+          className="z-1 absolute cursor-pointer transition-transform duration-1000"
           style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
           onClick={() => handlePokemonClick(idx)}
         >
-          <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.id}.gif`} alt="포켓몬 이미지" width={100} height={100} />
+          <Image
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.id}.gif`}
+            alt="포켓몬 이미지"
+            width={100}
+            height={100}
+          />
         </div>
       ))}
 
       {selectedPokemon && (
         <div
           id="selected-pokemon"
-          className="absolute z-1 transition-transform duration-1000"
+          className="z-1 absolute transition-transform duration-1000"
           style={{ transform: `translate(${selectedPokemonPos.x}px, ${selectedPokemonPos.y}px)` }}
         >
-          <Image src={selectedPokemon.sprites.front_default} alt="선택된 포켓몬 이미지" width={200} height={200} />
+          <Image
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${selectedPokemon.id}.gif`}
+            alt="선택된 포켓몬 이미지"
+            width={200}
+            height={200}
+          />
         </div>
       )}
     </div>
