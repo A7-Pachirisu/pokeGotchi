@@ -1,4 +1,5 @@
 // src/data/dummy.ts
+import img from '@/assets/pokemon1.png';
 
 export interface Pokemon {
   id: number;
@@ -25,7 +26,7 @@ const hashtags: Hashtags[] = [
   { id: 2, hashtag: '내일은 세계최고의 포켓몬트레이너' },
   { id: 3, hashtag: '포켓몬 마스터를 향해' },
   { id: 4, hashtag: '전설의 포켓몬을 찾아서' },
-  { id: 5, hashtag: '진화의 신비' },
+  { id: 5, hashtag: '진화의 신비' }
 ];
 
 const users: User[] = [
@@ -33,13 +34,13 @@ const users: User[] = [
     id: 1,
     name: 'user1',
     profileImage: '/Pokeball.png',
-    hashtags: [ hashtags[2]],
+    hashtags: [hashtags[2]],
     pokemons: [
-      { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] },
-      { id: 2, name: '파이리', image: '/img1.png', abilities: ['맹화', '선파워'] },
-      { id: 3, name: '꼬부기', image: '/img1.png', abilities: ['급류', '빗의접시'] },
-      { id: 4, name: '피카츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
-    ],
+      { id: 1, name: '이상해씨', image: img.src, abilities: ['심록', '엽록소'] },
+      { id: 2, name: '파이리', image: img.src, abilities: ['맹화', '선파워'] },
+      { id: 3, name: '꼬부기', image: img.src, abilities: ['급류', '빗의접시'] },
+      { id: 4, name: '피카츄', image: img.src, abilities: ['정전기', '피뢰침'] }
+    ]
   },
   {
     id: 2,
@@ -49,20 +50,20 @@ const users: User[] = [
     pokemons: [
       { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] },
       { id: 6, name: '뮤', image: '/img1.png', abilities: ['싱크로'] },
-      { id: 7, name: '뮤츠', image: '/img1.png', abilities: ['프레셔', '정신력'] },
-    ],
+      { id: 7, name: '뮤츠', image: '/img1.png', abilities: ['프레셔', '정신력'] }
+    ]
   },
   {
     id: 3,
     name: 'user3',
     profileImage: '/bg1.png',
-    hashtags: [ hashtags[3], hashtags[4]],
+    hashtags: [hashtags[3], hashtags[4]],
     pokemons: [
       { id: 8, name: '라이츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
       { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] },
-      { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] },
-    ],
+      { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] }
+    ]
   },
   {
     id: 4,
@@ -74,8 +75,8 @@ const users: User[] = [
       { id: 3, name: '꼬부기', image: '/img1.png', abilities: ['급류', '빗의접시'] },
       { id: 4, name: '피카츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
       { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] },
-      { id: 6, name: '뮤', image: '/img1.png', abilities: ['싱크로'] },
-    ],
+      { id: 6, name: '뮤', image: '/img1.png', abilities: ['싱크로'] }
+    ]
   },
   {
     id: 5,
@@ -87,8 +88,8 @@ const users: User[] = [
       { id: 8, name: '라이츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
       { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] },
-      { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] },
-    ],
+      { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] }
+    ]
   },
   {
     id: 6,
@@ -99,8 +100,8 @@ const users: User[] = [
       { id: 2, name: '파이리', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 3, name: '꼬부기', image: '/img1.png', abilities: ['급류', '빗의접시'] },
       { id: 4, name: '피카츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
-      { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] },
-    ],
+      { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] }
+    ]
   },
   {
     id: 7,
@@ -112,8 +113,8 @@ const users: User[] = [
       { id: 7, name: '뮤츠', image: '/img1.png', abilities: ['프레셔', '정신력'] },
       { id: 8, name: '라이츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
       { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
-      { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] },
-    ],
+      { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] }
+    ]
   },
   {
     id: 8,
@@ -125,8 +126,8 @@ const users: User[] = [
       { id: 2, name: '파이리', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 3, name: '꼬부기', image: '/img1.png', abilities: ['급류', '빗의접시'] },
       { id: 4, name: '피카츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
-      { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] },
-    ],
+      { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] }
+    ]
   },
   {
     id: 9,
@@ -139,9 +140,9 @@ const users: User[] = [
       { id: 8, name: '라이츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
       { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] },
-      { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] },
-    ],
-  },
+      { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] }
+    ]
+  }
 ];
 
 export default users;
@@ -209,4 +210,4 @@ const posts = [
   }
 ];
 
-export {posts};
+export { posts };

@@ -104,7 +104,7 @@ const QuizGamePage: React.FC = () => {
             Next Question
           </button>
         ) : null}
-        <Link href="/game-lobby" className="mt-8 text-red-500">
+        <Link href="/game" className="mt-8 text-red-500">
           GoLobby
         </Link>
       </div>
