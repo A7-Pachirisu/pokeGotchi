@@ -15,12 +15,16 @@ const MenuBar = () => {
           <BsShop />
         </Link>
       </button>
-      <button className="text-[40px] text-white hover:brightness-90 active:brightness-75">
-        <IoGameControllerOutline />
-      </button>
-      <button className="text-[35px] text-white hover:brightness-90 active:brightness-75">
-        <FaRegCircleUser />
-      </button>
+      <Link href="/game-lobby">
+        <button className="text-[40px] text-white hover:brightness-90 active:brightness-75">
+          <IoGameControllerOutline />
+        </button>
+      </Link>
+      <Link href="/log-in">
+        <button className="text-[35px] text-white hover:brightness-90 active:brightness-75">
+          <FaRegCircleUser />
+        </button>
+      </Link>
     </div>
   );
 };
