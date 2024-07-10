@@ -19,6 +19,8 @@ type ItemPos = {
 export default function PokeBallGamePage() {
   const [state, setState] = useState<'play' | 'pause' | 'stop'>('stop');
   const [score, setScore] = useState(0);
+  const [createPokeBallTime, setCreatePokeBallTime] = useState(1000);
+  const [pokeBallAccel, setPokeBallAccel] = useState(0.03);
 
   const ref = useRef<HTMLCanvasElement>(null);
   const pokemonRef = useRef<HTMLImageElement>(null);
@@ -44,10 +46,8 @@ export default function PokeBallGamePage() {
     pokemon: {
       left: 6,
       right: 6
-    },
-    pokeBallAccel: 0.03
+    }
   };
-  const CREATE_POKEBALL_TIME = 500;
   const AVOID_POKEBALL_SCORE = 10;
 
   const drawImage = useCallback((ctx: CanvasRenderingContext2D, img: HTMLImageElement, { x, y, w, h }: ItemPos) => {
@@ -107,19 +107,25 @@ export default function PokeBallGamePage() {
     posRef.current.pokeBallAccel.push(1);
   }, [W]);
 
-  const updatePokeBallPos = useCallback((pokeBallPos: ItemPos, index: number) => {
-    const y = pokeBallPos.y;
-    const accel = posRef.current.pokeBallAccel[index];
-    posRef.current.pokeBallAccel[index] = accel + accel * VELOCITY.pokeBallAccel;
-    pokeBallPos.y = y + accel;
-  }, []);
+  const updatePokeBallPos = useCallback(
+    (pokeBallPos: ItemPos, index: number) => {
+      const y = pokeBallPos.y;
+      const accel = posRef.current.pokeBallAccel[index];
+      posRef.current.pokeBallAccel[index] = accel + accel * pokeBallAccel;
+      pokeBallPos.y = y + accel;
+    },
+    [pokeBallAccel]
+  );
 
-  const deletePokeBall = useCallback((index: number) => {
-    posRef.current.pokeBalls.splice(index, 1);
-    posRef.current.pokeBallAccel.splice(index, 1);
-    setScore((prevScore) => prevScore + AVOID_POKEBALL_SCORE);
-    createPokeBall();
-  }, []);
+  const deletePokeBall = useCallback(
+    (index: number) => {
+      posRef.current.pokeBalls.splice(index, 1);
+      posRef.current.pokeBallAccel.splice(index, 1);
+      setScore((prevScore) => prevScore + AVOID_POKEBALL_SCORE);
+      createPokeBall();
+    },
+    [createPokeBall]
+  );
 
   const catchPokeBall = useCallback(
     (pokeBallPos: ItemPos, index: number) => {
@@ -213,7 +219,7 @@ export default function PokeBallGamePage() {
       rafTimer = requestAnimationFrame(animate);
     };
     rafTimer = requestAnimationFrame(animate);
-    timer = window.setInterval(createPokeBall, CREATE_POKEBALL_TIME);
+    timer = window.setInterval(createPokeBall, createPokeBallTime);
     const onKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       keyRef.current.isLeft = key === 'a' || key === 'arrowleft';
@@ -239,12 +245,22 @@ export default function PokeBallGamePage() {
     loadImage,
     updatePokeBallPos,
     createPokeBall,
-    updatePokeBallPos,
     deletePokeBall,
     catchPokeBall,
     state,
-    initialGame
+    initialGame,
+    createPokeBallTime,
+    pokeBallAccel
   ]);
+
+  useEffect(() => {
+    if (score % 100 === 0 && score !== 0) {
+      setCreatePokeBallTime((prevTime) => Math.max(prevTime - 20, 100));
+    }
+    if (score % 500 === 0 && score !== 0) {
+      setPokeBallAccel((prevAccel) => prevAccel + 0.01);
+    }
+  }, [score]);
 
   return (
     <div className="flex min-h-screen items-center justify-center">
