@@ -24,16 +24,16 @@ export default function Home() {
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
 
-  const getRandomPosition = () => {
-    const x = Math.floor(Math.random() * (MOVEMENT_AREA.width - 100));
-    const y = Math.floor(Math.random() * (MOVEMENT_AREA.height - 100));
+  const getPosition = () => {
+    const x = MOVEMENT_AREA.width - 350;
+    const y = MOVEMENT_AREA.height - 150;
     return { x, y };
   };
 
   const movePokemon = (pokemonId: string) => {
     const pokemonElement = document.getElementById(pokemonId);
     if (pokemonElement) {
-      const { x, y } = getRandomPosition();
+      const { x, y } = getPosition();
       pokemonElement.style.transform = `translate(${x}px, ${y}px)`;
     }
   };
