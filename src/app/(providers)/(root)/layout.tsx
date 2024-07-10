@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto flex h-screen w-[600px] flex-col font-dunggeunmo">
+    <div className="font-dunggeunmo mx-auto flex h-screen w-[600px] flex-col">
       <Header />
       <main className="grow overflow-auto">
         <ToastContainer

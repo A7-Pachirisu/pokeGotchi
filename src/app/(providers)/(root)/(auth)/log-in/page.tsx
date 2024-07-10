@@ -1,6 +1,7 @@
 'use client';
 import Input from '@/components/Input';
 import useInput from '@/hooks/useInput';
+import { validateForm } from '@/utils/validateForm';
 import Link from 'next/link';
 
 function LogInPage() {
@@ -11,7 +12,9 @@ function LogInPage() {
     const email = emailInput.value;
     const password = passwordInput.value;
 
-    console.log(email, password);
+    if (validateForm({ email, password })) {
+      console.log(email, password);
+    }
   };
   return (
     <>
