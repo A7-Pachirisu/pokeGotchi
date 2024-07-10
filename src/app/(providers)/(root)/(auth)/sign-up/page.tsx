@@ -15,12 +15,9 @@ function SignUpPage() {
     const password = passwordInput.value;
     const passwordCheck = passwordCheckInput.value;
 
-    console.log(email, password, passwordCheck);
-    const isValidatedForm = validateForm({ email, password, passwordCheck });
-
-    // if (isValidatedForm) {
-
-    // }
+    if (validateForm({ email, password, passwordCheck })) {
+      console.log(email, password, passwordCheck);
+    }
   };
   return (
     <>
