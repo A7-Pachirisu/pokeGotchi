@@ -91,9 +91,6 @@ export default function Home() {
           <Image src={pokemon.sprites.front_default} alt="포켓몬 이미지" width={100} height={100} />
         </div>
       ))}
-      <Link className="absolute bottom-0 right-0 rounded bg-blue-500 p-4 text-white" href="/game-lobby">
-        Go Lobby
-      </Link>
     </div>
   );
 }

@@ -249,7 +249,7 @@ export default function PokeBallGamePage() {
             <button type="button" onClick={() => setState('stop')}>
               STOP
             </button>
-            <Link className="text-red-500" href="/game-lobby">
+            <Link className="text-red-500" href="/game">
               GoLobby
             </Link>
           </div>
