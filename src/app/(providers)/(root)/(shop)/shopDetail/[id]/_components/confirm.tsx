@@ -8,20 +8,20 @@ const Confirm = () => {
   const submit = () => {
     confirmAlert({
       customUI: ({ onClose }) => (
-        <div className="mx-auto my-16 max-w-md rounded-lg bg-white p-8 font-dunggeunmo shadow-lg">
-          <h1 className="mb-4 text-xl font-bold">이 포켓몬을 데려옵니다.</h1>
-          <div className="flex justify-between">
+        <div className="mx-auto my-16 max-w-md rounded-lg bg-gray-100 p-8 font-dunggeunmo shadow-lg">
+          <h1 className="mb-4 mt-2 text-2xl">이 포켓몬을 데려옵니다</h1>
+          <div className="mt-2 flex justify-around">
             <button
-              className="mr-2 rounded bg-green-500 px-4 py-2 text-white"
+              className="bg-custom-green mr-2 w-20 rounded px-4 py-2 text-2xl text-white hover:brightness-95"
               onClick={() => {
                 notify('선택한 포켓몬을 데려왔습니다');
                 onClose();
               }}
             >
-              Yes (test)
+              Yes
             </button>
             <button
-              className="rounded bg-red-500 px-4 py-2 text-white"
+              className="w-20 rounded bg-red-500 px-4 py-2 text-2xl text-white hover:brightness-95"
               onClick={() => {
                 onClose();
               }}
@@ -35,10 +35,8 @@ const Confirm = () => {
   };
 
   return (
-    <div className="flex">
-      <button className="mx-auto mt-4 rounded-md bg-custom-yellow p-3">마이페이지</button>
-
-      <button className="mx-auto mt-4 rounded-md bg-custom-yellow p-3" onClick={submit}>
+    <div className="flex justify-center gap-10">
+      <button className="mt-4 w-32 rounded-md bg-custom-yellow p-3" onClick={submit}>
         데려오기
       </button>
     </div>
