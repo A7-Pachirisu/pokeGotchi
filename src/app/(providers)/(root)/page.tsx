@@ -63,9 +63,9 @@ export default function Home() {
     const newPokemonData = [...pokemonData];
     const clickedPokemon = newPokemonData[index];
 
-    const tempSprite = clickedPokemon.sprites.front_default;
-    newPokemonData[index].sprites.front_default = selectedPokemon.sprites.front_default;
-    setSelectedPokemon({ ...selectedPokemon, sprites: { ...selectedPokemon.sprites, front_default: tempSprite } });
+    const tempId = clickedPokemon.id;
+    newPokemonData[index].id = selectedPokemon.id;
+    setSelectedPokemon({ ...selectedPokemon, id: tempId });
 
     setPokemonData(newPokemonData);
   };
