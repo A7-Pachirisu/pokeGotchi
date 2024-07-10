@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import api from '@/lib/axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import backgroundImage from '@/assets/background.png';
 
 interface Pokemon {
