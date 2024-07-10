@@ -6,6 +6,8 @@ export async function updateSession(request: NextRequest) {
     request
   });
 
+  console.log(process.env.NEXT_PUBLIC_SUPABASE_URL);
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -24,7 +26,6 @@ export async function updateSession(request: NextRequest) {
       }
     }
   );
-
   // IMPORTANT: Avoid writing any logic between createServerClient and
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
