@@ -13,7 +13,7 @@ const MenuBar = () => {
       <button className="text-[35px] text-white hover:brightness-90 active:brightness-75">
         <BsShop />
       </button>
-      <Link href="/game-lobby">
+      <Link href="/game">
         <button className="text-[40px] text-white hover:brightness-90 active:brightness-75">
           <IoGameControllerOutline />
         </button>
