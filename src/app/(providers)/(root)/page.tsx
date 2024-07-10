@@ -46,7 +46,7 @@ export default function Home() {
   const throttledMoveSelectedPokemon = useCallback(
     _.throttle((dx: number, dy: number) => {
       moveSelectedPokemon(dx, dy);
-    }, 500),
+    }, 400),
     [selectedPokemon]
   );
 
