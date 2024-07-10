@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useEffect, useRef, useState } from 'react';
 import api from '@/lib/axios';
 import Image from 'next/image';
@@ -10,68 +10,86 @@ interface Pokemon {
   korean_name: string;
   height: number;
   weight: number;
-  sprites: { front_default: string };
+  sprites: {
+    front_default: string;
+    other: {
+      showdown: {
+        front_default: string;
+      };
+    };
+  };
   types: { type: { name: string; korean_name: string } }[];
   abilities: { ability: { name: string; korean_name: string } }[];
   moves: { move: { name: string; korean_name: string } }[];
   x?: number;
   y?: number;
-};
+}
 
 const MOVEMENT_AREA = { width: 600, height: 1100 };
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
+  const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
+  const [selectedPokemonPos, setSelectedPokemonPos] = useState({ x: 0, y: 0 });
 
-  const movePokemon = (pokemonId: string, dx: number, dy: number) => {
-    const pokemonElement = document.getElementById(pokemonId);
-    if (pokemonElement) {
-      const transform = pokemonElement.style.transform || 'translate(0px, 0px)';
-      const translate = transform.match(/translate\((-?\d+)px,\s*(-?\d+)px\)/);
-      let x = 0, y = 0;
-      if (translate) {
-        x = parseInt(translate[1], 10);
-        y = parseInt(translate[2], 10);
-      }
-      pokemonElement.style.transform = `translate(${x + dx}px, ${y + dy}px)`;
-    }
+  const moveSelectedPokemon = (dx: number, dy: number) => {
+    if (!selectedPokemon) return;
+
+    setSelectedPokemonPos((prevPos) => ({
+      x: prevPos.x + dx,
+      y: prevPos.y + dy
+    }));
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'a':
-        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, -20, 0));
+        moveSelectedPokemon(-20, 0);
         break;
       case 'd':
-        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, 20, 0));
+        moveSelectedPokemon(20, 0);
         break;
       case ' ':
-        pokemonData.forEach((_, idx) => {
-          movePokemon(`pokemon-${idx}`, 0, -50);
-          setTimeout(() => movePokemon(`pokemon-${idx}`, 0, 50), 500);
-        });
+        moveSelectedPokemon(0, -50);
+        setTimeout(() => moveSelectedPokemon(0, 50), 500);
         break;
     }
+  };
+
+  const handlePokemonClick = (index: number) => {
+    if (!selectedPokemon) return;
+
+    const newPokemonData = [...pokemonData];
+    const clickedPokemon = newPokemonData[index];
+
+    const tempId = clickedPokemon.id;
+    newPokemonData[index].id = selectedPokemon.id;
+    setSelectedPokemon({ ...selectedPokemon, id: tempId });
+
+    setPokemonData(newPokemonData);
   };
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
         const response = await api.get<Pokemon[]>('/api/pokemons');
-        const data = response.data;
+        const data = response.data.slice(0, 6);
+
         if (data.length > 0) {
           const canvasWidth = canvasRef.current?.width || 800;
           const canvasHeight = canvasRef.current?.height || 600;
-          const spacing = canvasWidth / (data.length + 1);
+          const spacing = canvasWidth / (5 + 1);
 
           const updatedData = data.map((pokemon, index) => ({
             ...pokemon,
-            x: spacing * (index + 1),
-            y: canvasHeight + 350,
+            x: index < 5 ? spacing * (index + 1) - 150 : canvasWidth / 2 - 200,
+            y: index < 5 ? 50 : canvasHeight - 50
           }));
 
           setPokemonData(updatedData);
+          setSelectedPokemon(updatedData[5]);
+          setSelectedPokemonPos({ x: updatedData[5].x!, y: updatedData[5].y! });
         }
       } catch (error) {
         console.log('데이터 불러오는 도중 오류:', error);
@@ -85,29 +103,48 @@ export default function Home() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [pokemonData]);
+  }, [selectedPokemon]);
 
   return (
     <div
-      className="relative h-full w-full"
+      className="w-150 relative h-full"
       style={{
-        width: MOVEMENT_AREA.width,
-        height: MOVEMENT_AREA.height,
         backgroundImage: `url(${backgroundImage.src})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}
     >
-      {pokemonData.map((pokemon, idx) => (
+      {pokemonData.slice(0, 5).map((pokemon, idx) => (
         <div
           key={idx}
           id={`pokemon-${idx}`}
-          className="z-1 transition-transform duration-1000"
+          className="z-1 absolute cursor-pointer transition-transform duration-1000"
           style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
+          onClick={() => handlePokemonClick(idx)}
         >
-          <Image src={pokemon.sprites.front_default} alt="포켓몬 이미지" width={100} height={100} />
+          <Image
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.id}.gif`}
+            alt="포켓몬 이미지"
+            width={100}
+            height={100}
+          />
         </div>
       ))}
+
+      {selectedPokemon && (
+        <div
+          id="selected-pokemon"
+          className="z-1 absolute transition-transform duration-1000"
+          style={{ transform: `translate(${selectedPokemonPos.x}px, ${selectedPokemonPos.y}px)` }}
+        >
+          <Image
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${selectedPokemon.id}.gif`}
+            alt="선택된 포켓몬 이미지"
+            width={200}
+            height={200}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -9,22 +9,26 @@ import { IoArrowBackCircleOutline } from 'react-icons/io5';
 import { IoArrowUpCircleOutline } from 'react-icons/io5';
 import topBtn from './_components/topBtn';
 import { BsWallet2 } from 'react-icons/bs';
-
-const getPokemons = async () => {
-  const res = await fetch('http://localhost:3000/api/shop');
-  const data: Pokemon[] = await res.json();
-  return data;
-};
+import GetPokemons from './_components/getPokemons';
+import useAuth from './_components/getUser';
 
 const ShopPage = () => {
+  const { user } = useAuth();
   const {
     data: pokemons,
     isLoading,
     isError
   } = useQuery<Pokemon[]>({
     queryKey: ['pokemonsQuery'],
-    queryFn: getPokemons
+    queryFn: GetPokemons
   });
+
+  if (!user) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login';
+    }
+    return null;
+  }
 
   if (isLoading) {
     return (
