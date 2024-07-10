@@ -23,55 +23,67 @@ const MOVEMENT_AREA = { width: 600, height: 1100 };
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
+  const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
+  const [selectedPokemonPos, setSelectedPokemonPos] = useState({ x: 0, y: 0 });
 
-  const movePokemon = (pokemonId: string, dx: number, dy: number) => {
-    const pokemonElement = document.getElementById(pokemonId);
-    if (pokemonElement) {
-      const transform = pokemonElement.style.transform || 'translate(0px, 0px)';
-      const translate = transform.match(/translate\((-?\d+)px,\s*(-?\d+)px\)/);
-      let x = 0, y = 0;
-      if (translate) {
-        x = parseInt(translate[1], 10);
-        y = parseInt(translate[2], 10);
-      }
-      pokemonElement.style.transform = `translate(${x + dx}px, ${y + dy}px)`;
-    }
+  const moveSelectedPokemon = (dx: number, dy: number) => {
+    if (!selectedPokemon) return;
+
+    setSelectedPokemonPos(prevPos => ({
+      x: prevPos.x + dx,
+      y: prevPos.y + dy
+    }));
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'a':
-        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, -20, 0));
+        moveSelectedPokemon(-20, 0);
         break;
       case 'd':
-        pokemonData.forEach((_, idx) => movePokemon(`pokemon-${idx}`, 20, 0));
+        moveSelectedPokemon(20, 0);
         break;
       case ' ':
-        pokemonData.forEach((_, idx) => {
-          movePokemon(`pokemon-${idx}`, 0, -50);
-          setTimeout(() => movePokemon(`pokemon-${idx}`, 0, 50), 500);
-        });
+        moveSelectedPokemon(0, -50);
+        setTimeout(() => moveSelectedPokemon(0, 50), 500);
         break;
     }
+  };
+
+  const handlePokemonClick = (index: number) => {
+    if (!selectedPokemon) return;
+
+    const newPokemonData = [...pokemonData];
+    const clickedPokemon = newPokemonData[index];
+
+    // 이미지 교체
+    const tempSprite = clickedPokemon.sprites.front_default;
+    newPokemonData[index].sprites.front_default = selectedPokemon.sprites.front_default;
+    setSelectedPokemon({ ...selectedPokemon, sprites: { ...selectedPokemon.sprites, front_default: tempSprite } });
+
+    setPokemonData(newPokemonData);
   };
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
         const response = await api.get<Pokemon[]>('/api/pokemons');
-        const data = response.data;
+        const data = response.data.slice(0, 6); // 상단에 5마리, 아래 1마리만 필요
+
         if (data.length > 0) {
           const canvasWidth = canvasRef.current?.width || 800;
           const canvasHeight = canvasRef.current?.height || 600;
-          const spacing = canvasWidth / (data.length + 1);
+          const spacing = canvasWidth / (5 + 1);
 
           const updatedData = data.map((pokemon, index) => ({
             ...pokemon,
-            x: spacing * (index + 1),
-            y: canvasHeight + 350,
+            x: index < 5 ? spacing * (index + 1) - 150 : canvasWidth / 2 - 200,
+            y: index < 5 ? 50 : canvasHeight + 280,
           }));
 
           setPokemonData(updatedData);
+          setSelectedPokemon(updatedData[5]); // 6번째 포켓몬을 선택
+          setSelectedPokemonPos({ x: updatedData[5].x!, y: updatedData[5].y! });
         }
       } catch (error) {
         console.log('데이터 불러오는 도중 오류:', error);
@@ -85,7 +97,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [pokemonData]);
+  }, [selectedPokemon]);
 
   return (
     <div
@@ -98,16 +110,27 @@ export default function Home() {
         backgroundPosition: 'center'
       }}
     >
-      {pokemonData.map((pokemon, idx) => (
+      {pokemonData.slice(0, 5).map((pokemon, idx) => (
         <div
           key={idx}
           id={`pokemon-${idx}`}
-          className="z-1 transition-transform duration-1000"
+          className="absolute z-1 transition-transform duration-1000 cursor-pointer"
           style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
+          onClick={() => handlePokemonClick(idx)}
         >
           <Image src={pokemon.sprites.front_default} alt="포켓몬 이미지" width={100} height={100} />
         </div>
       ))}
+
+      {selectedPokemon && (
+        <div
+          id="selected-pokemon"
+          className="absolute z-1 transition-transform duration-1000"
+          style={{ transform: `translate(${selectedPokemonPos.x}px, ${selectedPokemonPos.y}px)` }}
+        >
+          <Image src={selectedPokemon.sprites.front_default} alt="선택된 포켓몬 이미지" width={200} height={200} />
+        </div>
+      )}
     </div>
   );
 }
