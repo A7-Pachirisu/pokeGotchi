@@ -1,8 +1,9 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import api from '@/lib/axios';
 import Image from 'next/image';
 import backgroundImage from '@/assets/background.png';
+import _ from 'lodash';
 
 interface Pokemon {
   id: number;
@@ -42,17 +43,31 @@ export default function Home() {
     }));
   };
 
+  const throttledMoveSelectedPokemon = useCallback(
+    _.throttle((dx: number, dy: number) => {
+      moveSelectedPokemon(dx, dy);
+    }, 400),
+    [selectedPokemon]
+  );
+
+  const debouncedMoveSelectedPokemon = useCallback(
+    _.debounce((dx: number, dy: number) => {
+      moveSelectedPokemon(dx, dy);
+    }, 300),
+    [selectedPokemon]
+  );
+
   const handleKeyDown = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'a':
-        moveSelectedPokemon(-20, 0);
+        throttledMoveSelectedPokemon(-30, 0);
         break;
       case 'd':
-        moveSelectedPokemon(20, 0);
+        throttledMoveSelectedPokemon(30, 0);
         break;
       case ' ':
-        moveSelectedPokemon(0, -50);
-        setTimeout(() => moveSelectedPokemon(0, 50), 500);
+        debouncedMoveSelectedPokemon(0, -50);
+        setTimeout(() => debouncedMoveSelectedPokemon(0, 50), 500);
         break;
     }
   };
