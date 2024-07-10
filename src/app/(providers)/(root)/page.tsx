@@ -10,7 +10,14 @@ interface Pokemon {
   korean_name: string;
   height: number;
   weight: number;
-  sprites: { front_default: string };
+  sprites: { 
+    front_default: string,
+    other: {
+      showdown: {
+        front_default: string;
+      }
+    }
+   };
   types: { type: { name: string; korean_name: string } }[];
   abilities: { ability: { name: string; korean_name: string } }[];
   moves: { move: { name: string; korean_name: string } }[];
@@ -118,7 +125,7 @@ export default function Home() {
           style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
           onClick={() => handlePokemonClick(idx)}
         >
-          <Image src={pokemon.sprites.front_default} alt="포켓몬 이미지" width={100} height={100} />
+          <Image src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.id}.gif`} alt="포켓몬 이미지" width={100} height={100} />
         </div>
       ))}
 
