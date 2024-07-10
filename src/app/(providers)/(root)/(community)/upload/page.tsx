@@ -1,7 +1,13 @@
 import React from 'react';
+import FormCard from './_components/FormCard';
 
 function page() {
-  return <div>업로드 페이지</div>;
+  return (
+    <div>
+      <h1>게시물 업로드</h1>
+      <FormCard />
+    </div>
+  );
 }
 
 export default page;
