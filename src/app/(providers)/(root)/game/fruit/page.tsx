@@ -60,7 +60,7 @@ export default function MatterGame() {
       <div className="items-center" ref={containerRef}>
         <canvas ref={canvasRef}></canvas>
       </div>
-      <Link href="/game-lobby">GoLobby</Link>
+      <Link href="/game">GoLobby</Link>
     </div>
   );
 }

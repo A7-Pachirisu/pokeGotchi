@@ -5,8 +5,10 @@ import { ToastContainer } from 'react-toastify';
 
 function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="font-dunggeunmo mx-auto flex h-screen w-[600px] flex-col">
-      <Header />
+    <div className="mx-auto flex h-screen w-[600px] flex-col font-dunggeunmo">
+      <div>
+        <Header />
+      </div>
       <main className="grow overflow-auto">
         <ToastContainer
           position="top-right"
@@ -23,7 +25,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         />
         {children}
       </main>
-      <MenuBar />
+      <div>
+        <MenuBar />
+      </div>
     </div>
   );
 }

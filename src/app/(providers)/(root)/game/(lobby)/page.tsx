@@ -7,13 +7,13 @@ const GameLobbyPage = () => {
     <div className="flex-col text-center">
       <div className="mt-40">유저정보</div>
       <div className="mt-20 grid">
-        <LinkItem href="/game-lobby/ball" altText="lobby-ball" className="bg-custom-yellow">
+        <LinkItem href="/game/ball" altText="lobby-ball" className="bg-custom-yellow">
           포켓볼 피하기
         </LinkItem>
-        <LinkItem href="/game-lobby/quiz" altText="lobby-quiz" className="bg-custom-blue">
+        <LinkItem href="/game/quiz" altText="lobby-quiz" className="bg-custom-blue">
           퀴즈 맞히기
         </LinkItem>
-        <LinkItem href="/game-lobby/fruit" altText="lobby-fruit" className="bg-custom-red">
+        <LinkItem href="/game/fruit" altText="lobby-fruit" className="bg-custom-red">
           수박 게임
         </LinkItem>
       </div>
