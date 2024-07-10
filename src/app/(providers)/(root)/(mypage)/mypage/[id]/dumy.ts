@@ -145,3 +145,68 @@ const users: User[] = [
 ];
 
 export default users;
+
+const posts = [
+  {
+    id: 1,
+    image: '/img1.png',
+    title: '게시글 제목 1',
+    content: '이것은 게시글 내용 1입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 2,
+    image: '/img1.png',
+    title: '게시글 제목 2',
+    content: '이것은 게시글 내용 2입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 3,
+    image: '/img1.png',
+    title: '게시글 제목 3',
+    content: '이것은 게시글 내용 3입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 4,
+    image: '/img1.png',
+    title: '게시글 제목 4',
+    content: '이것은 게시글 내용 4입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 5,
+    image: '/img1.png',
+    title: '게시글 제목 5',
+    content: '이것은 게시글 내용 5입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 6,
+    image: '/img1.png',
+    title: '게시글 제목 6',
+    content: '이것은 게시글 내용 6입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 7,
+    image: '/img1.png',
+    title: '게시글 제목 7',
+    content: '이것은 게시글 내용 7입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 8,
+    image: '/img1.png',
+    title: '게시글 제목 8',
+    content: '이것은 게시글 내용 8입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 9,
+    image: '/img1.png',
+    title: '게시글 제목 9',
+    content: '이것은 게시글 내용 9입니다. 자세한 내용은 여기에 작성됩니다.'
+  },
+  {
+    id: 10,
+    image: '/img1.png',
+    title: '게시글 제목 10',
+    content: '이것은 게시글 내용 10입니다. 자세한 내용은 여기에 작성됩니다.'
+  }
+];
+
+export {posts};
