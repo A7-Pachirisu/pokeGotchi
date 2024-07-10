@@ -7,5 +7,5 @@ export const notify = (message: string) =>
     position: 'top-center',
     autoClose: 2000,
     hideProgressBar: true,
-    style: { marginTop: '25vh', transform: 'translateY(-30%)' }
+    style: { marginTop: '20vh', transform: 'translateY(-30%)' }
   });

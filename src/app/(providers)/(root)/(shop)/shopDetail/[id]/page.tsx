@@ -23,7 +23,7 @@ const ShopDetailPage = async ({
       <div className="my-[5%] text-center text-2xl"></div>
       <div className="mx-auto w-10/12 rounded-lg border bg-gray-200 text-center">
         <div className="my-5 flex justify-center gap-2 text-3xl">
-          <div className="text-orange-500">No.{pokemons.id}</div>
+          <div className="mr-2 text-orange-500">No.{pokemons.id}</div>
           <div>{pokemons.korean_name}</div>
         </div>
         <div className="mt-3 h-[100] w-[100]">
