@@ -8,6 +8,7 @@ import users from './dumy';
 const Page: React.FC = () => {
   const { id } = useParams();
   const [startIndex, setStartIndex] = useState(0);
+  const cardsPerView = 3; // 한 번에 보여줄 카드 수
   const cardWidth = 180; // 각 카드의 폭
   const cardMargin = 20; // 각 카드 사이의 간격
 
@@ -23,11 +24,11 @@ const Page: React.FC = () => {
   }
 
   const handleNext = () => {
-    setStartIndex((prevIndex) => Math.min(prevIndex + 1, user.pokemons.length - 3));
+    setStartIndex((prevIndex) => Math.min(prevIndex + cardsPerView, user.pokemons.length - cardsPerView));
   };
 
   const handlePrev = () => {
-    setStartIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    setStartIndex((prevIndex) => Math.max(prevIndex - cardsPerView, 0));
   };
 
   return (
@@ -59,19 +60,23 @@ const Page: React.FC = () => {
         <div className="relative flex items-center justify-center">
           <button
             onClick={handlePrev}
-            className="absolute left-0 z-10 p-2 bg-gray-200 bg-opacity-50 hover:bg-opacity-75"
+            className="absolute left-[-25px] z-10 p-2 bg-gray-200 bg-opacity-50 hover:bg-opacity-75"
           >
             &lt;
           </button>
-          <div className="flex justify-center w-[540px]">
+          <div className="w-[600px]">
             <div
-              className="flex justify-center transition-transform duration-300 space-x-3"
-              style={{ transform: `translateX(-${startIndex * (cardWidth + cardMargin)}px)` }}
+              className="flex transition-transform duration-300"
+              style={{
+                transform: `translateX(-${startIndex * (cardWidth + cardMargin)}px)`,
+                width: `${user.pokemons.length * (cardWidth + cardMargin)}px`,
+                marginLeft: '8px', 
+              }}
             >
               {user.pokemons.map((mypokemon) => (
                 <div
                   key={mypokemon.id}
-                  className="min-w-[180px] bg-white-100 transform rounded-lg border border-gray-300 p-4 shadow-sm transition duration-300 hover:scale-105 hover:shadow-lg"
+                  className="min-w-[180px] bg-white-100 transform rounded-lg border border-gray-300 p-4 shadow-sm transition duration-300 hover:scale-105 hover:shadow-lg mx-2"
                 >
                   <div className="flex flex-col items-center">
                     <div className="relative mb-4 h-24 w-24">
@@ -92,10 +97,13 @@ const Page: React.FC = () => {
           </div>
           <button
             onClick={handleNext}
-            className="absolute right-0 z-10 p-2 bg-gray-200 bg-opacity-50 hover:bg-opacity-75"
+            className="absolute right-[-20px] z-10 p-2 bg-gray-200 bg-opacity-50 hover:bg-opacity-75"
           >
             &gt;
           </button>
+        </div>
+        <div>
+        <h2 className="mt-4 mb-4 text-2xl font-bold">내 게시글</h2>
         </div>
       </div>
     </div>
