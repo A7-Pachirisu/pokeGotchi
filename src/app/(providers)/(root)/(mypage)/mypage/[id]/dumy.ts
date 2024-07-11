@@ -19,6 +19,10 @@ export interface User {
   profileImage: string;
   hashtags: Hashtags[];
   pokemons: Pokemon[];
+  gameScore_ball: number;
+  gameScore_quiz: number;
+  gameScore_fruits: number;
+  coins: number;
 }
 
 const hashtags: Hashtags[] = [
@@ -40,7 +44,11 @@ const users: User[] = [
       { id: 2, name: '파이리', image: img.src, abilities: ['맹화', '선파워'] },
       { id: 3, name: '꼬부기', image: img.src, abilities: ['급류', '빗의접시'] },
       { id: 4, name: '피카츄', image: img.src, abilities: ['정전기', '피뢰침'] }
-    ]
+    ],
+    gameScore_ball: 50,
+    gameScore_quiz: 70,
+    gameScore_fruits: 90,
+    coins: 100
   },
   {
     id: 2,
@@ -51,7 +59,11 @@ const users: User[] = [
       { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] },
       { id: 6, name: '뮤', image: '/img1.png', abilities: ['싱크로'] },
       { id: 7, name: '뮤츠', image: '/img1.png', abilities: ['프레셔', '정신력'] }
-    ]
+    ],
+    gameScore_ball: 80,
+    gameScore_quiz: 60,
+    gameScore_fruits: 70,
+    coins: 200
   },
   {
     id: 3,
@@ -63,7 +75,11 @@ const users: User[] = [
       { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] },
       { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] }
-    ]
+    ],
+    gameScore_ball: 40,
+    gameScore_quiz: 50,
+    gameScore_fruits: 80,
+    coins: 150
   },
   {
     id: 4,
@@ -76,7 +92,11 @@ const users: User[] = [
       { id: 4, name: '피카츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
       { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] },
       { id: 6, name: '뮤', image: '/img1.png', abilities: ['싱크로'] }
-    ]
+    ],
+    gameScore_ball: 90,
+    gameScore_quiz: 80,
+    gameScore_fruits: 85,
+    coins: 300
   },
   {
     id: 5,
@@ -89,7 +109,11 @@ const users: User[] = [
       { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] },
       { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] }
-    ]
+    ],
+    gameScore_ball: 70,
+    gameScore_quiz: 60,
+    gameScore_fruits: 95,
+    coins: 250
   },
   {
     id: 6,
@@ -99,9 +123,11 @@ const users: User[] = [
     pokemons: [
       { id: 2, name: '파이리', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 3, name: '꼬부기', image: '/img1.png', abilities: ['급류', '빗의접시'] },
-      { id: 4, name: '피카츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
-      { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] }
-    ]
+    ],
+    gameScore_ball: 85,
+    gameScore_quiz: 75,
+    gameScore_fruits: 70,
+    coins: 220
   },
   {
     id: 7,
@@ -110,11 +136,11 @@ const users: User[] = [
     hashtags: [hashtags[0], hashtags[1], hashtags[4]],
     pokemons: [
       { id: 6, name: '뮤', image: '/img1.png', abilities: ['싱크로'] },
-      { id: 7, name: '뮤츠', image: '/img1.png', abilities: ['프레셔', '정신력'] },
-      { id: 8, name: '라이츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
-      { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
-      { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] }
-    ]
+    ],
+    gameScore_ball: 60,
+    gameScore_quiz: 50,
+    gameScore_fruits: 80,
+    coins: 180
   },
   {
     id: 8,
@@ -127,7 +153,11 @@ const users: User[] = [
       { id: 3, name: '꼬부기', image: '/img1.png', abilities: ['급류', '빗의접시'] },
       { id: 4, name: '피카츄', image: '/img1.png', abilities: ['정전기', '피뢰침'] },
       { id: 5, name: '이브이', image: '/img1.png', abilities: ['적응력', '도주'] }
-    ]
+    ],
+    gameScore_ball: 75,
+    gameScore_quiz: 85,
+    gameScore_fruits: 90,
+    coins: 270
   },
   {
     id: 9,
@@ -141,7 +171,11 @@ const users: User[] = [
       { id: 9, name: '리자몽', image: '/img1.png', abilities: ['맹화', '선파워'] },
       { id: 10, name: '프리저', image: '/img1.png', abilities: ['눈보라', '빙판'] },
       { id: 1, name: '이상해씨', image: '/img1.png', abilities: ['심록', '엽록소'] }
-    ]
+    ],
+    gameScore_ball: 65,
+    gameScore_quiz: 55,
+    gameScore_fruits: 85,
+    coins: 230
   }
 ];
 

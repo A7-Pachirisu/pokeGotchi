@@ -1,16 +1,27 @@
+'use client';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 import Image from 'next/image';
-import img from '../assets/default ball.png';
 import Link from 'next/link';
+import img from '../assets/default ball.png';
+import Button from './Button';
 
 const Header = () => {
+  const { me, logOut } = useAuth();
+  // console.log('여기는 헤더', me);
+  const handleClick = async () => {
+    await logOut();
+  };
+
   return (
-    <header className="flex h-[70px] w-full items-center justify-center bg-bar-color">
+    <header className="relative flex h-[70px] w-full items-center justify-center bg-bar-color px-4">
       <Link href="/">
         <Image src={img} alt="" width={40} height={40} />
       </Link>
-      <Link className="pl-10 text-white" href="/log-in">
-        Login
-      </Link>
+      {me && (
+        <Button size="sm" intent="yellow" className="absolute right-4 uppercase" onClick={handleClick}>
+          Logout
+        </Button>
+      )}
     </header>
   );
 };
