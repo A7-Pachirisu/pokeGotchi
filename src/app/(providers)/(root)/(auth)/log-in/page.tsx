@@ -26,13 +26,13 @@ function LogInPage() {
         <Input label="Password" type="password" {...passwordInput} />
       </form>
       <div className="mt-10 flex flex-col gap-y-4">
-        <Button size="lg" onClick={handleLogin}>
+        <Button size="lg" onClick={handleLogin} fit={false}>
           로그인
         </Button>
-        <Button size="lg" href="/sign-up">
+        <Button size="lg" href="/sign-up" fit={false}>
           회원가입
         </Button>
-        <Button size="lg" intent="yellow" href="/sign-up" onClick={handleLogout}>
+        <Button size="lg" intent="yellow" href="/sign-up" onClick={handleLogout} fit={false}>
           카카오 로그인이지만 지금은 로그아웃
         </Button>
       </div>
