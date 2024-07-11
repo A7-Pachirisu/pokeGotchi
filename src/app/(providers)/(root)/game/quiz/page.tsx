@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import QuestionCard from './_components/QuestionCard';
 import backgroundImage from '@/assets/background.png';
-import { QuestionsState, Difficulty, AnswerObject } from '@/types/quizTypes';
+import { QuestionsState, Difficulty, AnswerObject } from '@/app/(providers)/(root)/game/quiz/quizTypes';
 
 const TOTAL_QUESTIONS = 10;
 
