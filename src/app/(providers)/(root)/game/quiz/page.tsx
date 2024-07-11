@@ -3,17 +3,9 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { fetchQuizQuestions } from './api';
 import QuestionCard from './_components/QuestionCard';
-import { QuestionsState, Difficulty } from './api';
 import backgroundImage from '@/assets/background.png';
-
-export type AnswerObject = {
-  question: string;
-  answer: string;
-  correct: boolean;
-  correctAnswer: string;
-};
+import { QuestionsState, Difficulty, AnswerObject } from '@/types/quizTypes';
 
 const TOTAL_QUESTIONS = 10;
 
@@ -28,7 +20,12 @@ const QuizGamePage: React.FC = () => {
   const startTrivia = async () => {
     setLoading(true);
     setGameOver(false);
-    const newQuestions = await fetchQuizQuestions(TOTAL_QUESTIONS, Difficulty.EASY);
+    const response = await fetch(`/api/quiz?amount=${TOTAL_QUESTIONS}&difficulty=${Difficulty.EASY}`);
+    if (!response.ok) {
+      setLoading(false);
+      throw new Error('Failed to fetch questions');
+    }
+    const newQuestions = await response.json();
     setQuestions(newQuestions);
     setScore(0);
     setUserAnswers([]);
@@ -61,7 +58,7 @@ const QuizGamePage: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
+    <div className="flex max-h-screen flex-col items-center justify-center">
       <div className="relative h-[800px] w-[600px]">
         <Image
           src={backgroundImage}
@@ -72,7 +69,7 @@ const QuizGamePage: React.FC = () => {
           className="pointer-events-none"
         />
       </div>
-      <div className="absolute z-10 flex flex-col items-center">
+      <div className="z-1 absolute flex w-full flex-col items-center">
         <h1 className="mb-8 bg-gradient-to-b from-white to-blue-300 bg-clip-text text-center text-5xl font-bold text-transparent drop-shadow-lg">
           REACT QUIZ
         </h1>
@@ -86,7 +83,7 @@ const QuizGamePage: React.FC = () => {
         ) : null}
         {!gameOver ? <p className="mb-4 text-2xl text-white">Score: {score}</p> : null}
         {loading ? <p className="text-2xl text-white">Loading Questions...</p> : null}
-        {!loading && !gameOver && (
+        {!loading && !gameOver && questions.length > 0 && (
           <QuestionCard
             questionNr={number + 1}
             totalQuestions={TOTAL_QUESTIONS}
