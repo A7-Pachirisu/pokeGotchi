@@ -4,8 +4,10 @@ import React, { useState } from 'react';
 import FormCard from './_components/FormCard';
 import UploadBtn from './_components/UploadBtn';
 import { supabase } from '@/supabase/supabaseClient';
+import { useRouter } from 'next/navigation';
 
 function Page() {
+  const router = useRouter();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   const [content, setContent] = useState<string>('');
@@ -51,6 +53,7 @@ function Page() {
         setContent('');
         setSelectedFile(null);
         setPreviewImageUrl(null);
+        router.push('/sns');
       }
     } catch (error) {
       console.error('일반 에러 발생:', (error as Error).message);
