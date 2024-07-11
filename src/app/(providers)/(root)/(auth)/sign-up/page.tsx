@@ -1,23 +1,24 @@
 'use client';
 import Input from '@/components/Input';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 import useInput from '@/hooks/useInput';
-import { validateForm } from '@/utils/validateForm';
 import Link from 'next/link';
 import 'react-toastify/dist/ReactToastify.css';
 
 function SignUpPage() {
+  const { signUp } = useAuth();
   const emailInput = useInput('');
   const passwordInput = useInput('');
   const passwordCheckInput = useInput('');
 
-  const handleClick = () => {
+  const handleSignUp = async () => {
     const email = emailInput.value;
     const password = passwordInput.value;
     const passwordCheck = passwordCheckInput.value;
 
-    if (validateForm({ email, password, passwordCheck })) {
-      console.log(email, password, passwordCheck);
-    }
+    const signUpData = { email, password, passwordCheck };
+
+    await signUp(signUpData);
   };
   return (
     <>
@@ -28,7 +29,7 @@ function SignUpPage() {
       </form>
 
       <div className="mt-10 flex flex-col gap-y-4">
-        <button className="w-full rounded bg-black px-1.5 py-2 text-white" onClick={handleClick}>
+        <button className="w-full rounded bg-black px-1.5 py-2 text-white" onClick={handleSignUp}>
           회원가입
         </button>
         <Link href="/log-in" className="w-full rounded bg-black px-1.5 py-2 text-center text-white">
