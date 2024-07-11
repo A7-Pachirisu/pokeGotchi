@@ -9,7 +9,7 @@ const buttonVariant = cva(
     variants: {
       size: {
         sm: 'px-2.5 py-1.5', // 상단바
-        md: '', // 상점, sns
+        md: 'px-3.5 py-2.5', // 상점, sns
         lg: 'px-1.5 py-2', // 로그인
         xl: 'px-6 py-3.5 w-full text-4xl' // 로비,
       },
@@ -20,13 +20,19 @@ const buttonVariant = cva(
         grey: 'bg-custom-grey',
         black: 'bg-custom-black',
         green: 'bg-custom-green',
-        white: 'bg-custom-white'
+        white: 'bg-custom-white',
+        darkGrey: 'bg-bar-color'
+      },
+      fit: {
+        true: 'w-fit',
+        false: 'w-full'
       }
     },
     compoundVariants: [],
     defaultVariants: {
       size: 'md',
-      intent: 'blue'
+      intent: 'blue',
+      fit: true
     }
   }
 );
