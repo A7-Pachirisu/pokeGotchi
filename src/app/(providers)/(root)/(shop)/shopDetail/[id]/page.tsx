@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { IoArrowBackCircleOutline } from 'react-icons/io5';
 import PokemonConfirm from './_components/PokemonConfirm';
-import StatGraph from './_components/StatGraph';
+import StatGraph from './_components/statGraph';
 
 const ShopDetailPage = async ({
   params
