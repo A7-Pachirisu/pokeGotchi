@@ -1,5 +1,5 @@
 //유저 정보, 코인, 닉네임 가져오기 (users 테이블)
-import create from 'zustand';
+import { create } from 'zustand';
 import { createClient } from '@/supabase/client';
 
 interface userState {

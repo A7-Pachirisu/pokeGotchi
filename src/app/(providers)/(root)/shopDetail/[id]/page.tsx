@@ -34,7 +34,6 @@ const ShopDetailPage = async ({
           />
         </div>
         <div className="mx-auto my-7 w-4/5 rounded-md bg-white p-5">
-          <div className="mx-auto w-1/5 rounded-md text-xl">Lv.1</div>
           {pokemons.stats.map((pokemon, index) => {
             const ratio = pokemon.base_stat % 100;
             return (

@@ -1,12 +1,11 @@
 'use client';
-
 import Button from '@/components/Button';
 import { notify } from '@/utils/toastify';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { insertType } from '@/types/insertType';
 import { BiCoinStack } from 'react-icons/bi';
-import buyPokemon from './buyPokemon';
+import GetPokemon from './getPokemon';
 
 const PokemonConfirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
   const submit = () => {
@@ -22,7 +21,7 @@ const PokemonConfirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
             <Button
               className="mr-2 w-20 rounded bg-custom-green px-4 py-2 text-2xl text-white hover:brightness-95"
               onClick={async () => {
-                const success = await buyPokemon(pokemonNumber, gifUrl, pokemonName);
+                const success = await GetPokemon(pokemonNumber, gifUrl, pokemonName);
                 if (success) {
                   notify('선택한 포켓몬을 데려왔습니다');
                 }

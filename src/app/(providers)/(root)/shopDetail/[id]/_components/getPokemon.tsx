@@ -2,7 +2,7 @@ import { useUserStore } from '@/store/userStore';
 import { createClient } from '@/supabase/client';
 import { notify } from '@/utils/toastify';
 
-const buyPokemon = async (pokemonNumber: number, gifUrl: string, pokemonName: string) => {
+const GetPokemon = async (pokemonNumber: number, gifUrl: string, pokemonName: string) => {
   const { user, deductCoins } = useUserStore.getState();
   const supabase = createClient();
   const pokemon_price = 50;
@@ -46,4 +46,4 @@ const buyPokemon = async (pokemonNumber: number, gifUrl: string, pokemonName: st
   }
 };
 
-export default buyPokemon;
+export default GetPokemon;
