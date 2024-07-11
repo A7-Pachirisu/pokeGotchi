@@ -1,10 +1,27 @@
-import React from 'react';
+'use client';
+
+import React, { useEffect, useState } from 'react';
 import RankItem from './_components/RankItem';
 import PostItem from './_components/PostItem';
 import Link from 'next/link';
 import { FaPencil } from 'react-icons/fa6';
+import { supabase } from '@/supabase/supabaseClient';
 
 function page() {
+  const [posts, setPosts] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const { data, error } = await supabase.from('posts').select('*');
+      if (error) {
+        console.error('게시물 fetch 에러: ', error);
+      } else {
+        setPosts(data || []);
+      }
+    }
+    fetchPosts();
+  }, []);
+
   return (
     <div className="">
       <header className="mt-10">
@@ -18,7 +35,7 @@ function page() {
             <FaPencil />
           </Link>
         </div>
-        <PostItem />
+        <PostItem posts={posts} />
       </main>
     </div>
   );

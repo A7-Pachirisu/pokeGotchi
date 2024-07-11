@@ -1,10 +1,14 @@
 import React from 'react';
 
-const UploadBtn = () => {
+interface UploadBtnProps {
+  onClick: () => void;
+}
+
+const UploadBtn: React.FC<UploadBtnProps> = ({ onClick }) => {
   return (
-    <div className="mt-10 flex justify-center">
-      <button className="h-[40px] w-[100px] rounded-lg border bg-bar-color text-white">업로드</button>
-    </div>
+    <button className="ml-10 mt-5 rounded bg-blue-500 p-2 text-white" onClick={onClick}>
+      업로드
+    </button>
   );
 };
 
