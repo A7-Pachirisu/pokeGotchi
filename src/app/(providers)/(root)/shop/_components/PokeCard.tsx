@@ -10,7 +10,10 @@ interface PokeCarProps {
 
 function PokeCard({ pokemon }: PokeCarProps) {
   return (
-    <div key={pokemon.id} className="my-1 flex flex-col rounded-md border border-gray-300 p-3 shadow-lg">
+    <div
+      key={pokemon.id}
+      className="mx-1 my-1 flex flex-col rounded-md border border-gray-300 p-3 shadow-lg hover:scale-105"
+    >
       <Link href={`/shopDetail/${pokemon.id}`}>
         <div className="align-center flex justify-end text-xl">
           <BiCoinStack className="my-auto text-yellow-400" />
