@@ -1,4 +1,5 @@
 'use client';
+import Button from '@/components/Button';
 import { Pokemon } from '@/types/pokemonType';
 import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
@@ -35,15 +36,14 @@ const ShopPage = () => {
   return (
     <>
       <div className="align-center mx-auto my-auto mt-7 flex justify-center text-center text-3xl">포켓몬 상점</div>
-      <div className="my-5 flex justify-between">
-        <div className="mx-2 rounded-md border border-gray-400 p-2 text-3xl shadow-md">
-          <div>Lv.1</div>
-        </div>
-
-        <div className="align-center mx-2 flex gap-2 rounded-md border border-gray-400 p-2 text-3xl shadow-md">
+      <div className="m-5 flex justify-between">
+        <Button intent="white" size="md">
+          <span>Lv.1</span>
+        </Button>
+        <Button intent="white" size="md">
           <BiCoinStack className="my-auto text-yellow-400" />
-          50
-        </div>
+          <span>50</span>
+        </Button>
       </div>
       <div className="mx-auto mt-10 grid grid-cols-3 gap-3 text-center">
         {pokemons?.map((pokemon) => {

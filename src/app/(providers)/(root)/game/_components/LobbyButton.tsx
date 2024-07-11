@@ -8,7 +8,7 @@ type LobbyButton = {
 
 function LobbyButton({ title, ...props }: LobbyButton) {
   return (
-    <Button {...props}>
+    <Button fit={false} {...props}>
       <Image src={PokeBall} alt="" width={80} height={80} className="mr-10" />
       <span className="grow">{title}</span>
     </Button>

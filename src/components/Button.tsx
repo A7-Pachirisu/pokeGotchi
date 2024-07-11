@@ -4,7 +4,7 @@ import { ComponentProps, PropsWithChildren } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const buttonVariant = cva(
-  'flex font-semibold justify-center  text-white rounded items-center  hover:brightness-105 active:brightness-110',
+  'flex font-semibold justify-center text-white rounded items-center text-xl hover:brightness-105 active:brightness-110',
   {
     variants: {
       size: {
@@ -28,7 +28,9 @@ const buttonVariant = cva(
         false: 'w-full'
       }
     },
-    compoundVariants: [],
+    compoundVariants: [
+      { intent: 'white', size: 'md', className: 'text-black bg-white border border-gray-400 shadow-md' }
+    ],
     defaultVariants: {
       size: 'md',
       intent: 'blue',
@@ -41,8 +43,8 @@ type ButtonrVariant = VariantProps<typeof buttonVariant>;
 export type ButtonProps = ButtonrVariant &
   (ComponentProps<'button'> | ({ href: string } & ComponentProps<typeof Link>));
 
-function Button({ intent, size, children, className, ...props }: PropsWithChildren<ButtonProps>) {
-  const mergedClassName = twMerge(buttonVariant({ intent, size }), className);
+function Button({ intent, size, fit, children, className, ...props }: PropsWithChildren<ButtonProps>) {
+  const mergedClassName = twMerge(buttonVariant({ intent, size, fit }), className);
   if ('href' in props) {
     return (
       <Link className={mergedClassName} {...props}>
