@@ -10,10 +10,10 @@ import { IoArrowUpCircleOutline } from 'react-icons/io5';
 import topBtn from './_components/topBtn';
 import { BsWallet2 } from 'react-icons/bs';
 import GetPokemons from './_components/getPokemons';
-import useAuth from './_components/getUser';
+// import useAuth from './_components/getUser';
 
 const ShopPage = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   const {
     data: pokemons,
     isLoading,
@@ -23,12 +23,12 @@ const ShopPage = () => {
     queryFn: GetPokemons
   });
 
-  if (!user) {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/login';
-    }
-    return null;
-  }
+  // if (!user) {
+  //   if (typeof window !== 'undefined') {
+  //     window.location.href = '/log-in';
+  //   }
+  //   return null;
+  // }
 
   if (isLoading) {
     return (
@@ -81,7 +81,7 @@ const ShopPage = () => {
                     <div className="my-2 text-xl">{pokemon.korean_name}</div>
                   </div>
 
-                  <button className="border-custom-green bg-custom-green rounded-md border px-3 text-lg text-white shadow-sm shadow-black hover:brightness-95">
+                  <button className="rounded-md border border-custom-green bg-custom-green px-3 text-lg text-white shadow-sm shadow-black hover:brightness-95">
                     Buy
                   </button>
                 </Link>
