@@ -15,6 +15,7 @@ const Page: React.FC = () => {
   const { id } = useParams();
   const [startIndex, setStartIndex] = useState(0);
   const [user, setUser] = useState<any>(null);
+  const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
   const cardsPerView = 3; // 한 번에 보여줄 카드 수
   const cardWidth = 180; // 각 카드의 폭
@@ -24,6 +25,18 @@ const Page: React.FC = () => {
     if (id) {
       fetchUserData(id as string);
     }
+
+    // 로그인된 사용자 아이디 가져오기
+    const fetchLoggedInUserId = async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error fetching logged in user:', error);
+      } else {
+        setLoggedInUserId(data?.user?.id || null);
+      }
+    };
+
+    fetchLoggedInUserId();
   }, [id]);
 
   const fetchUserData = async (userId: string) => {
@@ -105,12 +118,14 @@ const Page: React.FC = () => {
                 </div>
               </div>
             </div>
-            <button
-              onClick={handleOpenModal}
-              className="absolute bottom-4 right-4 rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs"
-            >
-              수정
-            </button>
+            {loggedInUserId === user.id && (
+              <button
+                onClick={handleOpenModal}
+                className="absolute bottom-4 right-4 rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs"
+              >
+                수정
+              </button>
+            )}
           </div>
         </div>
         <h2 className="mb-4 text-2xl font-bold">내 포켓몬</h2>
