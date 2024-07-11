@@ -16,16 +16,16 @@ const initialValue: AuthContextValue = {
   signUp: () => {}
 };
 
-const AuthContext = createContext(initialValue);
+const AuthContext = createContext<AuthContextValue>(initialValue);
 
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
 
-  const [isInitialized, setIsInitialized] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [me, setMe] = useState(null);
+  const [isInitialized, setIsInitialized] = useState<AuthContextValue['isInitialized']>(false);
+  const [me, setMe] = useState<AuthContextValue['me']>(null);
+  const isLoggedIn = !!me;
 
   const logIn = async (logInData: logInForm) => {
     if (me) {
@@ -36,10 +36,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     if (validateForm(logInData)) {
       try {
         const { user } = await logInService(logInData);
+        router.replace('/');
         performToast({ msg: '로그인 성공!', type: 'success' });
         setMe(user);
-        setIsLoggedIn(true);
-        router.replace('/');
       } catch {
         performToast({ msg: '잘못된 로그인 정보입니다', type: 'error' });
       }
@@ -54,6 +53,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
     await logOutService();
     performToast({ msg: '로그아웃 되었습니다!', type: 'success' });
+    router.replace('/log-in');
     init();
   };
 
@@ -72,7 +72,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const init = () => {
     setMe(null);
     setIsInitialized(false);
-    setIsLoggedIn(false);
   };
 
   useEffect(() => {
