@@ -1,14 +1,5 @@
 import React from 'react';
-import { AnswerObject } from '../page';
-
-type Props = {
-  question: string;
-  answers: string[];
-  callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  userAnswer: AnswerObject | undefined;
-  questionNr: number;
-  totalQuestions: number;
-};
+import { AnswerObject, Props } from '@/types/quizTypes';
 
 const QuestionCard: React.FC<Props> = ({ question, answers, callback, userAnswer, questionNr, totalQuestions }) => (
   <div className="max-w-screen-lg rounded-lg border-2 border-[#0085a3] bg-[#ebfeff] p-5 text-center shadow-lg">
