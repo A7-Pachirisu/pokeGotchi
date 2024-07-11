@@ -1,10 +1,9 @@
 'use client';
+import { Pokemon } from '@/types/pokemonType';
 import { useQuery } from '@tanstack/react-query';
-import React from 'react';
 import Image from 'next/image';
-import { Pokemon } from '../../../../../types/pokemonType';
-import { BiCoinStack } from 'react-icons/bi';
 import Link from 'next/link';
+import { BiCoinStack } from 'react-icons/bi';
 
 const getPokemons = async () => {
   const res = await fetch('http://localhost:3000/api/shop');
