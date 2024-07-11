@@ -1,37 +1,24 @@
 'use client';
 import Input from '@/components/Input';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 import useInput from '@/hooks/useInput';
-import { logIn, logOut } from '@/services/authService';
-import { performToast } from '@/utils/performToast';
-import { validateForm } from '@/utils/validateForm';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 function LogInPage() {
-  const router = useRouter();
+  const { logIn, logOut } = useAuth();
   const emailInput = useInput('');
   const passwordInput = useInput('');
 
-  const handleClick = async () => {
+  const handleLogin = async () => {
     const email = emailInput.value;
     const password = passwordInput.value;
 
     const logInData = { email, password };
-    if (validateForm(logInData)) {
-      try {
-        const data = await logIn(logInData);
-        performToast({ msg: '로그인 성공!', type: 'success' });
-        router.replace('/');
-      } catch {
-        return performToast({ msg: '잘못된 로그인 정보입니다', type: 'error' });
-      }
-    }
+    await logIn(logInData);
   };
 
-  const handleLogout = async () => {
-    const data = await logOut();
-    console.log('>>>', data);
-  };
+  const handleLogout = async () => await logOut();
+
   return (
     <>
       <form className="my-5 flex flex-col gap-2">
@@ -39,7 +26,7 @@ function LogInPage() {
         <Input label="Password" type="password" {...passwordInput} />
       </form>
       <div className="mt-10 flex flex-col gap-y-4">
-        <button className="w-full rounded bg-black px-1.5 py-2 text-white" onClick={handleClick}>
+        <button className="w-full rounded bg-black px-1.5 py-2 text-white" onClick={handleLogin}>
           로그인
         </button>
         <Link href="/sign-up" className="w-full rounded bg-black px-1.5 py-2 text-center text-white">
