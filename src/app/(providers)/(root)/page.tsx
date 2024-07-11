@@ -99,7 +99,7 @@ export default function Home() {
           const updatedData = data.map((pokemon, index) => ({
             ...pokemon,
             x: index < 5 ? spacing * (index + 1) - 150 : canvasWidth / 2 - 200,
-            y: index < 5 ? 50 : canvasHeight - 50
+            y: index < 5 ? 50 : canvasHeight - 20
           }));
 
           setPokemonData(updatedData);

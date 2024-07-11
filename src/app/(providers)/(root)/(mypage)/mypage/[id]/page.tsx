@@ -1,4 +1,5 @@
 'use client';
+import img from '@/assets/random profile1.png';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
@@ -7,7 +8,7 @@ import { BiCoinStack } from 'react-icons/bi';
 import dummyUsers from './dumy';
 import EditProfileModal from './EditProfileModal';
 
-const defaultProfileImage = '/images/default-profile.png'; // 기본 프로필 이미지 경로
+const defaultProfileImage = img.src; // 기본 프로필 이미지 경로
 const defaultPokemonImage = '/random profile1.png'; // 기본 포켓몬 이미지 경로
 
 const Page: React.FC = () => {
@@ -94,7 +95,7 @@ const Page: React.FC = () => {
                   )}
                 </div>
               </div>
-              <div className="ml-10 mt-1 flex flex-col justify-center items-start">
+              <div className="ml-10 mt-0 flex flex-col justify-center items-start">
                 <div className="text-sm font-bold">Game Scores</div>
                 <div className="text-xs mt-0">Ball: {user.gameScore_ball}</div>
                 <div className="text-xs mt-0">Quiz: {user.gameScore_quiz}</div>
