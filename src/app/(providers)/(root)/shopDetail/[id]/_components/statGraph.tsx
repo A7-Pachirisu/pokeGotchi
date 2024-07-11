@@ -1,7 +1,6 @@
 'use client';
-import React from 'react';
 
-const Graph = ({ ratio }: { ratio: number }) => {
+const StatGraph = ({ ratio }: { ratio: number }) => {
   return (
     <div className="flex h-6 w-36 justify-start border-2">
       <div
@@ -12,4 +11,4 @@ const Graph = ({ ratio }: { ratio: number }) => {
   );
 };
 
-export default Graph;
+export default StatGraph;

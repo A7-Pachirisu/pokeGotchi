@@ -1,13 +1,14 @@
 'use client';
-import React from 'react';
-import { confirmAlert } from 'react-confirm-alert';
+
+import Button from '@/components/Button';
 import { notify } from '@/utils/toastify';
+import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { insertType } from '@/types/insertType';
 import { BiCoinStack } from 'react-icons/bi';
 import buyPokemon from './buyPokemon';
-import { insertType } from '@/types/insertType';
 
-const Confirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
+const PokemonConfirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
   const submit = () => {
     confirmAlert({
       customUI: ({ onClose }) => (
@@ -18,7 +19,7 @@ const Confirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
           </h1>
           <h1 className="mb-4 mt-2 text-2xl">이 포켓몬을 데려옵니다</h1>
           <div className="mt-2 flex justify-around">
-            <button
+            <Button
               className="mr-2 w-20 rounded bg-custom-green px-4 py-2 text-2xl text-white hover:brightness-95"
               onClick={async () => {
                 const success = await buyPokemon(pokemonNumber, gifUrl, pokemonName);
@@ -29,15 +30,15 @@ const Confirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
               }}
             >
               Yes
-            </button>
-            <button
+            </Button>
+            <Button
               className="w-20 rounded bg-red-500 px-4 py-2 text-2xl text-white hover:brightness-95"
               onClick={() => {
                 onClose();
               }}
             >
               No
-            </button>
+            </Button>
           </div>
         </div>
       )
@@ -56,4 +57,4 @@ const Confirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
   );
 };
 
-export default Confirm;
+export default PokemonConfirm;

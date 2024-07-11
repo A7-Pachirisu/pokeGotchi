@@ -19,8 +19,8 @@ type ItemPos = {
 export default function PokeBallGamePage() {
   const [state, setState] = useState<'play' | 'pause' | 'stop'>('stop');
   const [score, setScore] = useState(0);
-  const [createPokeBallTime, setCreatePokeBallTime] = useState(1000);
-  const [pokeBallAccel, setPokeBallAccel] = useState(0.03);
+  const [createPokeBallTime, setCreatePokeBallTime] = useState(700);
+  const [pokeBallAccel, setPokeBallAccel] = useState(0.02);
 
   const ref = useRef<HTMLCanvasElement>(null);
   const pokemonRef = useRef<HTMLImageElement>(null);
@@ -254,18 +254,18 @@ export default function PokeBallGamePage() {
   ]);
 
   useEffect(() => {
-    if (score % 100 === 0 && score !== 0) {
-      setCreatePokeBallTime((prevTime) => Math.max(prevTime - 20, 100));
+    if (score % 200 === 0 && score !== 0) {
+      setCreatePokeBallTime((prevTime) => Math.max(prevTime - 50, 100));
     }
-    if (score % 500 === 0 && score !== 0) {
-      setPokeBallAccel((prevAccel) => prevAccel + 0.01);
+    if (score % 100 === 0 && score !== 0) {
+      setPokeBallAccel((prevAccel) => prevAccel + 0.002);
     }
   }, [score]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <div className="h-[800px] w-[600px] bg-white p-4">
-        <div className="mx-auto my-3 text-center">
+    <div className="flex max-h-screen items-center justify-center">
+      <div className="bg-white">
+        <div className="mx-auto my-4 text-center">
           <div className="flex justify-center space-x-5">
             <button type="button" onClick={() => setState('pause')}>
               PAUSE
