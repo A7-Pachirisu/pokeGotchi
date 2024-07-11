@@ -1,11 +1,13 @@
 'use client';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 import Image from 'next/image';
 import Link from 'next/link';
 import img from '../assets/default ball.png';
 
 const Header = () => {
-  const handleClick = () => {
-    console.log('1');
+  const { me, logOut } = useAuth();
+  const handleClick = async () => {
+    await logOut();
   };
 
   return (
@@ -13,12 +15,14 @@ const Header = () => {
       <Link href="/">
         <Image src={img} alt="" width={40} height={40} />
       </Link>
-      <button
-        className="absolute right-4 rounded bg-custom-yellow p-1.5 px-2 text-lg uppercase text-black hover:brightness-95 active:brightness-90"
-        onClick={handleClick}
-      >
-        Logout
-      </button>
+      {me && (
+        <button
+          className="absolute right-4 rounded bg-custom-yellow p-1.5 px-2 text-lg uppercase text-black hover:brightness-95 active:brightness-90"
+          onClick={handleClick}
+        >
+          Logout
+        </button>
+      )}
     </header>
   );
 };

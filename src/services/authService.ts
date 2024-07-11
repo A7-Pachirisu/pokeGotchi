@@ -16,7 +16,7 @@ export const logOutService = async () => {
   return response.data;
 };
 
-export const getUser = async () => {
+export const getUserService = async () => {
   const response = await api.get('/api/auth/me');
   return response.data;
 };

@@ -1,10 +1,10 @@
 'use client';
-import { logInService, logOutService, signUpService } from '@/services/authService';
+import { getUserService, logInService, logOutService, signUpService } from '@/services/authService';
 import { logInForm, signUpForm } from '@/types/formType';
 import { performToast } from '@/utils/performToast';
 import { validateForm } from '@/utils/validateForm';
 import { useRouter } from 'next/navigation';
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { AuthContextValue } from './authContextType';
 
 const initialValue: AuthContextValue = {
@@ -74,6 +74,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     setIsInitialized(false);
     setIsLoggedIn(false);
   };
+
+  useEffect(() => {
+    (async () => {
+      const user = await getUserService();
+      if (user) setMe(user);
+    })();
+    setIsInitialized(true);
+  }, []);
 
   const value: AuthContextValue = {
     isInitialized,
