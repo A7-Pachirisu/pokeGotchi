@@ -1,17 +1,18 @@
-import React from 'react';
+import Button from '@/components/Button';
 import FormCard from './_components/FormCard';
-import UploadBtn from './_components/UploadBtn';
 
-function page() {
+function UploadPage() {
   return (
-    <div>
-      <header className="mt-10">
-        <h1 className="ml-10 text-lg font-semibold">게시물 업로드</h1>
+    <div className="flex h-full flex-col items-center px-10">
+      <header className="mt-10 flex w-full justify-start">
+        <h1 className="text-lg font-semibold">게시물 업로드</h1>
       </header>
       <FormCard />
-      <UploadBtn />
+      <Button intent="darkGrey" size="md" className="mt-10">
+        업로드
+      </Button>
     </div>
   );
 }
 
-export default page;
+export default UploadPage;

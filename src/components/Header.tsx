@@ -3,6 +3,7 @@ import { useAuth } from '@/contexts/auth.context/auth.context';
 import Image from 'next/image';
 import Link from 'next/link';
 import img from '../assets/default ball.png';
+import Button from './Button';
 
 const Header = () => {
   const { me, logOut } = useAuth();
@@ -17,12 +18,9 @@ const Header = () => {
         <Image src={img} alt="" width={40} height={40} />
       </Link>
       {me && (
-        <button
-          className="absolute right-4 rounded bg-custom-yellow p-1.5 px-2 text-lg uppercase text-black hover:brightness-95 active:brightness-90"
-          onClick={handleClick}
-        >
+        <Button size="sm" intent="yellow" className="absolute right-4 uppercase" onClick={handleClick}>
           Logout
-        </button>
+        </Button>
       )}
     </header>
   );
