@@ -9,7 +9,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       <div>
         <Header />
       </div>
-      <main className="grow overflow-auto">
+      <main className="grow overflow-auto" id="main-content">
         <ToastContainer
           position="top-right"
           autoClose={5000}

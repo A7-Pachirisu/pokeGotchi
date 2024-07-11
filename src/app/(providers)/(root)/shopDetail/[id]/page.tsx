@@ -20,21 +20,20 @@ const ShopDetailPage = async ({
     <>
       <div className="mx-10 flex h-full flex-col items-center justify-center rounded-lg border bg-gray-200">
         <div className="my-5 flex justify-center gap-2 text-3xl">
-          <div className="text-orange-500">No.{pokemons.id}</div>
+          <div className="mr-2 text-orange-500">No.{pokemons.id}</div>
           <div>{pokemons.korean_name}</div>
         </div>
         <div className="mt-3 h-[100] w-[100]">
           <Image
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`}
             alt={'pokemon_img'}
-            unoptimized
             width={100}
             height={100}
             className="mx-auto flex justify-center"
+            unoptimized
           />
         </div>
         <div className="mx-auto my-7 w-4/5 rounded-md bg-white p-5">
-          <div className="mx-auto w-1/5 rounded-md text-xl">Lv.1</div>
           {pokemons.stats.map((pokemon, index) => {
             const ratio = pokemon.base_stat % 100;
             return (
@@ -50,9 +49,13 @@ const ShopDetailPage = async ({
             );
           })}
         </div>
-        <PokemonConfirm />
+        <PokemonConfirm
+          pokemonNumber={pokemons.id}
+          gifUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`}
+          pokemonName={pokemons.korean_name}
+        />
       </div>
-      <Link href="/shop">
+      <Link href={'/shop/'}>
         <IoArrowBackCircleOutline className="fixed bottom-20 ml-5 text-5xl text-gray-600" />
       </Link>
     </>
