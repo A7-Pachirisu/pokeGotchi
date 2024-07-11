@@ -92,7 +92,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
             type="text"
             value={nickname || ''}
             onChange={(e) => setNickname(e.target.value)}
-            className="mt-1 block w-full border border-gray-300 rounded-md"
+            className="mt-1 block w-full border border-gray-300 rounded-md p-1"
           />
         </div>
         <div className="mb-4">
@@ -103,12 +103,12 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
                 type="text"
                 value={hashtag}
                 onChange={(e) => handleHashtagChange(index, e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md"
+                className="mt-1 block w-full border border-gray-300 rounded-md p-1"
               />
               <button
                 type="button"
                 onClick={() => handleRemoveHashtag(index)}
-                className="ml-2 text-red-500"
+                className="ml-2 text-red-500 flex"
               >
                 삭제
               </button>

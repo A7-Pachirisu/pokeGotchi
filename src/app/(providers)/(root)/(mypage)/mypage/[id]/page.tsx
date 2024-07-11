@@ -42,7 +42,7 @@ const Page: React.FC = () => {
   const fetchUserData = async (userId: string) => {
     console.log('Fetching user data for ID:', userId); // 콘솔에 userId 출력
     const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
-    
+
     if (error || !data) {
       console.error('Error fetching user data:', error);
       const dummyUser = dummyUsers.find((user) => user.id === parseInt(userId, 10));
@@ -108,13 +108,16 @@ const Page: React.FC = () => {
                   )}
                 </div>
               </div>
-              <div className="ml-10 mt-0 flex flex-col justify-center items-start">
+              <div className="ml-10 mt-0 flex flex-col items-start justify-center">
                 <div className="text-sm font-bold">Game Scores</div>
-                <div className="text-xs mt-0">Ball: {user.gameScore_ball}</div>
-                <div className="text-xs mt-0">Quiz: {user.gameScore_quiz}</div>
-                <div className="text-xs mt-0">Fruits: {user.gameScore_fruit}</div>
-                <div className="flex text-sm font-bold mt-2">
-                  <BiCoinStack className="text-yellow-400 mr-1 mt-1" /> {user.coins}
+                <div className="mt-0 text-xs">Ball: {user.gameScore_ball}</div>
+                <div className="mt-0 text-xs">Quiz: {user.gameScore_quiz}</div>
+                <div className="mt-0 text-xs">Fruits: {user.gameScore_fruit}</div>
+                <div className="mt-2 flex text-sm font-bold">
+                  <div className='mt-1 flex'>
+                    <div className="text-sm font-bold">보유코인</div>
+                    <BiCoinStack className="mr-1 mt-1 text-yellow-400 flex" /> {user.coins} conis
+                  </div>
                 </div>
               </div>
             </div>
@@ -188,11 +191,7 @@ const Page: React.FC = () => {
           <div>게시글이 없습니다.</div>
         </div>
       </div>
-      <EditProfileModal
-        user={user}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      <EditProfileModal user={user} isOpen={isModalOpen} onClose={handleCloseModal} />
     </div>
   );
 };
