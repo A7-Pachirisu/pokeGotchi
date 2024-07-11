@@ -5,8 +5,8 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import supabase from '@/supabase/client';
 import { BiCoinStack } from 'react-icons/bi';
-import dummyUsers from './dumy';
 import EditProfileModal from './EditProfileModal';
+import Link from 'next/link';
 
 const defaultProfileImage = img.src; // 기본 프로필 이미지 경로
 const defaultPokemonImage = '/random profile1.png'; // 기본 포켓몬 이미지 경로
@@ -15,6 +15,7 @@ const Page: React.FC = () => {
   const { id } = useParams();
   const [startIndex, setStartIndex] = useState(0);
   const [user, setUser] = useState<any>(null);
+  const [pokemons, setPokemons] = useState<any[]>([]);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
   const cardsPerView = 3; // 한 번에 보여줄 카드 수
@@ -24,6 +25,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     if (id) {
       fetchUserData(id as string);
+      fetchUserPokemons(id as string);
     }
 
     // 로그인된 사용자 아이디 가져오기
@@ -45,19 +47,24 @@ const Page: React.FC = () => {
 
     if (error || !data) {
       console.error('Error fetching user data:', error);
-      const dummyUser = dummyUsers.find((user) => user.id === parseInt(userId, 10));
-      if (dummyUser) {
-        setUser(dummyUser);
-      } else {
-        setUser(null);
-      }
+      setUser(null);
     } else {
       setUser(data);
     }
   };
 
+  const fetchUserPokemons = async (userId: string) => {
+    const { data, error } = await supabase.from('user_pokemons').select('*').eq('userId', userId);
+
+    if (error) {
+      console.error('Error fetching user pokemons:', error);
+    } else {
+      setPokemons(data || []);
+    }
+  };
+
   const handleNext = () => {
-    setStartIndex((prevIndex) => Math.min(prevIndex + cardsPerView, user.pokemons.length - cardsPerView));
+    setStartIndex((prevIndex) => Math.min(prevIndex + cardsPerView, pokemons.length - cardsPerView));
   };
 
   const handlePrev = () => {
@@ -132,7 +139,7 @@ const Page: React.FC = () => {
           </div>
         </div>
         <h2 className="mb-4 text-2xl font-bold">내 포켓몬</h2>
-        {dummyUsers[0].pokemons && dummyUsers[0].pokemons.length > 0 ? (
+        {pokemons && pokemons.length > 0 ? (
           <div className="relative flex items-center justify-center">
             <button
               onClick={handlePrev}
@@ -145,11 +152,11 @@ const Page: React.FC = () => {
                 className="flex transition-transform duration-300"
                 style={{
                   transform: `translateX(-${startIndex * (cardWidth + cardMargin)}px)`,
-                  width: `${dummyUsers[0].pokemons.length * (cardWidth + cardMargin)}px`,
+                  width: `${pokemons.length * (cardWidth + cardMargin)}px`,
                   marginLeft: '8px'
                 }}
               >
-                {dummyUsers[0].pokemons.map((mypokemon) => (
+                {pokemons.map((mypokemon) => (
                   <div
                     key={mypokemon.id}
                     className="bg-white-100 mx-2 min-w-[180px] transform rounded-lg border border-gray-300 p-4 shadow-sm transition duration-300 hover:scale-105 hover:shadow-lg"
@@ -157,20 +164,21 @@ const Page: React.FC = () => {
                     <div className="flex flex-col items-center">
                       <div className="relative mb-4 h-24 w-24">
                         <Image
-                          src={mypokemon.image || defaultPokemonImage}
-                          alt={mypokemon.name}
+                          src={mypokemon.gifUrl || defaultPokemonImage}
+                          alt={mypokemon.pokemonName}
                           fill
-                          className="rounded-full object-cover"
+                          className=" object-cover"
                           sizes="100%"
                           onError={(e) => {
                             e.currentTarget.src = defaultPokemonImage;
                           }}
                         />
                       </div>
-                      <h3 className="mb-2 text-sm font-bold">{mypokemon.name}</h3>
+                      <h3 className="mb-2 text-sm font-bold">{mypokemon.pokemonName}</h3>
+                      <Link href={`/shopDetail/${mypokemon.pokemonNumber}`}>
                       <button className="rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs">
                         상세정보
-                      </button>
+                      </button></Link>
                     </div>
                   </div>
                 ))}
