@@ -30,10 +30,10 @@ const ShopDetailPage = async ({
           <Image
             src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`}
             alt={'pokemon_img'}
-            unoptimized
             width={100}
             height={100}
             className="mx-auto flex justify-center"
+            unoptimized
           />
         </div>
         <div className="mx-auto my-7 w-4/5 rounded-md bg-white p-5">
@@ -55,7 +55,11 @@ const ShopDetailPage = async ({
         </div>
       </div>
       <div>
-        <Confirm />
+        <Confirm
+          pokemonNumber={pokemons.id}
+          gifUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`}
+          pokemonName={pokemons.korean_name}
+        />
         <Alert />
       </div>
       <Link href={'/shop/'}>
