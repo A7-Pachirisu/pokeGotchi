@@ -8,7 +8,7 @@ const buttonVariant = cva(
   {
     variants: {
       size: {
-        sm: '', // 상단바
+        sm: 'px-2.5 py-1.5', // 상단바
         md: '', // 상점, sns
         lg: 'px-1.5 py-2', // 로그인
         xl: 'px-6 py-3.5 w-full text-4xl' // 로비,
@@ -35,16 +35,17 @@ type ButtonrVariant = VariantProps<typeof buttonVariant>;
 export type ButtonProps = ButtonrVariant &
   (ComponentProps<'button'> | ({ href: string } & ComponentProps<typeof Link>));
 
-function Button({ intent, size, children, ...props }: PropsWithChildren<ButtonProps>) {
+function Button({ intent, size, children, className, ...props }: PropsWithChildren<ButtonProps>) {
+  const mergedClassName = twMerge(buttonVariant({ intent, size }), className);
   if ('href' in props) {
     return (
-      <Link className={twMerge(buttonVariant({ intent, size }))} {...props}>
+      <Link className={mergedClassName} {...props}>
         {children}
       </Link>
     );
   }
   return (
-    <button className={twMerge(buttonVariant({ intent, size }))} {...props}>
+    <button className={mergedClassName} {...props}>
       {children}
     </button>
   );
