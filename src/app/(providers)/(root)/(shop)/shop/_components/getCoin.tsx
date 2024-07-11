@@ -28,14 +28,13 @@ export default function CoinsPage() {
 
       if (user) {
         const { data, error } = await supabase
-          .from('coins') // 'coins' 테이블에서
+          .from('users') // 'coins' 테이블에서
           .select('coins') // 'coins' 컬럼을 선택하여
           .eq('user_id', user.id) // user_id가 현재 유저의 id와 일치하는 행을 가져옵니다.
           .single(); // 단일 행을 가져옵니다.
 
         if (error) {
-          // 코인 정보를 가져오는 중 에러가 발생한 경우
-          console.error('코인 정보를 가져오는 중 에러가 발생했습니다:', error.message);
+          console.error('에러가 발생했습니다:', error.message);
         } else {
           setCoinInfo(data); // 코인 정보를 상태에 저장합니다.
         }
@@ -46,7 +45,6 @@ export default function CoinsPage() {
   }, []);
 
   if (!user) {
-    // 유저가 로그인되어 있지 않은 경우
     return <div>로그인이 필요합니다.</div>;
   }
 
