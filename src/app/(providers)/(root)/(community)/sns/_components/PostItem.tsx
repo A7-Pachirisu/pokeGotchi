@@ -1,6 +1,9 @@
 import React from 'react';
 import Image from 'next/image';
 import img from '@/assets/random profile1.png';
+import { useAuth } from '@/contexts/auth.context/auth.context';
+import { supabase } from '@/supabase/supabaseClient';
+import Link from 'next/link';
 
 const defaultProfileImage = img.src;
 
@@ -20,6 +23,17 @@ interface PostItemProps {
 }
 
 const PostItem: React.FC<PostItemProps> = ({ posts }) => {
+  const { me } = useAuth();
+
+  const handleDelete = async (postId: number) => {
+    const { error } = await supabase.from('posts').delete().eq('id', postId);
+    if (error) {
+      console.error('게시물 삭제 에러:', error);
+    } else {
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="mt-5 flex w-full flex-col items-center">
       {posts.map((item: PostItemType, index: number) => (
@@ -33,6 +47,16 @@ const PostItem: React.FC<PostItemProps> = ({ posts }) => {
               className="h-[50px] w-[50px] rounded-full border border-gray-300"
             />
             <p className="ml-5">{item.user.nickname || 'Unknown User'}</p>
+            {me?.id?.toString() === item.user_id.toString() && (
+              <div className="ml-auto mr-5 flex items-center">
+                <Link href={`/edit/${item.id}`}>
+                  <button className="mr-3 text-blue-500">수정</button>
+                </Link>
+                <button onClick={() => handleDelete(item.id)} className="text-red-500">
+                  삭제
+                </button>
+              </div>
+            )}
           </div>
           <div className="flex justify-center">
             <Image
