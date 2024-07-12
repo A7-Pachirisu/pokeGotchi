@@ -4,6 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/supabase/supabaseClient';
 import { useAuth } from '@/contexts/auth.context/auth.context';
+import Image from 'next/image';
+import img from '@/assets/random profile1.png';
+
+const defaultProfileImage = img.src;
+const MAX_CONTENT_LENGTH = 125;
 
 const EditPost = () => {
   const router = useRouter();
@@ -13,29 +18,40 @@ const EditPost = () => {
   const [imgUrl, setImgUrl] = useState('');
   const [newImage, setNewImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [nickname, setNickname] = useState<string>('');
+  const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchPost() {
       if (!id) return;
 
-      const { data, error } = await supabase.from('posts').select('content, img_url, user_id').eq('id', id).single();
+      const { data: postData, error: postError } = await supabase
+        .from('posts')
+        .select('content, img_url, user_id')
+        .eq('id', id)
+        .single();
 
-      if (error) {
-        console.error('게시물 fetch 에러:', error);
-      } else if (data) {
-        if (data.user_id !== me?.id?.toString()) {
-          alert('수정 권한이 없습니다.');
-          router.push('/');
-        } else {
-          setContent(data.content);
-          setImgUrl(data.img_url);
-          setPreviewImage(data.img_url);
+      if (postError) {
+        console.error('게시물 fetch 에러:', postError);
+      } else if (me) {
+        setContent(postData.content);
+        setImgUrl(postData.img_url);
+        setPreviewImage(postData.img_url);
+
+        // 사용자 정보 가져오기
+        const { data, error } = await supabase.from('users').select('nickname, profile_image').eq('id', me.id).single();
+
+        if (error) {
+          console.error('사용자 정보 fetch 에러:', error);
+        } else if (data) {
+          setNickname(data.nickname || '');
+          setProfileImgUrl(data.profile_image || defaultProfileImage);
         }
       }
     }
 
     fetchPost();
-  }, [id, me, router]);
+  }, [id, me]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -97,15 +113,26 @@ const EditPost = () => {
     <div className="container mx-auto">
       <h1 className="mt-5 text-2xl font-bold">게시물 수정</h1>
       <form onSubmit={handleSubmit} className="flex w-[100%] flex-col items-center">
+        <div className="mt-5 flex w-[450px] items-center">
+          <Image
+            width={10}
+            height={10}
+            src={profileImgUrl || defaultProfileImage}
+            alt="profileImg"
+            className="h-[40px] w-[40px] rounded-full border"
+          />
+          <p className="ml-5">{nickname}</p>
+        </div>
         <div className="mb-4">
           <label className="mt-5 block text-sm font-bold" htmlFor="content">
             내용
           </label>
           <textarea
             id="content"
-            className="mt-3 h-[200px] w-[420px] resize-none border pl-[10px] pt-5"
+            className="mt-3 h-[180px] w-[420px] resize-none border pl-[10px] pt-5"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            maxLength={MAX_CONTENT_LENGTH}
           />
         </div>
         <div className="mb-4">
@@ -124,7 +151,10 @@ const EditPost = () => {
             <input type="file" id="image" onChange={handleImageChange} />
           </div>
         </div>
-        <button type="submit" className="mt-5 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
+        <button
+          type="submit"
+          className="mt-5 w-[100px] rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+        >
           수정
         </button>
       </form>

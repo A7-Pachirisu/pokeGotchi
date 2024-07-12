@@ -10,7 +10,8 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'bchospmmqzfkbuowwxrf.supabase.co'
       }
-    ]
+    ],
+    domains: ['k.kakaocdn.net']
   }
 };
 

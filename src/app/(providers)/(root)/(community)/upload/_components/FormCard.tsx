@@ -1,16 +1,11 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { FaRegImage } from 'react-icons/fa6';
-import profile1 from '../../../../../../assets/random profile1.png';
 import img from '@/assets/random profile1.png';
 import { useAuth } from '@/contexts/auth.context/auth.context';
+import { supabase } from '@/supabase/supabaseClient';
 
 const defaultProfileImage = img.src;
-
-interface User {
-  nickname: string | null;
-  profile_image: string | null;
-}
 
 interface FormCardProps {
   onFileSelect: (file: File | null) => void;
@@ -23,16 +18,29 @@ const MAX_CONTENT_LENGTH = 125;
 
 const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, content, setContent }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { me } = useAuth() as unknown as { me: User };
+  const { me } = useAuth();
 
   const [nickname, setNickname] = useState<string>('');
   const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    if (me) {
-      setNickname(me?.nickname || '');
-      setProfileImgUrl(me?.profile_image || defaultProfileImage);
-    }
+    const fetchUserData = async () => {
+      if (me) {
+        const { data, error } = await supabase.from('users').select('nickname, profile_image').eq('id', me.id).single();
+
+        if (error) {
+          console.error('Error fetching user data:', error.message);
+          return;
+        }
+
+        if (data) {
+          setNickname(data.nickname || '');
+          setProfileImgUrl(data.profile_image || defaultProfileImage);
+        }
+      }
+    };
+
+    fetchUserData();
   }, [me]);
 
   const handleIconClick = () => {
@@ -52,8 +60,8 @@ const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, cont
     <div className="mt-10 flex w-full flex-col items-center">
       <div className="mb-5 flex w-[450px] items-center">
         <Image
-          width={12}
-          height={12}
+          width={50}
+          height={50}
           src={profileImgUrl || defaultProfileImage}
           alt="profileImg"
           className="h-[50px] w-[50px] rounded-full border"
@@ -77,7 +85,6 @@ const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, cont
               style={{ width: '100%', height: 'auto', maxWidth: '90%', maxHeight: '200px', objectFit: 'contain' }}
             />
           )}
-
           <input type="file" ref={fileInputRef} hidden onChange={handleFileChange} />
           <FaRegImage style={{ cursor: 'pointer', fontSize: '24px' }} onClick={handleIconClick} />
         </div>
