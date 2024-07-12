@@ -20,10 +20,7 @@ function PokeCard({ pokemon }: PokeCardProps) {
   }, [ownedPokemons, pokemon.id]);
 
   return (
-    <div
-      key={pokemon.id}
-      className="mx-1 my-1 flex flex-col rounded-md border border-gray-300 p-3 shadow-lg hover:scale-105"
-    >
+    <div className="mx-1 my-1 flex flex-col rounded-md border border-gray-300 p-3 shadow-lg hover:scale-105">
       <Link href={`/shopDetail/${pokemon.id}`}>
         <div className="align-center flex justify-end text-xl">
           <BiCoinStack className="my-auto text-yellow-400" />
@@ -39,7 +36,6 @@ function PokeCard({ pokemon }: PokeCardProps) {
           />
         </div>
         <p className="m-2 text-xl">{pokemon.korean_name}</p>
-
         <Button intent={owned ? 'red' : 'green'} size="sm" className="mx-auto">
           {owned ? 'Own' : 'Get'}
         </Button>
