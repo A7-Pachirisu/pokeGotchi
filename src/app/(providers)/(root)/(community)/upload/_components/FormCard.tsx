@@ -1,5 +1,4 @@
-import React from 'react';
-import profile1 from '../../../../../../assets/random profile1.png';
+import profile1 from '@/assets/random profile1.png';
 import Image from 'next/image';
 import { FaRegImage } from 'react-icons/fa6';
 

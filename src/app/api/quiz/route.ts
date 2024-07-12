@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { Question, Difficulty, QuestionsState } from '@/types/quizTypes';
+import { Question, Difficulty, QuestionsState } from '@/app/(providers)/(root)/game/quiz/quizTypes';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
