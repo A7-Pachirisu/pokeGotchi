@@ -122,7 +122,7 @@ export default function Home() {
 
   return (
     <div
-      className="w-150 relative h-full"
+      className="w-150 relative h-full overflow-hidden"
       style={{
         backgroundImage: `url(${backgroundImage.src})`,
         backgroundSize: 'cover',
