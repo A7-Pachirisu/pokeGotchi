@@ -107,7 +107,7 @@ const Page: React.FC = () => {
                   {user.hashtags && user.hashtags.length > 0 ? (
                     user.hashtags.map((hashtag: string, index: number) => (
                       <div key={index}>
-                        <h4 className="text-xs font-light">#{hashtag}</h4>
+                        <h4 className="text-xs font-light"># {hashtag}</h4>
                       </div>
                     ))
                   ) : (
@@ -123,7 +123,7 @@ const Page: React.FC = () => {
                 <div className="mt-2 flex text-sm font-bold">
                   <div className='mt-1 flex'>
                     <div className="text-sm font-bold">보유코인</div>
-                    <BiCoinStack className="mr-1 mt-1 text-yellow-400 flex" /> {user.coins} conis
+                    <BiCoinStack className="mr-1 mt-1 text-yellow-400 flex" />{user.coins}
                   </div>
                 </div>
               </div>
