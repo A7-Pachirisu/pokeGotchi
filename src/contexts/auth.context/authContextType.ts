@@ -8,4 +8,5 @@ export type AuthContextValue = {
   logIn: ({ email, password }: logInForm) => void;
   logOut: () => void;
   signUp: ({ email, password, passwordCheck }: signUpForm) => void;
+  logInWithKakao: () => void;
 };

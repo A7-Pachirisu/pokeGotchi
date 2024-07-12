@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import PokeBallImage from '@/assets/default ball.png';
 import PokemonImage from '@/assets/pokemon2.png';
+import supabase from '@/supabase/client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const gameSwal = withReactContent(Swal);
 
@@ -16,11 +18,58 @@ type ItemPos = {
   h: number;
 };
 
+const fetchUser = async () => {
+  const response = await fetch('/api/auth/me');
+  if (!response.ok) throw new Error('Network response was not ok');
+  return response.json();
+};
+
+const updateScore = async (score: number, userId: string, userEmail: string) => {
+  const { data, error } = await supabase.from('users').select('gameScore_ball, coins').eq('id', userId).single();
+
+  if (error && error.code !== 'PGRST116') {
+    throw error;
+  }
+
+  const currentScore = data?.gameScore_ball ?? 0;
+  const currentCoins = data?.coins ?? 0;
+
+  const additionalCoins = Math.floor(score / 10);
+  const newCoins = currentCoins + additionalCoins;
+
+  const { error: updateError } = await supabase
+    .from('users')
+    .upsert(
+      { id: userId, gameScore_ball: score > currentScore ? score : currentScore, coins: newCoins, email: userEmail },
+      { onConflict: 'id' }
+    );
+
+  if (updateError) throw updateError;
+};
+
 export default function PokeBallGamePage() {
+  const queryClient = useQueryClient();
+  const {
+    data: user,
+    error,
+    isLoading
+  } = useQuery({
+    queryKey: ['user'],
+    queryFn: fetchUser
+  });
+
+  const mutation = useMutation({
+    mutationFn: (score: number) => updateScore(score, user.id, user.email),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+    }
+  });
+
   const [state, setState] = useState<'play' | 'pause' | 'stop'>('stop');
   const [score, setScore] = useState(0);
   const [createPokeBallTime, setCreatePokeBallTime] = useState(700);
   const [pokeBallAccel, setPokeBallAccel] = useState(0.02);
+  const [scoreUpdated, setScoreUpdated] = useState(false);
 
   const ref = useRef<HTMLCanvasElement>(null);
   const pokemonRef = useRef<HTMLImageElement>(null);
@@ -136,18 +185,23 @@ export default function PokeBallGamePage() {
         pokemonPos.y + pokemonPos.h >= pokeBallPos.y &&
         pokemonPos.y <= pokeBallPos.y + pokeBallPos.h
       ) {
-        gameSwal
-          .fire({
-            title: `점수: ${score}`,
-            icon: 'success',
-            confirmButtonText: '게임 종료'
-          })
-          .then(() => {
-            setState('stop');
-          });
+        if (!scoreUpdated) {
+          mutation.mutate(score);
+          setScoreUpdated(true);
+          setState('pause');
+          gameSwal
+            .fire({
+              title: `점수: ${score}`,
+              icon: 'success',
+              confirmButtonText: '게임 종료'
+            })
+            .then(() => {
+              setState('stop');
+            });
+        }
       }
     },
-    [score]
+    [score, mutation, scoreUpdated]
   );
 
   const initialGame = useCallback(
@@ -165,6 +219,9 @@ export default function PokeBallGamePage() {
       keyRef.current.isLeft = false;
       keyRef.current.isRight = false;
       setScore(0);
+      setScoreUpdated(false);
+      setCreatePokeBallTime(700);
+      setPokeBallAccel(0.02);
     },
     [W, H]
   );
@@ -261,6 +318,14 @@ export default function PokeBallGamePage() {
       setPokeBallAccel((prevAccel) => prevAccel + 0.002);
     }
   }, [score]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div className="flex max-h-screen items-center justify-center">

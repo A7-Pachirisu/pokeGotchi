@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnswerObject, Props } from '@/types/quizTypes';
+import { AnswerObject, Props } from '@/app/(providers)/(root)/game/quiz/quizTypes';
 
 const QuestionCard: React.FC<Props> = ({ question, answers, callback, userAnswer, questionNr, totalQuestions }) => (
   <div className="max-w-screen-lg rounded-lg border-2 border-[#0085a3] bg-[#ebfeff] p-5 text-center shadow-lg">
@@ -8,7 +8,7 @@ const QuestionCard: React.FC<Props> = ({ question, answers, callback, userAnswer
     </p>
     <p className="mb-4 text-lg" dangerouslySetInnerHTML={{ __html: question }} />
     <div>
-      {answers.map((answer) => {
+      {answers.map((answer, idx) => {
         const isCorrect = userAnswer?.correctAnswer === answer;
         const isUserClicked = userAnswer?.answer === answer;
 
@@ -20,7 +20,7 @@ const QuestionCard: React.FC<Props> = ({ question, answers, callback, userAnswer
 
         return (
           <div
-            key={answer}
+            key={idx}
             className={`mb-2 transition-opacity duration-300 ease-in-out hover:opacity-80 ${buttonClassName}`}
           >
             <button

@@ -1,5 +1,11 @@
 'use client';
-import { getUserService, logInService, logOutService, signUpService } from '@/services/authService';
+import {
+  getUserService,
+  logInService,
+  logInWithKaKaoService,
+  logOutService,
+  signUpService
+} from '@/services/authService';
 import { logInForm, signUpForm } from '@/types/formType';
 import { performToast } from '@/utils/performToast';
 import { validateForm } from '@/utils/validateForm';
@@ -13,7 +19,8 @@ const initialValue: AuthContextValue = {
   me: null,
   logIn: () => {},
   logOut: () => {},
-  signUp: () => {}
+  signUp: () => {},
+  logInWithKakao: () => {}
 };
 
 const AuthContext = createContext<AuthContextValue>(initialValue);
@@ -27,7 +34,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [me, setMe] = useState<AuthContextValue['me']>(null);
   const isLoggedIn = !!me;
 
-  const logIn = async (logInData: logInForm) => {
+  const logIn: AuthContextValue['logIn'] = async (logInData: logInForm) => {
     if (me) {
       performToast({ msg: '이미 로그인이 되었습니다', type: 'warning' });
       return;
@@ -46,7 +53,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }
   };
 
-  const logOut = async () => {
+  const logOut: AuthContextValue['logOut'] = async () => {
     if (!me) {
       performToast({ msg: '로그인한 유저가 없습니다', type: 'warning' });
       return;
@@ -57,7 +64,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     init();
   };
 
-  const signUp = async (signUpData: signUpForm) => {
+  const signUp: AuthContextValue['signUp'] = async (signUpData: signUpForm) => {
     if (validateForm(signUpData)) {
       try {
         const data = await signUpService(signUpData);
@@ -66,6 +73,16 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       } catch {
         return performToast({ msg: '잘못된 회원가입 정보입니다', type: 'error' });
       }
+    }
+  };
+
+  const logInWithKakao: AuthContextValue['logInWithKakao'] = async () => {
+    try {
+      const data = await logInWithKaKaoService();
+      performToast({ msg: '로그인 성공!', type: 'success' });
+      router.replace(data.url);
+    } catch {
+      return performToast({ msg: '잘못된 회원가입 정보입니다', type: 'error' });
     }
   };
 
@@ -88,7 +105,8 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     me,
     logIn,
     logOut,
-    signUp
+    signUp,
+    logInWithKakao
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
