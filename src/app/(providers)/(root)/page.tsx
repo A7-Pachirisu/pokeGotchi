@@ -75,12 +75,14 @@ export default function Home() {
   };
 
   const handlePokemonClick = (index: number) => {
+    if (!selectedPokemon) return;
+
     const newPokemonData = [...pokemonData];
     const clickedPokemon = newPokemonData[index];
 
-    const tempId = clickedPokemon.id;
-    newPokemonData[index].id = selectedPokemon?.id!;
-    setSelectedPokemon({ ...selectedPokemon!, id: tempId });
+    const tempId = clickedPokemon.pokemonNumber;
+    newPokemonData[index].pokemonNumber = selectedPokemon.pokemonNumber;
+    setSelectedPokemon({ ...selectedPokemon, pokemonNumber: tempId });
 
     setPokemonData(newPokemonData);
   };
@@ -112,19 +114,24 @@ export default function Home() {
     if (pokemons.length > 0) {
       const canvasWidth = canvasRef.current?.width || 800;
       const canvasHeight = canvasRef.current?.height || 600;
-      const spacing = canvasWidth / (5 + 1);
+      const spacing = canvasWidth / (5 + 2);
 
-      const updatedData = pokemons.map((pokemon, index) => ({
-        ...pokemon,
-        x: index < 5 ? spacing * (index + 1) - 120 : canvasWidth / 2 - 200,
-        y: index < 5 ? 50 : canvasHeight - 20
-      }));
+      const updatedData = pokemons
+        .slice(0, 6)
+        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
+        .map((pokemon, index) => ({
+          ...pokemon,
+          x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
+          y: index < 5 ? 50 : canvasHeight - 30
+        }));
 
       setPokemonData(updatedData);
 
-      const lastIndex = updatedData.length - 1;
-      setSelectedPokemon(updatedData[lastIndex]);
-      setSelectedPokemonPos({ x: updatedData[lastIndex].x!, y: updatedData[lastIndex].y! });
+      if (!selectedPokemon && updatedData.length > 0) {
+        const lastIndex = updatedData.length - 1;
+        setSelectedPokemon(updatedData[lastIndex]);
+        setSelectedPokemonPos({ x: updatedData[lastIndex].x!, y: canvasHeight - 30 });
+      }
     }
   }, [pokemons]);
 
@@ -137,7 +144,7 @@ export default function Home() {
         backgroundPosition: 'center'
       }}
     >
-      {pokemonData.slice(0, 5).map((pokemon, idx) => (
+      {pokemonData.map((pokemon, idx) => (
         <div
           key={idx}
           id={`pokemon-${idx}`}
