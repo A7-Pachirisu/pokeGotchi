@@ -68,7 +68,9 @@ const ShopPage = () => {
           {/* {pokemons?.map((pokemon) => {
             return <PokeCard key={pokemon.id} pokemon={pokemon} />;
           })} */}
-          {pokemons.pages.map((page) => page.result.map((pokemon) => <PokeCard key={pokemon.id} pokemon={pokemon} />))}
+          {pokemons.pages.map((page) =>
+            page.result.map((pokemon: Pokemon) => <PokeCard key={pokemon.id} pokemon={pokemon} />)
+          )}
         </div>
         {isFetchingNextPage ? <div className="my-2 text-center text-2xl">로딩중...</div> : <div ref={ref}></div>}
         <IoArrowUpCircleOutline
