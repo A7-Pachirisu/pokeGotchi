@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    console.log('💙', data, error);
+    // console.log('💙', data, error);
     if (error) return NextResponse.json({ error: '로그인 실패', details: error.message }, { status: 401 });
     if (data) return NextResponse.json(data, { status: 200 });
   } catch (error) {
