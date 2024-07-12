@@ -12,7 +12,7 @@ import { useInView } from 'react-intersection-observer';
 const getPokemons = async ({ pageParam = 1 }) => {
   const res = await fetch(`http://localhost:3000/api/shop?page=${pageParam}`);
   const data = await res.json();
-  return data; // 데이터를 반환합니다.
+  return data;
 };
 
 const ShopPage = () => {
