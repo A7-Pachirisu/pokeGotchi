@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { BiCoinStack } from 'react-icons/bi';
-
-const defaultProfileImage = '/random_profile1.png';
+import noneprofileImage from '@/assets/random profile6.png'
+const defaultProfileImage = noneprofileImage.src;
 
 interface UserProfileProps {
   user: {
