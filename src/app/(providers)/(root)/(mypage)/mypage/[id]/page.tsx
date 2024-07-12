@@ -157,7 +157,7 @@ const Page: React.FC = () => {
                           src={mypokemon.gifUrl || '/random_profile1.png'}
                           alt={mypokemon.pokemonName}
                           fill
-                          className="object-cover"
+                          className="object-contain"
                           sizes="100%"
                           onError={(e) => {
                             e.currentTarget.src = '/random_profile1.png';
