@@ -3,11 +3,11 @@ import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Pokemon } from '@/types/pokemonType';
 import { IoArrowUpCircleOutline } from 'react-icons/io5';
 import topBtn from './_components/topBtn';
-import { BsWallet2 } from 'react-icons/bs';
 import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import PokeCard from './_components/PokeCard';
 import { useInView } from 'react-intersection-observer';
+import { BiCoinStack } from 'react-icons/bi';
 
 const getPokemons = async ({ pageParam = 1 }) => {
   const res = await fetch(`http://localhost:3000/api/shop?page=${pageParam}`);
@@ -60,7 +60,7 @@ const ShopPage = () => {
           </div>
 
           <div className="align-center mx-3 flex gap-2 rounded-md border border-gray-400 px-3 py-2 text-2xl shadow-md">
-            <BsWallet2 className="my-auto text-yellow-400" />
+            <BiCoinStack className="my-auto text-yellow-400" />
             {coins}
           </div>
         </div>
