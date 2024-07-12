@@ -8,8 +8,8 @@ import { BiCoinStack } from 'react-icons/bi';
 import EditProfileModal from './EditProfileModal';
 import Link from 'next/link';
 
-const defaultProfileImage = img.src; 
-const defaultPokemonImage = img.src; 
+const defaultProfileImage = img.src;
+const defaultPokemonImage = img.src;
 
 const Page: React.FC = () => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ const Page: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [pokemons, setPokemons] = useState<any[]>([]);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const cardsPerView = 3; // 한 번에 보여줄 카드 수
   const cardWidth = 180; // 각 카드의 폭
   const cardMargin = 20; // 각 카드 사이의 간격
@@ -121,9 +121,10 @@ const Page: React.FC = () => {
                 <div className="mt-0 text-xs">Quiz: {user.gameScore_quiz}</div>
                 <div className="mt-0 text-xs">Fruits: {user.gameScore_fruit}</div>
                 <div className="mt-2 flex text-sm font-bold">
-                  <div className='mt-1 flex'>
+                  <div className="mt-1 flex">
                     <div className="text-sm font-bold">보유코인</div>
-                    <BiCoinStack className="mr-1 mt-1 text-yellow-400 flex" />{user.coins}
+                    <BiCoinStack className="mr-1 mt-1 flex text-yellow-400" />
+                    {user.coins}
                   </div>
                 </div>
               </div>
@@ -167,7 +168,8 @@ const Page: React.FC = () => {
                           src={mypokemon.gifUrl || defaultPokemonImage}
                           alt={mypokemon.pokemonName}
                           fill
-                          className=" object-cover"
+                          unoptimized
+                          className="object-cover"
                           sizes="100%"
                           onError={(e) => {
                             e.currentTarget.src = defaultPokemonImage;
@@ -176,9 +178,10 @@ const Page: React.FC = () => {
                       </div>
                       <h3 className="mb-2 text-sm font-bold">{mypokemon.pokemonName}</h3>
                       <Link href={`/shopDetail/${mypokemon.pokemonNumber}`}>
-                      <button className="rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs">
-                        상세정보
-                      </button></Link>
+                        <button className="rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs">
+                          상세정보
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 ))}
