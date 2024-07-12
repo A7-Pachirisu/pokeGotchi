@@ -33,6 +33,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
   const [pokemonName, setPokemonName] = useState<string>('');
   const [newPokemonName, setNewPokemonName] = useState<string>('');
   const [isByeModalOpen, setIsByeModalOpen] = useState(false);
+  const [nameError, setNameError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPokemonName = async () => {
@@ -126,6 +127,15 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length <= 11) {
+      setNewPokemonName(e.target.value);
+      setNameError(null);
+    } else {
+      setNameError('포켓몬 이름은 최대 11자까지 입력할 수 있습니다.');
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -141,10 +151,13 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
                 <input
                   type="text"
                   value={newPokemonName}
-                  onChange={(e) => setNewPokemonName(e.target.value)}
-                  className="mb-4 w-full rounded-md border border-gray-300 p-2"
+                  onChange={handleInputChange}
+                  className="mb-2 w-full rounded-md border border-gray-300 p-2"
                   placeholder="새로운 포켓몬 이름"
                 />
+                {nameError && (
+                  <p className="mb-4 text-sm text-red-500">{nameError}</p>
+                )}
                 <button
                   type="button"
                   onClick={handleNameChange}
@@ -155,7 +168,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
               </>
             )}
             <div className="flex justify-end w-full mt-4">
-            {loggedInUserId === userId && (
+              {loggedInUserId === userId && (
                 <button
                   type="button"
                   onClick={handleSell}
@@ -171,7 +184,6 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
               >
                 닫기
               </button>
-            
             </div>
           </div>
         </div>
