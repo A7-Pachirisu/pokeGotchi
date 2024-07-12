@@ -19,6 +19,8 @@ interface FormCardProps {
   setContent: (content: string) => void;
 }
 
+const MAX_CONTENT_LENGTH = 125;
+
 const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, content, setContent }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { me } = useAuth() as unknown as { me: User };
@@ -60,10 +62,11 @@ const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, cont
       </div>
       <main className="flex h-[400px] w-[450px] flex-col items-center justify-between rounded-xl border">
         <textarea
-          placeholder="내용을 입력하세요..."
+          placeholder="120자 이내로 내용을 입력해주세요..."
           className="mt-5 h-[200px] w-[420px] resize-none pl-[10px] pt-5"
           value={content}
           onChange={handleContentChange}
+          maxLength={MAX_CONTENT_LENGTH}
         />
         <div className="mb-5 ml-5 w-[420px] text-2xl">
           {previewImageUrl && (
