@@ -1,7 +1,9 @@
+// MyPokemonModal.tsx
 'use client';
 import React, { useState, useEffect } from 'react';
 import supabase from '@/supabase/client';
 import ByeMyPokemon from './ByeMyPokemon';
+import ByeMent from './ByeMent'; // ByeMent 추가
 
 interface MyPokemonModalProps {
   isOpen: boolean;
@@ -33,6 +35,8 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
   const [pokemonName, setPokemonName] = useState<string>('');
   const [newPokemonName, setNewPokemonName] = useState<string>('');
   const [isByeModalOpen, setIsByeModalOpen] = useState(false);
+  const [isByeMentOpen, setIsByeMentOpen] = useState(false); // ByeMent 상태 추가
+  const [nameError, setNameError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPokemonName = async () => {
@@ -99,10 +103,19 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
       console.log('Pokemon sold successfully');
       onPokemonUpdated();  // 변경된 사항이 페이지에 반영되도록 콜백 호출
       setIsByeModalOpen(false);
-      onClose();
+      setIsByeMentOpen(true); // ByeMent 모달 열기
+      setTimeout(() => {
+        handleCloseAllModals(); // ByeMent 모달 닫기 및 모든 모달 닫기
+      }, 1500); 
     } catch (error: any) {
       console.error('Error selling pokemon:', error.message);
     }
+  };
+
+  const handleCloseAllModals = () => {
+    setIsByeMentOpen(false);
+    setIsByeModalOpen(false);
+    onClose();
   };
 
   const handleNameChange = async () => {
@@ -126,6 +139,15 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length <= 11) {
+      setNewPokemonName(e.target.value);
+      setNameError(null);
+    } else {
+      setNameError('포켓몬 이름은 최대 11자까지 입력할 수 있습니다.');
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -141,10 +163,11 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
                 <input
                   type="text"
                   value={newPokemonName}
-                  onChange={(e) => setNewPokemonName(e.target.value)}
+                  onChange={handleInputChange}
                   className="mb-4 w-full rounded-md border border-gray-300 p-2"
                   placeholder="새로운 포켓몬 이름"
                 />
+                {nameError && <p className="text-red-500 text-sm">{nameError}</p>}
                 <button
                   type="button"
                   onClick={handleNameChange}
@@ -155,7 +178,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
               </>
             )}
             <div className="flex justify-end w-full mt-4">
-            {loggedInUserId === userId && (
+              {loggedInUserId === userId && (
                 <button
                   type="button"
                   onClick={handleSell}
@@ -171,7 +194,6 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
               >
                 닫기
               </button>
-            
             </div>
           </div>
         </div>
@@ -182,6 +204,12 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
         onConfirm={handleConfirmSell}
         pokemonImage={pokemonImage}
         pokemonName={pokemonName}
+        onShowByeMent={() => setIsByeMentOpen(true)} // onShowByeMent 추가
+      />
+      <ByeMent
+        isOpen={isByeMentOpen}
+        pokemonName={pokemonName}
+        onClose={handleCloseAllModals}
       />
     </>
   );
