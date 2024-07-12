@@ -1,3 +1,4 @@
+// ByeMyPokemon.tsx
 import React, { useEffect, useState } from 'react';
 import { Transition } from '@headlessui/react';
 import { Ments } from './Ment'; // 더미 데이터 import
@@ -9,9 +10,10 @@ interface ByeMyPokemonProps {
   onConfirm: () => void;
   pokemonImage: string;
   pokemonName: string;
+  onShowByeMent: () => void; // 추가된 콜백
 }
 
-const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm, pokemonImage, pokemonName }) => {
+const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm, pokemonImage, pokemonName, onShowByeMent }) => {
   const [randomMent, setRandomMent] = useState<string>('');
   const [isClosing, setIsClosing] = useState<boolean>(false);
 
@@ -21,6 +23,11 @@ const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm,
       setRandomMent(Ments[randomIndex].message);
     }
   }, [isOpen]);
+
+  const handleConfirm = () => {
+    onConfirm();
+    onShowByeMent(); // 추가된 콜백 호출
+  };
 
   const handleClose = () => {
     setIsClosing(true);
@@ -65,7 +72,7 @@ const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm,
 
             <div className="flex space-x-4">
               <button
-                onClick={onConfirm}
+                onClick={handleConfirm}
                 className="px-4 py-2 bg-red-500 text-white rounded-md"
               >
                 판매
