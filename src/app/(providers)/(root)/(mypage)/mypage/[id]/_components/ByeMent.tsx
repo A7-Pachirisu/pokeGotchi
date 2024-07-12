@@ -43,10 +43,10 @@ const ByeMent: React.FC<ByeMentProps> = ({ isOpen, pokemonName, onClose }) => {
           leaveFrom="scale-100 opacity-100"
           leaveTo="scale-95 opacity-0"
         >
-          <div className="relative z-20 flex w-400 h-400 flex-col items-center p-6 text-white rounded-md">
+          <div className="relative z-20 flex flex-col items-center p-6 text-white rounded-md">
             <p className="mb-4 text-2xl font-bold">{`잘가... ${pokemonName}`}</p>
             <p className="text-lg">포켓몬을 판매했습니다.</p>
-          </div>
+          </div>    
         </Transition.Child>
       </div>
     </Transition>
