@@ -8,8 +8,8 @@ import { BiCoinStack } from 'react-icons/bi';
 import EditProfileModal from './EditProfileModal';
 import Link from 'next/link';
 
-const defaultProfileImage = img.src; 
-const defaultPokemonImage = img.src; 
+const defaultProfileImage = img.src;
+const defaultPokemonImage = img.src;
 
 const Page: React.FC = () => {
   const { id } = useParams();
@@ -17,7 +17,7 @@ const Page: React.FC = () => {
   const [user, setUser] = useState<any>(null);
   const [pokemons, setPokemons] = useState<any[]>([]);
   const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const cardsPerView = 3; // 한 번에 보여줄 카드 수
   const cardWidth = 180; // 각 카드의 폭
   const cardMargin = 20; // 각 카드 사이의 간격
@@ -123,11 +123,8 @@ const Page: React.FC = () => {
                 <div className="mt-2 flex text-sm font-bold">
                   <div className="mt-1 flex">
                     <div className="text-sm font-bold">보유코인</div>
-<<<<<<< HEAD
-                    <BiCoinStack className="mr-1 mt-1 flex text-yellow-400" /> {user.coins} conis
-=======
-                    <BiCoinStack className="mr-1 mt-1 text-yellow-400 flex" />{user.coins}
->>>>>>> 0598dc7a80a755d49a80768164d8cbc7efc57776
+                    <BiCoinStack className="mr-1 mt-1 flex text-yellow-400" />
+                    {user.coins}
                   </div>
                 </div>
               </div>
