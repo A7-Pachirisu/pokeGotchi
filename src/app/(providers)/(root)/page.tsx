@@ -122,7 +122,7 @@ export default function Home() {
         .map((pokemon, index) => ({
           ...pokemon,
           x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
-          y: index < 5 ? 50 : canvasHeight - 30
+          y: index < 5 ? 50 : canvasHeight - 80
         }));
 
       setPokemonData(updatedData);
@@ -130,7 +130,7 @@ export default function Home() {
       if (!selectedPokemon && updatedData.length > 0) {
         const lastIndex = updatedData.length - 1;
         setSelectedPokemon(updatedData[lastIndex]);
-        setSelectedPokemonPos({ x: updatedData[lastIndex].x!, y: canvasHeight - 30 });
+        setSelectedPokemonPos({ x: updatedData[lastIndex].x!, y: canvasHeight - 80 });
       }
     }
   }, [pokemons]);
