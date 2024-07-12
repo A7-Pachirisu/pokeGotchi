@@ -1,22 +1,19 @@
 'use client';
-import img from '@/assets/random profile1.png';
 import { useParams } from 'next/navigation';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import supabase from '@/supabase/client';
-import { BiCoinStack } from 'react-icons/bi';
-import EditProfileModal from './EditProfileModal';
+import EditProfileModal from './_components/EditProfileModal';
+import UserProfile from './_components/UserProfile';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 import Link from 'next/link';
-
-const defaultProfileImage = img.src;
-const defaultPokemonImage = img.src;
+import Image from 'next/image';
 
 const Page: React.FC = () => {
   const { id } = useParams();
+  const { me } = useAuth(); // 로그인된 사용자 정보를 가져옵니다
   const [startIndex, setStartIndex] = useState(0);
   const [user, setUser] = useState<any>(null);
   const [pokemons, setPokemons] = useState<any[]>([]);
-  const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const cardsPerView = 3; // 한 번에 보여줄 카드 수
   const cardWidth = 180; // 각 카드의 폭
@@ -27,18 +24,6 @@ const Page: React.FC = () => {
       fetchUserData(id as string);
       fetchUserPokemons(id as string);
     }
-
-    // 로그인된 사용자 아이디 가져오기
-    const fetchLoggedInUserId = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching logged in user:', error);
-      } else {
-        setLoggedInUserId(data?.user?.id || null);
-      }
-    };
-
-    fetchLoggedInUserId();
   }, [id]);
 
   const fetchUserData = async (userId: string) => {
@@ -87,56 +72,7 @@ const Page: React.FC = () => {
     <div className="flex items-center justify-center overflow-hidden bg-gray-100">
       <div className="w-[600px] bg-white p-7">
         <div className="mb-8">
-          <div className="bg-white-200 relative flex items-center justify-between rounded-lg border border-gray-300 p-4 shadow-sm">
-            <div className="relative flex items-start">
-              <div className="relative h-24 w-24">
-                <Image
-                  src={user.profile_image || defaultProfileImage}
-                  alt="userImage"
-                  layout="fill"
-                  className="rounded-full object-cover"
-                  onError={(e) => {
-                    e.currentTarget.src = defaultProfileImage;
-                  }}
-                />
-              </div>
-              <div className="ml-5">
-                <div className="text-lg font-bold">{user.nickname || '트레이너'}</div>
-                <div className="mt-2">
-                  {user.hashtags && user.hashtags.length > 0 ? (
-                    user.hashtags.map((hashtag: string, index: number) => (
-                      <div key={index}>
-                        <h4 className="text-xs font-light"># {hashtag}</h4>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="text-xs font-light">해시태그가 없습니다.</div>
-                  )}
-                </div>
-              </div>
-              <div className="ml-10 mt-0 flex flex-col items-start justify-center">
-                <div className="text-sm font-bold">Game Scores</div>
-                <div className="mt-0 text-xs">Ball: {user.gameScore_ball}</div>
-                <div className="mt-0 text-xs">Quiz: {user.gameScore_quiz}</div>
-                <div className="mt-0 text-xs">Fruits: {user.gameScore_fruit}</div>
-                <div className="mt-2 flex text-sm font-bold">
-                  <div className="mt-1 flex">
-                    <div className="text-sm font-bold">보유코인</div>
-                    <BiCoinStack className="mr-1 mt-1 flex text-yellow-400" />
-                    {user.coins}
-                  </div>
-                </div>
-              </div>
-            </div>
-            {loggedInUserId === user.id && (
-              <button
-                onClick={handleOpenModal}
-                className="absolute bottom-4 right-4 rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs"
-              >
-                수정
-              </button>
-            )}
-          </div>
+          <UserProfile user={user} loggedInUserId={me?.id || null} onEdit={handleOpenModal} />
         </div>
         <h2 className="mb-4 text-2xl font-bold">내 포켓몬</h2>
         {pokemons && pokemons.length > 0 ? (
@@ -164,14 +100,13 @@ const Page: React.FC = () => {
                     <div className="flex flex-col items-center">
                       <div className="relative mb-4 h-24 w-24">
                         <Image
-                          src={mypokemon.gifUrl || defaultPokemonImage}
+                          src={mypokemon.gifUrl || '/random_profile1.png'}
                           alt={mypokemon.pokemonName}
                           fill
-                          unoptimized
                           className="object-cover"
                           sizes="100%"
                           onError={(e) => {
-                            e.currentTarget.src = defaultPokemonImage;
+                            e.currentTarget.src = '/random_profile1.png';
                           }}
                         />
                       </div>
