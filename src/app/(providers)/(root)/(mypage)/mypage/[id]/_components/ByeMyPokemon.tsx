@@ -13,6 +13,7 @@ interface ByeMyPokemonProps {
 
 const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm, pokemonImage, pokemonName }) => {
   const [randomMent, setRandomMent] = useState<string>('');
+  const [isClosing, setIsClosing] = useState<boolean>(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -21,15 +22,23 @@ const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm,
     }
   }, [isOpen]);
 
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setIsClosing(false);
+      onClose();
+    }, 100); // 빠른 닫기 트랜지션 시간
+  };
+
   return (
     <Transition show={isOpen} as={React.Fragment}>
       <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-75">
         <Transition.Child
           as={React.Fragment}
-          enter="transition-opacity ease-out duration-300"
+          enter="transition-opacity ease-out duration-1000"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="transition-opacity ease-in duration-200"
+          leave={`transition-opacity ease-in ${isClosing ? 'duration-100' : 'duration-200'}`}
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
@@ -38,20 +47,22 @@ const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm,
 
         <Transition.Child
           as={React.Fragment}
-          enter="transition ease-out duration-300 transform"
+          enter="transition ease-out duration-1000 transform"
           enterFrom="scale-95 opacity-0"
           enterTo="scale-100 opacity-100"
-          leave="transition ease-in duration-100 transform"
+          leave={`transition ease-in ${isClosing ? 'duration-100' : 'duration-200'} transform`}
           leaveFrom="scale-100 opacity-100"
           leaveTo="scale-95 opacity-0"
         >
           <div className="relative z-20 flex flex-col items-center">
-            <img src={pokemonImage} alt={pokemonName} className="mb-4 h-36  w-36 object-cover" />
+            <img src={pokemonImage} alt={pokemonName} className="mb-4 h-36 w-36 object-contain" />
             <h2 className="text-md font-bold mb-2 text-white">{pokemonName}와 작별하시겠습니까?</h2>
             <p className="mb-4 text-2xl text-white">{randomMent}</p>
-            <p className='mt-5 mb-0 text-lg text-white flex'>포켓몬을 40<BiCoinStack className='text-yellow-400 my-auto'/>에 판매합니다</p>
+            <p className="mt-5 mb-0 text-lg text-white flex">
+              포켓몬을 40<BiCoinStack className="text-yellow-400 my-auto" />에 판매합니다
+            </p>
             <p className="mt-0 mb-3 text-md text-white">포켓몬을 판매하시면 되돌릴 수 없습니다</p>
-            
+
             <div className="flex space-x-4">
               <button
                 onClick={onConfirm}
@@ -60,14 +71,14 @@ const ByeMyPokemon: React.FC<ByeMyPokemonProps> = ({ isOpen, onClose, onConfirm,
                 판매
               </button>
               <button
-                onClick={onClose}
+                onClick={handleClose}
                 className="px-4 py-2 bg-gray-300 text-black rounded-md"
               >
                 닫기
               </button>
             </div>
           </div>
-        </Transition.Child> 
+        </Transition.Child>
       </div>
     </Transition>
   );

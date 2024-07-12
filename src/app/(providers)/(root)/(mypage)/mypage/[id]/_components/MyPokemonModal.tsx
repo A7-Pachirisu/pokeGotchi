@@ -134,7 +134,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
         <div className="w-[400px] bg-white p-5 rounded-lg shadow-lg">
           <h2 className="text-xl font-bold mb-4">내 포켓몬</h2>
           <div className="flex flex-col items-center">
-            <img src={pokemonImage} alt={pokemonName} className="mb-4 h-24 w-24 object-cover" />
+            <img src={pokemonImage} alt={pokemonName} className="mb-4 h-24 w-24 object-contain" />
             <p className="mb-4 text-lg font-bold">{pokemonName}</p>
             {loggedInUserId === userId && (
               <>
@@ -148,7 +148,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
                 <button
                   type="button"
                   onClick={handleNameChange}
-                  className="mr-2 px-4 py-2 bg-green-500 text-white rounded-md"
+                  className="mr-auto mt-1 px-2 py-1 bg-green-500 text-white rounded-md"
                 >
                   이름 변경
                 </button>
@@ -159,7 +159,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
                 <button
                   type="button"
                   onClick={handleSell}
-                  className="mr-2 px-4 py-2 bg-red-500 text-white rounded-md"
+                  className="mr-auto px-2 py-1 bg-red-500 text-white rounded-md"
                 >
                   판매
                 </button>
@@ -167,7 +167,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 border border-gray-300 rounded-md"
+                className="px-2 py-1 border border-gray-300 rounded-md"
               >
                 닫기
               </button>
