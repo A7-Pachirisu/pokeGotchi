@@ -151,6 +151,14 @@ const QuizGamePage: React.FC = () => {
             Start
           </button>
         ) : null}
+        {!gameOver && !loading && userAnswers.length !== TOTAL_QUESTIONS ? (
+          <button
+            className="mt-4 rounded-xl border-2 border-red-600 bg-gradient-to-b from-white to-red-300 px-8 py-2 shadow-md"
+            onClick={startTrivia}
+          >
+            Restart Quiz
+          </button>
+        ) : null}
         {!gameOver ? <p className="mb-4 text-2xl text-white">Score: {score}</p> : null}
         {loading ? <p className="text-2xl text-white">Loading Questions...</p> : null}
         {!loading && !gameOver && questions.length > 0 && (
@@ -179,17 +187,6 @@ const QuizGamePage: React.FC = () => {
             Submit
           </button>
         ) : null}
-        {!gameOver && !loading && userAnswers.length !== TOTAL_QUESTIONS ? (
-          <button
-            className="mt-4 rounded-xl border-2 border-red-600 bg-gradient-to-b from-white to-red-300 px-8 py-2 shadow-md"
-            onClick={startTrivia}
-          >
-            Restart Quiz
-          </button>
-        ) : null}
-        <Link href="/game" className="mt-8 text-red-500">
-          GoLobby
-        </Link>
       </div>
     </div>
   );

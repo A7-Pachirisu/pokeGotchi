@@ -362,9 +362,6 @@ export default function PokeBallGamePage() {
             <button type="button" onClick={() => setState('stop')}>
               STOP
             </button>
-            <Link className="text-red-500" href="/game">
-              GoLobby
-            </Link>
           </div>
           <p className="mt-2">현재 점수: {score}</p>
         </div>
