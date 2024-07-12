@@ -133,7 +133,7 @@ export default function Home() {
         <div
           key={idx}
           id={`pokemon-${idx}`}
-          className="z-1 absolute cursor-pointer transition-transform duration-1000"
+          className="z-1 absolute cursor-pointer transition-transform duration-1000 hover:drop-shadow-[0_0_20px_rgba(255,255,0,0.8)]"
           style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
           onClick={() => handlePokemonClick(idx)}
         >
