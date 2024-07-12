@@ -34,11 +34,9 @@ const updateScore = async (score: number, userId: string, userEmail: string) => 
   const currentScore = data?.gameScore_ball ?? 0;
   const currentCoins = data?.coins ?? 0;
 
-  // Calculate new coins based on the current score
   const additionalCoins = Math.floor(score / 10);
   const newCoins = currentCoins + additionalCoins;
 
-  // Update both gameScore_ball and coins
   const { error: updateError } = await supabase
     .from('users')
     .upsert(
@@ -71,7 +69,7 @@ export default function PokeBallGamePage() {
   const [score, setScore] = useState(0);
   const [createPokeBallTime, setCreatePokeBallTime] = useState(700);
   const [pokeBallAccel, setPokeBallAccel] = useState(0.02);
-  const [scoreUpdated, setScoreUpdated] = useState(false); // 추가된 상태
+  const [scoreUpdated, setScoreUpdated] = useState(false);
 
   const ref = useRef<HTMLCanvasElement>(null);
   const pokemonRef = useRef<HTMLImageElement>(null);
@@ -188,8 +186,9 @@ export default function PokeBallGamePage() {
         pokemonPos.y <= pokeBallPos.y + pokeBallPos.h
       ) {
         if (!scoreUpdated) {
-          mutation.mutate(score); // 점수 업데이트 함수 호출
-          setScoreUpdated(true); // scoreUpdated 상태를 true로 설정
+          mutation.mutate(score);
+          setScoreUpdated(true);
+          setState('pause');
           gameSwal
             .fire({
               title: `점수: ${score}`,
@@ -220,7 +219,7 @@ export default function PokeBallGamePage() {
       keyRef.current.isLeft = false;
       keyRef.current.isRight = false;
       setScore(0);
-      setScoreUpdated(false); // 게임 초기화 시 scoreUpdated를 false로 설정
+      setScoreUpdated(false);
     },
     [W, H]
   );
