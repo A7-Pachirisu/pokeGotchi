@@ -14,10 +14,17 @@ interface EditProfileModalProps {
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClose }) => {
   const [profile_image, setProfileImage] = useState<string | null>(user.profile_image || '');
-  const [nickname, setNickname] = useState<string | null>(user.nickname || '');
+  const [nickname, setNickname] = useState<string>(user.nickname || '');
   const [hashtags, setHashtags] = useState<string[]>(user.hashtags || []);
+  const [nicknameError, setNicknameError] = useState<string | null>(null);
+  const [hashtagError, setHashtagError] = useState<string | null>(null);
 
   const handleSave = async () => {
+    if (nickname.length > 8) {
+      setNicknameError('닉네임은 최대 8글자까지 입력할 수 있습니다.');
+      return;
+    }
+
     console.log('전송할 업데이트 데이터:', { profile_image, nickname, hashtags });
 
     try {
@@ -51,10 +58,16 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
   };
 
   const handleAddHashtag = () => {
+    if (hashtags.length >= 4) {
+      setHashtagError('해시태그는 최대 4개까지 추가할 수 있습니다.');
+      return;
+    }
+    setHashtagError(null);
     setHashtags([...hashtags, '']);
   };
 
   const handleRemoveHashtag = (index: number) => {
+    setHashtagError(null);
     setHashtags(hashtags.filter((_, i) => i !== index));
   };
 
@@ -90,11 +103,19 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
           <label className="block text-sm font-medium">닉네임</label>
           <input
             type="text"
-            value={nickname || ''}
-            onChange={(e) => setNickname(e.target.value)}
+            value={nickname}
+            onChange={(e) => {
+              if (e.target.value.length <= 8) {
+                setNickname(e.target.value);
+                setNicknameError(null);
+              } else {
+                setNicknameError('닉네임은 최대 8글자까지 입력할 수 있습니다.');
+              }
+            }}
             className="mt-1 block w-full border border-gray-300 rounded-md p-1"
           />
         </div>
+        {nicknameError && <div className="text-red-500 text-xs mb-2">{nicknameError}</div>}
         <div className="mb-4">
           <label className="block text-sm font-medium">해시태그</label>
           {hashtags.map((hashtag, index) => (
@@ -103,17 +124,18 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
                 type="text"
                 value={hashtag}
                 onChange={(e) => handleHashtagChange(index, e.target.value)}
-                className="mt-1 block w-full border border-gray-300 rounded-md p-1"
+                className="mt-1 block w-80 border border-gray-300 rounded-md p-1"
               />
               <button
                 type="button"
                 onClick={() => handleRemoveHashtag(index)}
-                className="ml-2 text-red-500 flex"
+                className="ml-2 text-red-500"
               >
                 삭제
               </button>
             </div>
           ))}
+          {hashtagError && <div className="text-red-500 text-xs mb-2">{hashtagError}</div>}
           <button
             type="button"
             onClick={handleAddHashtag}

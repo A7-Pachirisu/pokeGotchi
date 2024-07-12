@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
@@ -362,9 +361,6 @@ export default function PokeBallGamePage() {
             <button type="button" onClick={() => setState('stop')}>
               STOP
             </button>
-            <Link className="text-red-500" href="/game">
-              GoLobby
-            </Link>
           </div>
           <p className="mt-2">현재 점수: {score}</p>
         </div>

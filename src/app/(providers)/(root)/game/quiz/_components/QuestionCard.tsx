@@ -2,11 +2,11 @@ import React from 'react';
 import { AnswerObject, Props } from '@/app/(providers)/(root)/game/quiz/quizTypes';
 
 const QuestionCard: React.FC<Props> = ({ question, answers, callback, userAnswer, questionNr, totalQuestions }) => (
-  <div className="max-w-screen-lg rounded-lg border-2 border-[#0085a3] bg-[#ebfeff] p-5 text-center shadow-lg">
+  <div className="w-[500px] rounded-lg border-2 border-[#0085a3] bg-[#ebfeff] p-5 text-center shadow-lg">
     <p className="mb-4 text-lg">
       Question: {questionNr} / {totalQuestions}
     </p>
-    <p className="mb-4 text-lg" dangerouslySetInnerHTML={{ __html: question }} />
+    <p className="mb-4 break-words text-lg" dangerouslySetInnerHTML={{ __html: question }} />
     <div>
       {answers.map((answer, idx) => {
         const isCorrect = userAnswer?.correctAnswer === answer;

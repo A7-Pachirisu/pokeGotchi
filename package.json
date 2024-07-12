@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.2",
     "@supabase/ssr": "^0.4.0",
     "@supabase/supabase-js": "^2.44.3",
     "@tanstack/react-query": "^5.50.1",
@@ -24,6 +25,7 @@
     "react-confirm-alert": "^3.0.6",
     "react-dom": "^18",
     "react-icons": "^5.2.1",
+    "react-intersection-observer": "^9.13.0",
     "react-modal": "^3.16.1",
     "react-toastify": "^10.0.5",
     "sweetalert2": "^11.12.2",

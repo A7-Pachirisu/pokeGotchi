@@ -25,27 +25,27 @@ export default function MatterGame() {
       options: {
         wireframes: false,
         width: 600,
-        height: 850,
+        height: 790,
         background: '#F7F4C8'
       }
     });
 
-    const leftWall = Bodies.rectangle(15, 395, 30, 790, {
+    const leftWall = Bodies.rectangle(15, 350, 30, 800, {
       isStatic: true,
       render: { fillStyle: '#E6B143' }
     });
 
-    const rightWall = Bodies.rectangle(605, 395, 30, 790, {
+    const rightWall = Bodies.rectangle(585, 350, 30, 800, {
       isStatic: true,
       render: { fillStyle: '#E6B143' }
     });
 
-    const ground = Bodies.rectangle(310, 820, 620, 60, {
+    const ground = Bodies.rectangle(300, 780, 700, 60, {
       isStatic: true,
       render: { fillStyle: '#E6B143' }
     });
 
-    const topLine = Bodies.rectangle(310, 150, 620, 2, {
+    const topLine = Bodies.rectangle(300, 50, 700, 2, {
       isStatic: true,
       render: { fillStyle: '#E6B143' }
     });
@@ -60,7 +60,7 @@ export default function MatterGame() {
       <div className="items-center" ref={containerRef}>
         <canvas ref={canvasRef}></canvas>
       </div>
-      <Link href="/game">GoLobby</Link>
+      {/* <Link href="/game">GoLobby</Link> */}
     </div>
   );
 }
