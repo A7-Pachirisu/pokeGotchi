@@ -53,7 +53,7 @@ export default function Home() {
   const debouncedMoveSelectedPokemon = useCallback(
     _.debounce((dx: number, dy: number) => {
       moveSelectedPokemon(dx, dy);
-    }, 300),
+    }, 200),
     [selectedPokemon]
   );
 

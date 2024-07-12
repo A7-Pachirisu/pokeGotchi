@@ -42,7 +42,6 @@ const Page: React.FC = () => {
   }, [id]);
 
   const fetchUserData = async (userId: string) => {
-    console.log('Fetching user data for ID:', userId); // 콘솔에 userId 출력
     const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
 
     if (error || !data) {

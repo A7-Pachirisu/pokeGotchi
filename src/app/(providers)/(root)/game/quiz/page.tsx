@@ -1,15 +1,14 @@
 'use client';
 
-import Link from 'next/link';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import QuestionCard from './_components/QuestionCard';
 import supabase from '@/supabase/client';
 import backgroundImage from '@/assets/background.png';
 import { QuestionsState, Difficulty, AnswerObject } from '@/app/(providers)/(root)/game/quiz/quizTypes';
+import QuestionCard from './_components/QuestionCard';
 
 const gameSwal = withReactContent(Swal);
 const TOTAL_QUESTIONS = 10;
