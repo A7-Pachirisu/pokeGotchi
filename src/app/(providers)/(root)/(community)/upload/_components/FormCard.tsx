@@ -1,7 +1,16 @@
-import React, { ChangeEvent, useRef } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { FaRegImage } from 'react-icons/fa6';
 import profile1 from '../../../../../../assets/random profile1.png';
+import img from '@/assets/random profile1.png';
+import { useAuth } from '@/contexts/auth.context/auth.context';
+
+const defaultProfileImage = img.src;
+
+interface User {
+  nickname: string | null;
+  profile_image: string | null;
+}
 
 interface FormCardProps {
   onFileSelect: (file: File | null) => void;
@@ -12,6 +21,17 @@ interface FormCardProps {
 
 const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, content, setContent }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { me } = useAuth() as unknown as { me: User };
+
+  const [nickname, setNickname] = useState<string>('');
+  const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (me) {
+      setNickname(me?.nickname || '');
+      setProfileImgUrl(me?.profile_image || defaultProfileImage);
+    }
+  }, [me]);
 
   const handleIconClick = () => {
     fileInputRef.current?.click();
@@ -29,8 +49,14 @@ const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, cont
   return (
     <div className="mt-10 flex w-full flex-col items-center">
       <div className="mb-5 flex w-[450px] items-center">
-        <Image src={profile1} alt="profileImg" className="h-[50px] w-[50px] rounded-full border" />
-        <p className="ml-5">ooo 님</p>
+        <Image
+          width={12}
+          height={12}
+          src={profileImgUrl || defaultProfileImage}
+          alt="profileImg"
+          className="h-[50px] w-[50px] rounded-full border"
+        />
+        <p className="ml-5">{nickname}</p>
       </div>
       <main className="flex h-[400px] w-[450px] flex-col items-center justify-between rounded-xl border">
         <textarea
