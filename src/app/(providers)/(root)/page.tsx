@@ -1,14 +1,16 @@
 'use client';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import api from '@/lib/axios';
 import Image from 'next/image';
-import backgroundImage from '@/assets/background.png';
 import _ from 'lodash';
+import backgroundImage from '@/assets/background.png';
+import supabase from '@/supabase/client';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 
 interface Pokemon {
   id: number;
   name: string;
   korean_name: string;
+  pokemonNumber: number;
   height: number;
   weight: number;
   sprites: {
@@ -26,13 +28,13 @@ interface Pokemon {
   y?: number;
 }
 
-const MOVEMENT_AREA = { width: 600, height: 1100 };
-
 export default function Home() {
+  const { me } = useAuth();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [selectedPokemonPos, setSelectedPokemonPos] = useState({ x: 0, y: 0 });
+  const [pokemons, setPokemons] = useState<any[]>([]);
 
   const moveSelectedPokemon = (dx: number, dy: number) => {
     if (!selectedPokemon) return;
@@ -53,7 +55,7 @@ export default function Home() {
   const debouncedMoveSelectedPokemon = useCallback(
     _.debounce((dx: number, dy: number) => {
       moveSelectedPokemon(dx, dy);
-    }, 300),
+    }, 200),
     [selectedPokemon]
   );
 
@@ -78,40 +80,28 @@ export default function Home() {
     const newPokemonData = [...pokemonData];
     const clickedPokemon = newPokemonData[index];
 
-    const tempId = clickedPokemon.id;
-    newPokemonData[index].id = selectedPokemon.id;
-    setSelectedPokemon({ ...selectedPokemon, id: tempId });
+    const tempId = clickedPokemon.pokemonNumber;
+    newPokemonData[index].pokemonNumber = selectedPokemon.pokemonNumber;
+    setSelectedPokemon({ ...selectedPokemon, pokemonNumber: tempId });
 
     setPokemonData(newPokemonData);
   };
 
+  const fetchUserPokemons = async (userId: string) => {
+    const { data, error } = await supabase.from('user_pokemons').select('*').eq('userId', userId);
+
+    if (error) {
+      console.error('Error fetching user pokemons:', error);
+    } else {
+      setPokemons(data || []);
+    }
+  };
+
   useEffect(() => {
-    const fetchPokemon = async () => {
-      try {
-        const response = await api.get<Pokemon[]>('/api/pokemons');
-        const data = response.data.slice(0, 6);
-
-        if (data.length > 0) {
-          const canvasWidth = canvasRef.current?.width || 800;
-          const canvasHeight = canvasRef.current?.height || 600;
-          const spacing = canvasWidth / (5 + 1);
-
-          const updatedData = data.map((pokemon, index) => ({
-            ...pokemon,
-            x: index < 5 ? spacing * (index + 1) - 150 : canvasWidth / 2 - 200,
-            y: index < 5 ? 50 : canvasHeight - 20
-          }));
-
-          setPokemonData(updatedData);
-          setSelectedPokemon(updatedData[5]);
-          setSelectedPokemonPos({ x: updatedData[5].x!, y: updatedData[5].y! });
-        }
-      } catch (error) {
-        console.log('데이터 불러오는 도중 오류:', error);
-      }
-    };
-    fetchPokemon();
-  }, []);
+    if (me?.id) {
+      fetchUserPokemons(me.id);
+    }
+  }, [me]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -119,6 +109,31 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [selectedPokemon]);
+
+  useEffect(() => {
+    if (pokemons.length > 0) {
+      const canvasWidth = canvasRef.current?.width || 800;
+      const canvasHeight = canvasRef.current?.height || 600;
+      const spacing = canvasWidth / (5 + 2);
+
+      const updatedData = pokemons
+        .slice(0, 6)
+        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
+        .map((pokemon, index) => ({
+          ...pokemon,
+          x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
+          y: index < 5 ? 50 : canvasHeight - 30
+        }));
+
+      setPokemonData(updatedData);
+
+      if (!selectedPokemon && updatedData.length > 0) {
+        const lastIndex = updatedData.length - 1;
+        setSelectedPokemon(updatedData[lastIndex]);
+        setSelectedPokemonPos({ x: updatedData[lastIndex].x!, y: canvasHeight - 30 });
+      }
+    }
+  }, [pokemons]);
 
   return (
     <div
@@ -129,7 +144,7 @@ export default function Home() {
         backgroundPosition: 'center'
       }}
     >
-      {pokemonData.slice(0, 5).map((pokemon, idx) => (
+      {pokemonData.map((pokemon, idx) => (
         <div
           key={idx}
           id={`pokemon-${idx}`}
@@ -138,10 +153,11 @@ export default function Home() {
           onClick={() => handlePokemonClick(idx)}
         >
           <Image
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.id}.gif`}
-            alt="포켓몬 이미지"
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.pokemonNumber}.gif`}
+            alt={`포켓몬 이미지 ${pokemon.korean_name}`}
             width={100}
             height={100}
+            onError={(e) => console.error('이미지를 불러올 수 없습니다:', e)}
           />
         </div>
       ))}
@@ -153,10 +169,11 @@ export default function Home() {
           style={{ transform: `translate(${selectedPokemonPos.x}px, ${selectedPokemonPos.y}px)` }}
         >
           <Image
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${selectedPokemon.id}.gif`}
-            alt="선택된 포켓몬 이미지"
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${selectedPokemon.pokemonNumber}.gif`}
+            alt={`선택된 포켓몬 이미지 ${selectedPokemon.korean_name}`}
             width={200}
             height={200}
+            onError={(e) => console.error('선택된 이미지를 불러올 수 없습니다:', e)}
           />
         </div>
       )}

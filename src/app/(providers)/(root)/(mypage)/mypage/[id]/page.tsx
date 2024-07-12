@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import supabase from '@/supabase/client';
 import EditProfileModal from './_components/EditProfileModal';
 import UserProfile from './_components/UserProfile';
+import MyPokemonModal from './_components/MyPokemonModal'; // MyPokemonModal 추가
 import { useAuth } from '@/contexts/auth.context/auth.context';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,7 +15,10 @@ const Page: React.FC = () => {
   const [startIndex, setStartIndex] = useState(0);
   const [user, setUser] = useState<any>(null);
   const [pokemons, setPokemons] = useState<any[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isPokemonModalOpen, setIsPokemonModalOpen] = useState(false);
+  const [selectedPokemonId, setSelectedPokemonId] = useState<string | null>(null);
+  const [selectedPokemonImage, setSelectedPokemonImage] = useState<string | null>(null);
   const cardsPerView = 3; // 한 번에 보여줄 카드 수
   const cardWidth = 180; // 각 카드의 폭
   const cardMargin = 20; // 각 카드 사이의 간격
@@ -27,7 +31,6 @@ const Page: React.FC = () => {
   }, [id]);
 
   const fetchUserData = async (userId: string) => {
-    console.log('Fetching user data for ID:', userId); // 콘솔에 userId 출력
     const { data, error } = await supabase.from('users').select('*').eq('id', userId).single();
 
     if (error || !data) {
@@ -56,13 +59,27 @@ const Page: React.FC = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - cardsPerView, 0));
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
     fetchUserData(user.id); // 모달이 닫힐 때 유저 데이터를 새로고침합니다.
+  };
+
+  const handleOpenPokemonModal = (pokemonId: string, pokemonImage: string) => {
+    setSelectedPokemonId(pokemonId);
+    setSelectedPokemonImage(pokemonImage);
+    setIsPokemonModalOpen(true);
+  };
+
+  const handleClosePokemonModal = () => {
+    setIsPokemonModalOpen(false);
+    setSelectedPokemonId(null); // 모달이 닫힐 때 선택된 포켓몬 ID를 초기화합니다.
+    setSelectedPokemonImage(null); // 모달이 닫힐 때 선택된 포켓몬 이미지를 초기화합니다.
+    fetchUserPokemons(id as string); // 변경된 사항이 페이지에 반영되도록 포켓몬 데이터를 새로고침합니다.
+    fetchUserData(id as string); // 변경된 사항이 페이지에 반영되도록 유저 데이터를 새로고침합니다.
   };
 
   if (!user) {
@@ -77,7 +94,7 @@ const Page: React.FC = () => {
     <div className="flex items-center justify-center overflow-hidden bg-gray-100">
       <div className="w-[600px] bg-white p-7">
         <div className="mb-8">
-          <UserProfile user={user} loggedInUserId={me?.id || null} onEdit={handleOpenModal} />
+          <UserProfile user={user} loggedInUserId={me?.id || null} onEdit={handleOpenEditModal} />
         </div>
         <h2 className="mb-4 text-2xl font-bold">내 포켓몬</h2>
         {pokemons && pokemons.length > 0 ? (
@@ -108,7 +125,7 @@ const Page: React.FC = () => {
                           src={mypokemon.gifUrl || '/random_profile1.png'}
                           alt={mypokemon.pokemonName}
                           fill
-                          className="object-cover"
+                          className="object-contain" // object-cover -> object-contain으로 변경
                           sizes="100%"
                           onError={(e) => {
                             e.currentTarget.src = '/random_profile1.png';
@@ -116,11 +133,12 @@ const Page: React.FC = () => {
                         />
                       </div>
                       <h3 className="mb-2 text-sm font-bold">{mypokemon.pokemonName}</h3>
-                      <Link href={`/shopDetail/${mypokemon.pokemonNumber}`}>
-                        <button className="rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs">
-                          상세정보
-                        </button>
-                      </Link>
+                      <button
+                        onClick={() => handleOpenPokemonModal(mypokemon.id, mypokemon.gifUrl || '/random_profile1.png')}
+                        className="rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs hover:brightness-95"
+                      >
+                        상세정보
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -141,7 +159,21 @@ const Page: React.FC = () => {
           <div>게시글이 없습니다.</div>
         </div>
       </div>
-      <EditProfileModal user={user} isOpen={isModalOpen} onClose={handleCloseModal} />
+      <EditProfileModal user={user} isOpen={isEditModalOpen} onClose={handleCloseEditModal} />
+      {selectedPokemonId && selectedPokemonImage && (
+        <MyPokemonModal
+          isOpen={isPokemonModalOpen}
+          onClose={handleClosePokemonModal}
+          pokemonId={selectedPokemonId}
+          userId={user.id}
+          loggedInUserId={me?.id || null}
+          pokemonImage={selectedPokemonImage}
+          onPokemonUpdated={() => {
+            fetchUserPokemons(id as string);
+            fetchUserData(id as string);
+          }}
+        />
+      )}
     </div>
   );
 };
