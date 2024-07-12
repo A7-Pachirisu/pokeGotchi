@@ -13,7 +13,7 @@ const GetPokemon = async (pokemonNumber: number, gifUrl: string, pokemonName: st
     return false;
   }
 
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from('user_pokemons')
     .select('*')
     .eq('userId', user.id)
