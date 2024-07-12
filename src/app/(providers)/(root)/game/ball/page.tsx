@@ -271,16 +271,20 @@ export default function PokeBallGamePage() {
     const animate = () => {
       const pokemon = pokemonRef.current;
       const pokeBall = pokeBallRef.current;
+
       ctx.clearRect(0, 0, W, H);
+
       if (pokemon) {
         updatePokemonPos(pos.pokemon);
         drawImage(ctx, pokemon, pos.pokemon);
       }
+
       if (pokeBall) {
         pos.pokeBalls.forEach((pokeBallPos, index) => {
           updatePokeBallPos(pokeBallPos, index);
           drawImage(ctx, pokeBall, pokeBallPos);
         });
+
         pos.pokeBalls.forEach((pokeBallPos, index) => {
           if (pokeBallPos.y >= H) {
             deletePokeBall(index);
@@ -289,6 +293,7 @@ export default function PokeBallGamePage() {
           }
         });
       }
+
       rafTimer = requestAnimationFrame(animate);
     };
 
