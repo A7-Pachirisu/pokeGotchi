@@ -5,9 +5,12 @@ import FormCard from './_components/FormCard';
 import UploadBtn from './_components/UploadBtn';
 import { supabase } from '@/supabase/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 
 function Page() {
   const router = useRouter();
+  const { isLoggedIn, me } = useAuth();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   const [content, setContent] = useState<string>('');
@@ -26,7 +29,7 @@ function Page() {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile || !content) return;
+    if (!isLoggedIn || !me || !selectedFile || !content) return;
 
     const fileName = `${Date.now()}_${selectedFile.name.replace(/\s/g, '_')}`;
     const key = `images/${encodeURIComponent(fileName)}`;
@@ -42,9 +45,13 @@ function Page() {
       const { data } = supabase.storage.from('sns').getPublicUrl(key);
       const publicUrl = data.publicUrl;
 
-      const { data: insertData, error: insertError } = await supabase
-        .from('posts')
-        .insert([{ content, img_url: publicUrl }]);
+      const { data: insertData, error: insertError } = await supabase.from('posts').insert([
+        {
+          content,
+          img_url: publicUrl,
+          user_id: me.id
+        }
+      ]);
 
       if (insertError) {
         console.error('게시물 업로드 에러:', insertError.message);

@@ -6,21 +6,27 @@ import PostItem from './_components/PostItem';
 import Link from 'next/link';
 import { FaPencil } from 'react-icons/fa6';
 import { supabase } from '@/supabase/supabaseClient';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 
-function page() {
+function Page() {
   const [posts, setPosts] = useState<any[]>([]);
+  const { me } = useAuth();
 
   useEffect(() => {
     async function fetchPosts() {
-      const { data, error } = await supabase.from('posts').select('*');
+      const { data, error } = await supabase
+        .from('posts')
+        .select('*, user:users(id, profile_image, nickname)')
+        .order('created_at', { ascending: false });
       if (error) {
         console.error('게시물 fetch 에러: ', error);
       } else {
         setPosts(data || []);
       }
     }
+
     fetchPosts();
-  }, []);
+  }, [me]);
 
   return (
     <div className="">
@@ -41,4 +47,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;
