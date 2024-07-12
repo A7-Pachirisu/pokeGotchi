@@ -81,7 +81,11 @@ const Page: React.FC = () => {
   };
 
   if (!user) {
-    return <div>로딩중...</div>;
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <div className="text-center text-3xl">로딩중. . .</div>
+      </div>
+    );
   }
 
   return (
