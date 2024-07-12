@@ -41,7 +41,7 @@ const updateScore = async (score: number, userId: string, userEmail: string) => 
     .from('users')
     .upsert(
       { id: userId, gameScore_ball: score > currentScore ? score : currentScore, coins: newCoins, email: userEmail },
-      { onConflict: ['id'] }
+      { onConflict: 'id' }
     );
 
   if (updateError) throw updateError;
@@ -220,6 +220,8 @@ export default function PokeBallGamePage() {
       keyRef.current.isRight = false;
       setScore(0);
       setScoreUpdated(false);
+      setCreatePokeBallTime(700);
+      setPokeBallAccel(0.02);
     },
     [W, H]
   );
