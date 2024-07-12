@@ -11,6 +11,11 @@ export const logInService = async (logInData: logInForm) => {
   return response.data;
 };
 
+export const logInWithKaKaoService = async () => {
+  const response = await api.get('/api/auth/provider');
+  return response.data;
+};
+
 export const logOutService = async () => {
   const response = await api.delete('/api/auth/log-out');
   return response.data;

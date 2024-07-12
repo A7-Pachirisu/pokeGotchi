@@ -1,16 +1,29 @@
+'use client';
 import Button from '@/components/Button';
+import { useUserStore } from '@/store/userStore';
 import { Pokemon } from '@/types/pokemonType';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { BiCoinStack } from 'react-icons/bi';
 
-interface PokeCarProps {
+interface PokeCardProps {
   pokemon: Pokemon;
 }
 
-function PokeCard({ pokemon }: PokeCarProps) {
+function PokeCard({ pokemon }: PokeCardProps) {
+  const { ownedPokemons } = useUserStore();
+  const [owned, setOwned] = useState(false);
+
+  useEffect(() => {
+    setOwned(ownedPokemons.includes(pokemon.id));
+  }, [ownedPokemons, pokemon.id]);
+
   return (
-    <div key={pokemon.id} className="my-1 flex flex-col rounded-md border border-gray-300 p-3 shadow-lg">
+    <div
+      key={pokemon.id}
+      className="mx-1 my-1 flex flex-col rounded-md border border-gray-300 p-3 shadow-lg hover:scale-105"
+    >
       <Link href={`/shopDetail/${pokemon.id}`}>
         <div className="align-center flex justify-end text-xl">
           <BiCoinStack className="my-auto text-yellow-400" />
@@ -25,11 +38,10 @@ function PokeCard({ pokemon }: PokeCarProps) {
             height={100}
           />
         </div>
-
         <p className="m-2 text-xl">{pokemon.korean_name}</p>
 
-        <Button intent="green" size="sm" className="mx-auto">
-          Get
+        <Button intent={owned ? 'red' : 'green'} size="sm" className="mx-auto">
+          {owned ? 'Own' : 'Get'}
         </Button>
       </Link>
     </div>

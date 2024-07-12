@@ -29,10 +29,10 @@ function SignUpPage() {
       </form>
 
       <div className="mt-10 flex flex-col gap-y-4">
-        <Button size="lg" onClick={handleSignUp}>
+        <Button size="lg" onClick={handleSignUp} fit={false}>
           회원가입
         </Button>
-        <Button size="lg" intent="black" href="/log-in">
+        <Button size="lg" intent="black" href="/log-in" fit={false}>
           돌아가기
         </Button>
       </div>
