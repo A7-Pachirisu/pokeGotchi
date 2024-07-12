@@ -102,25 +102,25 @@ const Page: React.FC = () => {
                 />
               </div>
               <div className="ml-5">
-                <div className="text-lg font-bold">{user.nickname || '트레이너'}</div>
+                <div className="text-2xl font-bold">{user.nickname || '트레이너'}</div>
                 <div className="mt-2">
                   {user.hashtags && user.hashtags.length > 0 ? (
                     user.hashtags.map((hashtag: string, index: number) => (
                       <div key={index}>
-                        <h4 className="text-xs font-light"># {hashtag}</h4>
+                        <h4 className="text-sm font-light"># {hashtag}</h4>
                       </div>
                     ))
                   ) : (
-                    <div className="text-xs font-light">해시태그가 없습니다.</div>
+                    <div className="text-sm font-light">해시태그가 없습니다.</div>
                   )}
                 </div>
               </div>
               <div className="ml-10 mt-0 flex flex-col items-start justify-center">
-                <div className="text-sm font-bold">Game Scores</div>
-                <div className="mt-0 text-xs">Ball: {user.gameScore_ball}</div>
-                <div className="mt-0 text-xs">Quiz: {user.gameScore_quiz}</div>
-                <div className="mt-0 text-xs">Fruits: {user.gameScore_fruit}</div>
-                <div className="mt-2 flex text-sm font-bold">
+                <div className="text-lg font-bold">Game Scores</div>
+                <div className="mt-0 text-md">Ball: {user.gameScore_ball}</div>
+                <div className="mt-0 text-md">Quiz: {user.gameScore_quiz}</div>
+                <div className="mt-0 text-md">Fruits: {user.gameScore_fruit}</div>
+                <div className="mt-1   flex text-sm font-bold">
                   <div className='mt-1 flex'>
                     <div className="text-sm font-bold">보유코인</div>
                     <BiCoinStack className="mr-1 mt-1 text-yellow-400 flex" />{user.coins}
@@ -131,7 +131,7 @@ const Page: React.FC = () => {
             {loggedInUserId === user.id && (
               <button
                 onClick={handleOpenModal}
-                className="absolute bottom-4 right-4 rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs"
+                className="absolute top-4 right-4 rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs"
               >
                 수정
               </button>
