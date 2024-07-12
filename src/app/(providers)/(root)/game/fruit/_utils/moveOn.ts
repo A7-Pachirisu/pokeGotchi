@@ -28,6 +28,7 @@ export const moveOn = ({ event, engine, bodyRef, isAbleRef }: moveOnProps): void
       });
       break;
 
+    case 'KeyS':
     case 'Space':
       console.log('내려갑니다');
       currentFruit.isSleeping = false;
