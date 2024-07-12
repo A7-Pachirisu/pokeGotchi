@@ -15,7 +15,7 @@ const getPokemons = async () => {
 };
 
 const ShopPage = () => {
-  const { coins, nickname, fetchUserAndCoinInfo } = useUserStore();
+  const { coins, nickname, fetchUserAndCoinInfo, ownedPokemons } = useUserStore();
   const {
     data: pokemons,
     isLoading,
@@ -40,6 +40,9 @@ const ShopPage = () => {
   if (isError) {
     return <div>오류가 발생했습니다.</div>;
   }
+  const owned = pokemons?.filter((pokemon) => !ownedPokemons.includes(pokemon.id)) || [];
+  const unOwned = pokemons?.filter((pokemon) => ownedPokemons.includes(pokemon.id)) || [];
+  const filterPokemons = [...owned, ...unOwned];
 
   return (
     <>
@@ -56,7 +59,7 @@ const ShopPage = () => {
           </div>
         </div>
         <div className="mx-auto mt-10 grid grid-cols-3 gap-1 text-center">
-          {pokemons?.map((pokemon) => {
+          {filterPokemons?.map((pokemon) => {
             return <PokeCard key={pokemon.id} pokemon={pokemon} />;
           })}
         </div>

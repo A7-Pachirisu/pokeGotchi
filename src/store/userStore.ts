@@ -1,22 +1,26 @@
-//유저 정보, 코인, 닉네임 가져오기 (users 테이블)
+//유저 정보, 코인, 닉네임 가져오기
 import { create } from 'zustand';
 import { createClient } from '@/supabase/client';
 
-interface userState {
+const supabase = createClient();
+
+type userState = {
   user: any;
   coins: number | null;
-  fetchUserAndCoinInfo: () => void;
   nickname: string | null;
+  ownedPokemons: (number | null)[];
+  fetchUserAndCoinInfo: () => void;
   deductCoins: (amount: number) => Promise<boolean>;
-}
+  fetchOwnedPokemons: () => void;
+};
 
 export const useUserStore = create<userState>((set) => ({
   user: null,
   coins: null,
   nickname: null,
+  ownedPokemons: [],
 
   fetchUserAndCoinInfo: async () => {
-    const supabase = createClient();
     const {
       data: { user },
       error: userError
@@ -40,12 +44,12 @@ export const useUserStore = create<userState>((set) => ({
           nickname: data.nickname
         });
       }
+      await useUserStore.getState().fetchOwnedPokemons();
     }
   },
 
   //코인 차감
   deductCoins: async (amount: number) => {
-    const supabase = createClient();
     const { user, coins } = useUserStore.getState();
 
     if (user && coins !== null && coins >= amount) {
@@ -62,6 +66,21 @@ export const useUserStore = create<userState>((set) => ({
       }
     } else {
       return false;
+    }
+  },
+
+  fetchOwnedPokemons: async () => {
+    const { user } = useUserStore.getState();
+
+    if (user) {
+      const { data: own, error } = await supabase.from('user_pokemons').select('*').eq('userId', user.id);
+
+      if (error) {
+        console.error('에러가 발생했습니다', error.message);
+      } else {
+        const ownedPokemons = own.map((pokemon) => pokemon.pokemonNumber);
+        set({ ownedPokemons });
+      }
     }
   }
 }));
