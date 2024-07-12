@@ -4,10 +4,10 @@ import Link from 'next/link';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import PokeBallImage from '@/assets/default ball.png';
 import PokemonImage from '@/assets/pokemon2.png';
 import supabase from '@/supabase/client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 const gameSwal = withReactContent(Swal);
 
@@ -26,25 +26,24 @@ const fetchUser = async () => {
 
 const updateScore = async (score: number, userId: string, userEmail: string) => {
   const { data, error } = await supabase.from('users').select('gameScore_ball, coins').eq('id', userId).single();
-
-  if (error && error.code !== 'PGRST116') {
+  if (error) {
     throw error;
   }
 
   const currentScore = data?.gameScore_ball ?? 0;
   const currentCoins = data?.coins ?? 0;
-
   const additionalCoins = Math.floor(score / 10);
   const newCoins = currentCoins + additionalCoins;
 
-  const { error: updateError } = await supabase
+  const { data: upsertData, error: upsertError } = await supabase
     .from('users')
     .upsert(
       { id: userId, gameScore_ball: score > currentScore ? score : currentScore, coins: newCoins, email: userEmail },
       { onConflict: 'id' }
     );
-
-  if (updateError) throw updateError;
+  if (upsertError) {
+    throw upsertError;
+  }
 };
 
 export default function PokeBallGamePage() {
@@ -121,6 +120,7 @@ export default function PokeBallGamePage() {
     (src: string) =>
       new Promise<HTMLImageElement>((resolve) => {
         const img = new Image();
+
         img.src = src;
         img.onload = () => resolve(img);
       }),
@@ -138,8 +138,10 @@ export default function PokeBallGamePage() {
   const updatePokemonPos = useCallback(
     (pokemonPos: ItemPos) => {
       const key = keyRef.current;
+
       if (key.isLeft) pokemonPos.x -= VELOCITY.pokemon.left;
       if (key.isRight) pokemonPos.x += VELOCITY.pokemon.right;
+
       blockOverflowPos(pokemonPos);
     },
     [blockOverflowPos]
@@ -147,12 +149,15 @@ export default function PokeBallGamePage() {
 
   const createPokeBall = useCallback(() => {
     if (!pokeBallRef.current) return;
+
     const size = pokeBallSizeRef.current;
+
     posRef.current.pokeBalls.push({
       x: Math.random() * (W - size.w),
       y: -size.h,
       ...size
     });
+
     posRef.current.pokeBallAccel.push(1);
   }, [W]);
 
@@ -160,6 +165,7 @@ export default function PokeBallGamePage() {
     (pokeBallPos: ItemPos, index: number) => {
       const y = pokeBallPos.y;
       const accel = posRef.current.pokeBallAccel[index];
+
       posRef.current.pokeBallAccel[index] = accel + accel * pokeBallAccel;
       pokeBallPos.y = y + accel;
     },
@@ -179,6 +185,7 @@ export default function PokeBallGamePage() {
   const catchPokeBall = useCallback(
     (pokeBallPos: ItemPos, index: number) => {
       const pokemonPos = posRef.current.pokemon;
+
       if (
         pokemonPos.x + pokemonPos.w >= pokeBallPos.x &&
         pokemonPos.x <= pokeBallPos.x + pokeBallPos.w &&
@@ -189,6 +196,7 @@ export default function PokeBallGamePage() {
           mutation.mutate(score);
           setScoreUpdated(true);
           setState('pause');
+
           gameSwal
             .fire({
               title: `점수: ${score}`,
@@ -210,14 +218,17 @@ export default function PokeBallGamePage() {
       const { w, h } = posRef.current.pokemon;
       posRef.current.pokeBallAccel = [];
       posRef.current.pokeBalls = [];
+
       posRef.current.pokemon = {
         x: W / 2 - w / 2,
         y: H - h,
         w,
         h
       };
+
       keyRef.current.isLeft = false;
       keyRef.current.isRight = false;
+
       setScore(0);
       setScoreUpdated(false);
       setCreatePokeBallTime(700);
@@ -229,8 +240,11 @@ export default function PokeBallGamePage() {
   useEffect(() => {
     const cvs = ref.current;
     const ctx = cvs?.getContext('2d');
+
     state === 'stop' && ctx && initialGame(ctx);
+
     if (!cvs || !ctx || state !== 'play') return;
+
     !pokemonRef.current &&
       loadImage(PokemonImage.src).then((img) => {
         (pokemonRef as any).current = img;
@@ -243,15 +257,18 @@ export default function PokeBallGamePage() {
           h
         };
       });
+
     !pokeBallRef.current &&
       loadImage(PokeBallImage.src).then((img) => {
         (pokeBallRef as any).current = img;
         pokeBallSizeRef.current.w = 50;
         pokeBallSizeRef.current.h = 50;
       });
+
     let timer: number | undefined;
     let rafTimer: number | undefined;
     const pos = posRef.current;
+
     const animate = () => {
       const pokemon = pokemonRef.current;
       const pokeBall = pokeBallRef.current;
@@ -275,17 +292,21 @@ export default function PokeBallGamePage() {
       }
       rafTimer = requestAnimationFrame(animate);
     };
+
     rafTimer = requestAnimationFrame(animate);
     timer = window.setInterval(createPokeBall, createPokeBallTime);
+
     const onKeyDown = (e: KeyboardEvent) => {
       const key = e.key.toLowerCase();
       keyRef.current.isLeft = key === 'a' || key === 'arrowleft';
       keyRef.current.isRight = key === 'd' || key === 'arrowright';
     };
+
     const onKeyUp = () => {
       keyRef.current.isLeft = false;
       keyRef.current.isRight = false;
     };
+
     window.addEventListener('keydown', onKeyDown);
     window.addEventListener('keyup', onKeyUp);
 
