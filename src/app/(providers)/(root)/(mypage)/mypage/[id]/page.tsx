@@ -7,16 +7,17 @@ import supabase from '@/supabase/client';
 import { BiCoinStack } from 'react-icons/bi';
 import EditProfileModal from './EditProfileModal';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/auth.context/auth.context';
 
 const defaultProfileImage = img.src;
 const defaultPokemonImage = img.src;
 
 const Page: React.FC = () => {
   const { id } = useParams();
+  const { me } = useAuth(); // 로그인된 사용자 정보를 가져옵니다
   const [startIndex, setStartIndex] = useState(0);
   const [user, setUser] = useState<any>(null);
   const [pokemons, setPokemons] = useState<any[]>([]);
-  const [loggedInUserId, setLoggedInUserId] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const cardsPerView = 3; // 한 번에 보여줄 카드 수
   const cardWidth = 180; // 각 카드의 폭
@@ -27,18 +28,6 @@ const Page: React.FC = () => {
       fetchUserData(id as string);
       fetchUserPokemons(id as string);
     }
-
-    // 로그인된 사용자 아이디 가져오기
-    const fetchLoggedInUserId = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching logged in user:', error);
-      } else {
-        setLoggedInUserId(data?.user?.id || null);
-      }
-    };
-
-    fetchLoggedInUserId();
   }, [id]);
 
   const fetchUserData = async (userId: string) => {
@@ -128,7 +117,7 @@ const Page: React.FC = () => {
                 </div>
               </div>
             </div>
-            {loggedInUserId === user.id && (
+            {me?.id === user.id && (
               <button
                 onClick={handleOpenModal}
                 className="absolute right-4 top-4 rounded-md border border-gray-300 bg-gray-100 px-2 py-1 text-xs"
