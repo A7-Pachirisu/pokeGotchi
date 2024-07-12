@@ -3,9 +3,8 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import { useAuth } from '@/contexts/auth.context/auth.context';
 import useInput from '@/hooks/useInput';
-
 function LogInPage() {
-  const { logIn, logOut } = useAuth();
+  const { logIn, logInWithKakao } = useAuth();
   const emailInput = useInput('');
   const passwordInput = useInput('');
 
@@ -17,7 +16,7 @@ function LogInPage() {
     await logIn(logInData);
   };
 
-  const handleLogout = async () => await logOut();
+  const handleKaKaoLogin = async () => await logInWithKakao();
 
   return (
     <>
@@ -32,8 +31,8 @@ function LogInPage() {
         <Button size="lg" href="/sign-up" fit={false}>
           회원가입
         </Button>
-        <Button size="lg" intent="yellow" href="/sign-up" onClick={handleLogout} fit={false}>
-          카카오 로그인이지만 지금은 로그아웃
+        <Button size="lg" intent="yellow" onClick={handleKaKaoLogin} fit={false}>
+          카카오 로그인
         </Button>
       </div>
     </>
