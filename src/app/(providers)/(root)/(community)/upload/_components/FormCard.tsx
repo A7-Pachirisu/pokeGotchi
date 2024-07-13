@@ -19,6 +19,7 @@ const MAX_CONTENT_LENGTH = 125;
 const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, content, setContent }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { me } = useAuth();
+  const [contentLength, setContentLength] = useState(0);
 
   const [nickname, setNickname] = useState<string>('');
   const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
@@ -52,8 +53,12 @@ const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, cont
     onFileSelect(file);
   };
 
-  const handleContentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(event.target.value);
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= MAX_CONTENT_LENGTH) {
+      setContent(value);
+      setContentLength(value.length);
+    }
   };
 
   return (
@@ -69,20 +74,23 @@ const FormCard: React.FC<FormCardProps> = ({ onFileSelect, previewImageUrl, cont
         <p className="ml-5">{nickname}</p>
       </div>
       <main className="flex h-[400px] w-[450px] flex-col items-center justify-between rounded-xl border">
-        <textarea
-          placeholder="120자 이내로 내용을 입력해주세요..."
-          className="mt-5 h-[200px] w-[420px] resize-none pl-[10px] pt-5"
-          value={content}
-          onChange={handleContentChange}
-          maxLength={MAX_CONTENT_LENGTH}
-        />
+        <div className="">
+          <textarea
+            placeholder="120자 이내로 내용을 입력해주세요..."
+            className="mt-5 h-[150px] w-[420px] resize-none rounded-md border pl-[10px] pr-[10px] pt-5"
+            value={content}
+            onChange={handleContentChange}
+            maxLength={MAX_CONTENT_LENGTH}
+          />
+          <div className="text-right text-sm text-gray-500">{`${contentLength}/${MAX_CONTENT_LENGTH}`}</div>
+        </div>
         <div className="mb-5 ml-5 w-[420px] text-2xl">
           {previewImageUrl && (
             <img
               src={previewImageUrl}
               alt="Selected"
               className="fixed-preview-image mt-5"
-              style={{ width: '100%', height: 'auto', maxWidth: '90%', maxHeight: '200px', objectFit: 'contain' }}
+              style={{ width: '100%', height: 'auto', maxWidth: '90%', maxHeight: '150px', objectFit: 'contain' }}
             />
           )}
           <input type="file" ref={fileInputRef} hidden onChange={handleFileChange} />
