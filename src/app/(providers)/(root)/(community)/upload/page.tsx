@@ -6,6 +6,7 @@ import UploadBtn from './_components/UploadBtn';
 import { supabase } from '@/supabase/supabaseClient';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth.context/auth.context';
+import Swal from 'sweetalert2';
 
 function Page() {
   const router = useRouter();
@@ -29,7 +30,10 @@ function Page() {
   };
 
   const handleUpload = async () => {
-    if (!isLoggedIn || !me || !selectedFile || !content) return;
+    if (!isLoggedIn || !me || !selectedFile || !content) {
+      Swal.fire('경고', '모든 필드를 채워주세요.', 'warning');
+      return;
+    }
 
     const fileName = `${Date.now()}_${selectedFile.name.replace(/\s/g, '_')}`;
     const key = `images/${encodeURIComponent(fileName)}`;
@@ -39,6 +43,7 @@ function Page() {
 
       if (uploadError) {
         console.error('파일 업로드 에러:', uploadError.message);
+        Swal.fire('에러', '파일 업로드 중 오류가 발생했습니다.', 'error');
         return;
       }
 
@@ -55,12 +60,15 @@ function Page() {
 
       if (insertError) {
         console.error('게시물 업로드 에러:', insertError.message);
+        Swal.fire('에러', '게시물 업로드 중 오류가 발생했습니다.', 'error');
       } else {
         console.log('게시물이 성공적으로 업로드 되었습니다:', insertData);
-        setContent('');
-        setSelectedFile(null);
-        setPreviewImageUrl(null);
-        router.push('/sns');
+        Swal.fire('성공', '게시물이 성공적으로 업로드 되었습니다.', 'success').then(() => {
+          setContent('');
+          setSelectedFile(null);
+          setPreviewImageUrl(null);
+          router.push('/sns');
+        });
       }
     } catch (error) {
       console.error('일반 에러 발생:', (error as Error).message);
