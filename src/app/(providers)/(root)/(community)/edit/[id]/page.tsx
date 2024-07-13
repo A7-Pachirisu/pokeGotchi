@@ -20,6 +20,7 @@ const EditPost = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
+  const [contentLength, setContentLength] = useState(0);
 
   useEffect(() => {
     async function fetchPost() {
@@ -37,8 +38,8 @@ const EditPost = () => {
         setContent(postData.content);
         setImgUrl(postData.img_url);
         setPreviewImage(postData.img_url);
+        setContentLength(postData.content.length);
 
-        // 사용자 정보 가져오기
         const { data, error } = await supabase.from('users').select('nickname, profile_image').eq('id', me.id).single();
 
         if (error) {
@@ -61,6 +62,14 @@ const EditPost = () => {
       };
       reader.readAsDataURL(e.target.files[0]);
       setNewImage(e.target.files[0]);
+    }
+  };
+
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= MAX_CONTENT_LENGTH) {
+      setContent(value);
+      setContentLength(value.length);
     }
   };
 
@@ -123,17 +132,17 @@ const EditPost = () => {
           />
           <p className="ml-5">{nickname}</p>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 w-[450px]">
           <label className="mt-5 block text-sm font-bold" htmlFor="content">
             내용
           </label>
           <textarea
             id="content"
-            className="mt-3 h-[180px] w-[420px] resize-none border pl-[10px] pt-5"
+            className="mt-3 h-[180px] w-[100%] resize-none border pl-[10px] pt-5"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            maxLength={MAX_CONTENT_LENGTH}
+            onChange={handleContentChange}
           />
+          <div className="text-right text-sm text-gray-500">{`${contentLength}/${MAX_CONTENT_LENGTH}`}</div>
         </div>
         <div className="mb-4">
           <label className="mb-2 block text-sm font-bold" htmlFor="image">
