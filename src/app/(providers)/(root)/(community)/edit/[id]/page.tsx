@@ -6,6 +6,7 @@ import { supabase } from '@/supabase/supabaseClient';
 import { useAuth } from '@/contexts/auth.context/auth.context';
 import Image from 'next/image';
 import img from '@/assets/random profile1.png';
+import Swal from 'sweetalert2';
 
 const defaultProfileImage = img.src;
 const MAX_CONTENT_LENGTH = 125;
@@ -88,6 +89,7 @@ const EditPost = () => {
 
         if (uploadError) {
           console.error('이미지 업로드 에러:', uploadError);
+          Swal.fire('에러', '이미지 업로드 중 오류가 발생했습니다.', 'error');
           return;
         }
 
@@ -97,6 +99,7 @@ const EditPost = () => {
 
         if (publicUrlError) {
           console.error('퍼블릭 URL 가져오기 에러:', publicUrlError);
+          Swal.fire('에러', '이미지 URL 가져오기 중 오류가 발생했습니다.', 'error');
           return;
         }
 
@@ -105,6 +108,7 @@ const EditPost = () => {
         }
       } catch (error) {
         console.error('이미지 업로드 및 URL 가져오기 중 에러:', error);
+        Swal.fire('에러', '이미지 업로드 및 URL 가져오기 중 오류가 발생했습니다.', 'error');
         return;
       }
     }
@@ -113,8 +117,11 @@ const EditPost = () => {
 
     if (error) {
       console.error('게시물 수정 에러:', error);
+      Swal.fire('에러', '게시물 수정 중 오류가 발생했습니다.', 'error');
     } else {
-      router.push('/sns');
+      Swal.fire('성공', '게시물이 성공적으로 수정되었습니다.', 'success').then(() => {
+        router.push('/sns');
+      });
     }
   };
 

@@ -83,7 +83,7 @@ const PostItem: React.FC<PostItemProps> = ({ posts }) => {
             />
           </div>
           <div className="flex justify-center">
-            <p className="mt-5 w-[380px]">{item.content}</p>
+            <p className="mt-5 w-[380px] break-words">{item.content}</p>
           </div>
         </main>
       ))}
