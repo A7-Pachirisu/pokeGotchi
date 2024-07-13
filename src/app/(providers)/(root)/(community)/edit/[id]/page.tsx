@@ -6,6 +6,7 @@ import { supabase } from '@/supabase/supabaseClient';
 import { useAuth } from '@/contexts/auth.context/auth.context';
 import Image from 'next/image';
 import img from '@/assets/random profile1.png';
+import Swal from 'sweetalert2';
 
 const defaultProfileImage = img.src;
 const MAX_CONTENT_LENGTH = 125;
@@ -20,6 +21,7 @@ const EditPost = () => {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
+  const [contentLength, setContentLength] = useState(0);
 
   useEffect(() => {
     async function fetchPost() {
@@ -37,8 +39,8 @@ const EditPost = () => {
         setContent(postData.content);
         setImgUrl(postData.img_url);
         setPreviewImage(postData.img_url);
+        setContentLength(postData.content.length);
 
-        // 사용자 정보 가져오기
         const { data, error } = await supabase.from('users').select('nickname, profile_image').eq('id', me.id).single();
 
         if (error) {
@@ -64,6 +66,14 @@ const EditPost = () => {
     }
   };
 
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= MAX_CONTENT_LENGTH) {
+      setContent(value);
+      setContentLength(value.length);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -79,6 +89,7 @@ const EditPost = () => {
 
         if (uploadError) {
           console.error('이미지 업로드 에러:', uploadError);
+          Swal.fire('에러', '이미지 업로드 중 오류가 발생했습니다.', 'error');
           return;
         }
 
@@ -88,6 +99,7 @@ const EditPost = () => {
 
         if (publicUrlError) {
           console.error('퍼블릭 URL 가져오기 에러:', publicUrlError);
+          Swal.fire('에러', '이미지 URL 가져오기 중 오류가 발생했습니다.', 'error');
           return;
         }
 
@@ -96,6 +108,7 @@ const EditPost = () => {
         }
       } catch (error) {
         console.error('이미지 업로드 및 URL 가져오기 중 에러:', error);
+        Swal.fire('에러', '이미지 업로드 및 URL 가져오기 중 오류가 발생했습니다.', 'error');
         return;
       }
     }
@@ -104,8 +117,11 @@ const EditPost = () => {
 
     if (error) {
       console.error('게시물 수정 에러:', error);
+      Swal.fire('에러', '게시물 수정 중 오류가 발생했습니다.', 'error');
     } else {
-      router.push('/sns');
+      Swal.fire('성공', '게시물이 성공적으로 수정되었습니다.', 'success').then(() => {
+        router.push('/sns');
+      });
     }
   };
 
@@ -123,17 +139,17 @@ const EditPost = () => {
           />
           <p className="ml-5">{nickname}</p>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 w-[450px]">
           <label className="mt-5 block text-sm font-bold" htmlFor="content">
             내용
           </label>
           <textarea
             id="content"
-            className="mt-3 h-[180px] w-[420px] resize-none border pl-[10px] pt-5"
+            className="mt-3 h-[180px] w-[100%] resize-none border pl-[10px] pt-5"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            maxLength={MAX_CONTENT_LENGTH}
+            onChange={handleContentChange}
           />
+          <div className="text-right text-sm text-gray-500">{`${contentLength}/${MAX_CONTENT_LENGTH}`}</div>
         </div>
         <div className="mb-4">
           <label className="mb-2 block text-sm font-bold" htmlFor="image">
