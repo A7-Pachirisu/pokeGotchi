@@ -1,6 +1,6 @@
 'use client';
 
-import { Bodies, Engine, Events, Render, Runner, World } from 'matter-js';
+import { Engine, Events, Render, Runner, World } from 'matter-js';
 import { RefObject, useEffect, useRef } from 'react';
 import { addFruit } from '../_utils/addFruit';
 import { createWallsAndGround } from '../_utils/createWallsAndGround';
@@ -26,7 +26,6 @@ export default function MatterRenderer({ containerRef, canvasRef }: MatterRender
   const engineRef = useRef(Engine.create()); // 물리 엔진
   const bodyRef = useRef<FruitBody | null>(null); // 움직일 과일
   const isAbleRef = useRef<boolean>(false); // 새로고침 안되게 하기 위해서 ref
-  const world = engineRef.current.world;
 
   useEffect(() => {
     if (!containerRef.current || !canvasRef.current) return;
@@ -56,52 +55,47 @@ export default function MatterRenderer({ containerRef, canvasRef }: MatterRender
 
     const cleanupKeydownListener = setupKeydownListener({ engine: engineRef.current, bodyRef, isAbleRef }); // 이벤트 리스너 추가
 
+    // 충돌 이벤트 적용
     Events.on(engineRef.current, 'collisionStart', (event) => {
       event.pairs.forEach((collision) => {
         const bodyA = collision.bodyA;
         const bodyB = collision.bodyB;
 
         // 바닥이나 벽과 충돌한 경우 return
+        if (bodyA.index === undefined || bodyB.index === undefined) return;
         if (bodyA.label === 'Rectangle Body' || bodyB.label === 'Rectangle Body') return;
 
         if (bodyA.index === bodyB.index) {
-          console.log('충돌 A', bodyA.index, bodyA);
-          console.log('충돌 B', bodyB.index, bodyB);
+          console.log('충돌한 인덱스 ', bodyA, bodyB);
 
-          const newIndex = bodyA.index; // 새로운 과일
+          const collisionIdx = bodyA.index; // 충돌한 과일 인덱스
 
-          if (newIndex === FRUITS_BASE.length - 1) return; // 수박이면 리턴
+          if (collisionIdx === FRUITS_BASE.length - 1) return; // 수박이면 리턴
 
           World.remove(engineRef.current.world, [bodyA, bodyB]); // 충돌한 요소 제거
 
-          const newFruit = FRUITS_BASE[newIndex + 1];
+          const newFruit = FRUITS_BASE[collisionIdx + 1];
+
           if (!newFruit) return;
           console.log('새로운 과일', newFruit);
 
-          const newBody = Bodies.circle(
-            collision.collision.supports[0].x,
-            collision.collision.supports[0].y,
-            newFruit.radius,
-            {
-              label: 'fruit',
-              render: {
-                fillStyle: newFruit.color
-              },
-              restitution: 0.3
-            }
-          );
-
-          World.add(world, newBody);
+          addFruit({
+            engine: engineRef.current,
+            bodyRef,
+            x: collision.collision.supports[0].x,
+            y: collision.collision.supports[0].y,
+            index: collisionIdx + 1
+          });
         }
       });
     });
 
     return () => {
       cleanupKeydownListener();
-      // Render.stop(render);
-      // World.clear(world, false);
-      // Engine.clear(engineRef.current);
-      // Runner.stop(runner);
+      Render.stop(render);
+      World.clear(engineRef.current.world, false);
+      Engine.clear(engineRef.current);
+      Runner.stop(runner);
     };
   }, [containerRef, canvasRef]);
 

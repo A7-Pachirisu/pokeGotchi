@@ -10,23 +10,26 @@ export const moveOn = ({ event, engine, bodyRef, isAbleRef }: moveOnProps): void
   switch (event.code) {
     case 'KeyA':
     case 'ArrowLeft':
-      Body.setPosition(currentFruit, {
-        x: currentFruit.position.x - 10,
-        y: currentFruit.position.y
-      });
+      if (currentFruit.position.x - currentFruit.circleRadius > 30) {
+        Body.setPosition(currentFruit, {
+          x: currentFruit.position.x - 10,
+          y: currentFruit.position.y
+        });
+      }
       break;
 
     case 'KeyD':
     case 'ArrowRight':
-      Body.setPosition(currentFruit, {
-        x: currentFruit.position.x + 10,
-        y: currentFruit.position.y
-      });
+      if (currentFruit.position.x + currentFruit.circleRadius < 570) {
+        Body.setPosition(currentFruit, {
+          x: currentFruit.position.x + 10,
+          y: currentFruit.position.y
+        });
+      }
       break;
 
     case 'KeyS':
     case 'Space':
-      console.log('내려갑니다');
       currentFruit.isSleeping = false;
       isAbleRef.current = true;
       setTimeout(() => {
