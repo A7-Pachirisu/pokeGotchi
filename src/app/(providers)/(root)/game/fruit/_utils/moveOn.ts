@@ -1,10 +1,6 @@
 import { Body } from 'matter-js';
-import { KeyDownParams } from '../types/Fruit';
+import { moveOnProps } from '../types/Fruit';
 import { addFruit } from './addFruit';
-
-type moveOnProps = {
-  event: KeyboardEvent;
-} & KeyDownParams;
 
 export const moveOn = ({ event, engine, bodyRef, isAbleRef }: moveOnProps): void => {
   const currentFruit = bodyRef.current; // 만든 과일
