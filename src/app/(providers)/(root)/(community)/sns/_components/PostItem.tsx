@@ -26,11 +26,14 @@ const PostItem: React.FC<PostItemProps> = ({ posts }) => {
   const { me } = useAuth();
 
   const handleDelete = async (postId: number) => {
-    const { error } = await supabase.from('posts').delete().eq('id', postId);
-    if (error) {
-      console.error('게시물 삭제 에러:', error);
-    } else {
-      window.location.reload();
+    const confirmDelete = window.confirm('이 게시물을 삭제하시겠습니까?');
+    if (confirmDelete) {
+      const { error } = await supabase.from('posts').delete().eq('id', postId);
+      if (error) {
+        console.error('게시물 삭제 에러:', error);
+      } else {
+        window.location.reload();
+      }
     }
   };
 
