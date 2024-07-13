@@ -1,5 +1,3 @@
-'use client';
-
 const StatGraph = ({ ratio }: { ratio: number }) => {
   return (
     <div className="flex h-6 w-36 justify-start border-2">
