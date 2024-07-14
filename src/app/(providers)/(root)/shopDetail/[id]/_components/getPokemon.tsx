@@ -29,8 +29,6 @@ const GetPokemon = async (pokemonNumber: number, gifUrl: string, pokemonName: st
     } else {
       notify('포켓몬을 데려왔습니다');
     }
-  } else {
-    notify('코인이 부족합니다');
   }
 };
 
