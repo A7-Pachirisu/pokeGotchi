@@ -102,9 +102,9 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
 
       onPokemonUpdated();  // 변경된 사항이 페이지에 반영되도록 콜백 호출
       setIsByeModalOpen(false);
-      setIsByeMentOpen(true); // ByeMent 모달 열기
+      setIsByeMentOpen(true);
       setTimeout(() => {
-        handleCloseAllModals(); // ByeMent 모달 닫기 및 모든 모달 닫기
+        handleCloseAllModals(); 
       }, 1500); 
     } catch (error: any) {
       throw new Error(error.message)

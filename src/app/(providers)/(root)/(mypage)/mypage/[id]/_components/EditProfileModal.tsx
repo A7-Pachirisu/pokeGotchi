@@ -25,6 +25,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
       return;
     }
 
+
     try {
       const updates = {
         profile_image: profile_image || null,
@@ -43,7 +44,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
       } else if (!data || data.length === 0) {
         console.warn('업데이트된 데이터가 반환되지 않았습니다.');
       } else {
-        onClose(); // 모달을 닫습니다.
+        onClose();
       }
     } catch (error: any) {
       throw new Error(error.message)
