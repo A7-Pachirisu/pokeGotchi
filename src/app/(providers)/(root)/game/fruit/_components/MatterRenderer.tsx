@@ -3,6 +3,7 @@ import { FRUITS_BASE as FRUITS } from '../_utils/fruites';
 interface MatterRendererProps {
   containerRef: RefObject<HTMLDivElement>;
   canvasRef: RefObject<HTMLCanvasElement>;
+  onUpdateScore: (updateFn: (prev: number) => number) => void;
 }
 
 import { Bodies, Body, Engine, Events, Render, Runner, World } from 'matter-js';
@@ -10,7 +11,7 @@ import { RefObject, useEffect, useRef } from 'react';
 import { createWallsAndGround } from '../_utils/createWallsAndGround';
 import { Fruit } from '../types/Fruit';
 
-const MatterRenderer = ({ containerRef, canvasRef }: MatterRendererProps) => {
+const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRendererProps) => {
   const engineRef = useRef(Engine.create()); // 물리 엔진
   const world = engineRef.current.world;
   const currentBodyRef = useRef<Body | null>(null); // 현재 생성된 과일
@@ -31,7 +32,7 @@ const MatterRenderer = ({ containerRef, canvasRef }: MatterRendererProps) => {
       options: {
         wireframes: false,
         width: containerRef.current.clientWidth,
-        height: containerRef.current.clientHeight,
+        height: containerRef.current.clientHeight / 1.5,
         background: '#F7F4C8'
       }
     });
@@ -173,6 +174,8 @@ const MatterRenderer = ({ containerRef, canvasRef }: MatterRendererProps) => {
           newBody.index = index + 1;
 
           World.add(world, newBody);
+
+          onUpdateScore((prevScore) => prevScore + newBody.index);
 
           setTimeout(() => {
             collisionFlagRef.current = false; // 충돌 처리 완료
