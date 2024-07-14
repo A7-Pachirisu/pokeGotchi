@@ -107,7 +107,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
         handleCloseAllModals(); 
       }, 1500); 
     } catch (error: any) {
-      console.error('Error selling pokemon:', error.message);
+      throw new Error(error.message)
     }
   };
 

@@ -26,9 +26,7 @@ const fetchUser = async () => {
 const updateScore = async (score: number, userId: string, userEmail: string) => {
   const { data, error } = await supabase.from('users').select('gameScore_ball, coins').eq('id', userId).single();
 
-  if (error) {
-    throw error;
-  }
+  if (error) throw new Error(error.message);
 
   const currentScore = data?.gameScore_ball ?? 0;
   const currentCoins = data?.coins ?? 0;
@@ -41,9 +39,8 @@ const updateScore = async (score: number, userId: string, userEmail: string) => 
       { id: userId, gameScore_ball: score > currentScore ? score : currentScore, coins: newCoins, email: userEmail },
       { onConflict: 'id' }
     );
-  if (upsertError) {
-    throw upsertError;
-  }
+
+  if (upsertError) throw new Error(upsertError.message);
 };
 
 export default function PokeBallGamePage() {

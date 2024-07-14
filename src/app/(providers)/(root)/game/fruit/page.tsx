@@ -37,13 +37,11 @@ function FruitGamePage() {
     setScore((prev) => {
       const newScore = updateFn(prev);
       scoreRef.current = newScore; // 최신 score 값을 scoreRef에 저장
-      console.log('Updating score:', newScore);
       return newScore;
     });
   };
 
   const handleGameOver = async () => {
-    console.log('Final score at game over:', scoreRef.current);
     setIsGameOver(true);
 
     const userId = me?.id;
