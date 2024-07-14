@@ -26,6 +26,6 @@ export const getUserService = async () => {
     const response = await api.get('/api/auth/me');
     return response.data;
   } catch (err) {
-    console.log('>>>>> getUserService 에러 (로그인 안했을 때)', err);
+    if (err instanceof Error) throw new Error(err.message);
   }
 };

@@ -25,8 +25,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
       return;
     }
 
-    console.log('전송할 업데이트 데이터:', { profile_image, nickname, hashtags });
-
     try {
       const updates = {
         profile_image: profile_image || null,
@@ -40,20 +38,15 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
         .eq('id', user.id)
         .select();
 
-      console.log('API 응답 상태:', status, statusText);
-      console.log('API 응답 데이터:', data);
-      console.log('API 응답 오류:', error);
-
       if (error) {
-        console.error('프로필 업데이트 중 오류 발생:', error.message);
+        throw new Error(error.message);
       } else if (!data || data.length === 0) {
         console.warn('업데이트된 데이터가 반환되지 않았습니다.');
       } else {
-        console.log('프로필 업데이트 성공:', data);
         onClose(); // 모달을 닫습니다.
       }
     } catch (error: any) {
-      console.error('요청 중 오류 발생:', error.message);
+      throw new Error(error.message)
     }
   };
 
@@ -92,12 +85,14 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="w-[400px] bg-white p-5 rounded-lg shadow-lg">
-        <h2 className="text-xl font-bold mb-4">프로필 수정</h2>
+      <div className="w-[400px] rounded-lg bg-white p-5 shadow-lg">
+        <h2 className="mb-4 text-xl font-bold">프로필 수정</h2>
         <div className="mb-4">
           <label className="block text-sm font-medium">프로필 이미지</label>
           <input type="file" onChange={handleImageChange} className="w-full" />
-          {profile_image && <img src={profile_image} alt="프로필 이미지" className="mt-2 h-24 w-24 object-cover rounded-full" />}
+          {profile_image && (
+            <img src={profile_image} alt="프로필 이미지" className="mt-2 h-24 w-24 rounded-full object-cover" />
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium">닉네임</label>
@@ -112,51 +107,35 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
                 setNicknameError('닉네임은 최대 8글자까지 입력할 수 있습니다.');
               }
             }}
-            className="mt-1 block w-full border border-gray-300 rounded-md p-1"
+            className="mt-1 block w-full rounded-md border border-gray-300 p-1"
           />
         </div>
-        {nicknameError && <div className="text-red-500 text-xs mb-2">{nicknameError}</div>}
+        {nicknameError && <div className="mb-2 text-xs text-red-500">{nicknameError}</div>}
         <div className="mb-4">
           <label className="block text-sm font-medium">해시태그</label>
           {hashtags.map((hashtag, index) => (
-            <div key={index} className="flex items-center mb-2">
+            <div key={index} className="mb-2 flex items-center">
               <input
                 type="text"
                 value={hashtag}
                 onChange={(e) => handleHashtagChange(index, e.target.value)}
-                className="mt-1 block w-80 border border-gray-300 rounded-md p-1"
+                className="mt-1 block w-80 rounded-md border border-gray-300 p-1"
               />
-              <button
-                type="button"
-                onClick={() => handleRemoveHashtag(index)}
-                className="ml-2 text-red-500"
-              >
+              <button type="button" onClick={() => handleRemoveHashtag(index)} className="ml-2 text-red-500">
                 삭제
               </button>
             </div>
           ))}
-          {hashtagError && <div className="text-red-500 text-xs mb-2">{hashtagError}</div>}
-          <button
-            type="button"
-            onClick={handleAddHashtag}
-            className="mt-2 text-blue-500"
-          >
+          {hashtagError && <div className="mb-2 text-xs text-red-500">{hashtagError}</div>}
+          <button type="button" onClick={handleAddHashtag} className="mt-2 text-blue-500">
             해시태그 추가
           </button>
         </div>
         <div className="flex justify-end">
-          <button
-            type="button"
-            onClick={onClose}
-            className="mr-2 px-4 py-2 border border-gray-300 rounded-md"
-          >
+          <button type="button" onClick={onClose} className="mr-2 rounded-md border border-gray-300 px-4 py-2">
             취소
           </button>
-          <button
-            type="button"
-            onClick={handleSave}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md"
-          >
+          <button type="button" onClick={handleSave} className="rounded-md bg-blue-500 px-4 py-2 text-white">
             저장
           </button>
         </div>

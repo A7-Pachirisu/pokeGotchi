@@ -100,7 +100,6 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
         return;
       }
 
-      console.log('Pokemon sold successfully');
       onPokemonUpdated();  // 변경된 사항이 페이지에 반영되도록 콜백 호출
       setIsByeModalOpen(false);
       setIsByeMentOpen(true); // ByeMent 모달 열기
@@ -108,7 +107,7 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
         handleCloseAllModals(); // ByeMent 모달 닫기 및 모든 모달 닫기
       }, 1500); 
     } catch (error: any) {
-      console.error('Error selling pokemon:', error.message);
+      throw new Error(error.message)
     }
   };
 
@@ -131,7 +130,6 @@ const MyPokemonModal: React.FC<MyPokemonModalProps> = ({
       }
 
       setPokemonName(newPokemonName);
-      console.log('포켓몬 이름 수정 완료');
       onPokemonUpdated();  // 변경된 사항이 페이지에 반영되도록 콜백 호출
       onClose();
     } catch (error: any) {
