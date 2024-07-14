@@ -7,35 +7,79 @@ import backgroundImage from '@/assets/background.png';
 import supabase from '@/supabase/client';
 import { useAuth } from '@/contexts/auth.context/auth.context';
 
-interface Pokemon {
+type Pokemon = {
   id: number;
   name: string;
   korean_name: string;
   pokemonNumber: number;
-  height: number;
-  weight: number;
-  sprites: {
-    front_default: string;
-    other: {
-      showdown: {
-        front_default: string;
-      };
-    };
-  };
-  types: { type: { name: string; korean_name: string } }[];
-  abilities: { ability: { name: string; korean_name: string } }[];
-  moves: { move: { name: string; korean_name: string } }[];
   x?: number;
   y?: number;
-}
+};
+
+type SupabasePokemon = {
+  createdAt: string;
+  gifUrl: string | null;
+  id: string;
+  pokemonName: string | null;
+  pokemonNumber: number | null;
+  userId: string;
+};
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
   const { me } = useAuth();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [pokemonData, setPokemonData] = useState<Pokemon[]>([]);
+  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [selectedPokemonPos, setSelectedPokemonPos] = useState({ x: 0, y: 0 });
-  const [pokemons, setPokemons] = useState<any[]>([]);
+  const [userPokemons, setUserPokemons] = useState<any[]>([]);
+
+  const fetchUserPokemons = async (userId: string) => {
+    const { data, error } = await supabase.from('user_pokemons').select('*').eq('userId', userId);
+
+    if (error) throw new Error(error.message);
+
+    setUserPokemons(data || []);
+    setIsLoading(false);
+  };
+
+  const updatePokemons = () => {
+    if (userPokemons.length > 0) {
+      const canvasWidth = canvasRef.current?.width || 800;
+      const canvasHeight = canvasRef.current?.height || 600;
+      const spacing = canvasWidth / (5 + 2);
+
+      const displayedPokemons = userPokemons
+        .slice(0, 6)
+        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
+        .map((pokemon, index) => ({
+          ...pokemon,
+          x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
+          y: index < 5 ? 50 : canvasHeight - 80
+        }));
+
+      setPokemonList(displayedPokemons);
+
+      if (!selectedPokemon && displayedPokemons.length > 0) {
+        const lastIndex = displayedPokemons.length - 1;
+        setSelectedPokemon(displayedPokemons[lastIndex]);
+        setSelectedPokemonPos({ x: displayedPokemons[lastIndex].x!, y: canvasHeight - 80 });
+      }
+    }
+  };
+
+  const handlePokemonClick = (index: number) => {
+    if (!selectedPokemon) return;
+
+    const newPokemonList = [...pokemonList];
+    const clickedPokemon = newPokemonList[index];
+
+    const tempId = clickedPokemon.pokemonNumber;
+    newPokemonList[index].pokemonNumber = selectedPokemon.pokemonNumber;
+    setSelectedPokemon({ ...selectedPokemon, pokemonNumber: tempId });
+
+    setPokemonList(newPokemonList);
+  };
 
   const moveSelectedPokemon = (dx: number, dy: number) => {
     if (!selectedPokemon) return;
@@ -75,63 +119,15 @@ export default function Home() {
     }
   };
 
-  const handlePokemonClick = (index: number) => {
-    if (!selectedPokemon) return;
-
-    const newPokemonData = [...pokemonData];
-    const clickedPokemon = newPokemonData[index];
-
-    const tempId = clickedPokemon.pokemonNumber;
-    newPokemonData[index].pokemonNumber = selectedPokemon.pokemonNumber;
-    setSelectedPokemon({ ...selectedPokemon, pokemonNumber: tempId });
-
-    setPokemonData(newPokemonData);
-  };
-
-  const fetchUserPokemons = async (userId: string) => {
-    const { data, error } = await supabase.from('user_pokemons').select('*').eq('userId', userId);
-
-    if (error) {
-      console.error('Error fetching user pokemons:', error);
-    } else {
-      setPokemons(data || []);
-    }
-  };
-
-  const mainPokemon = () => {
-    if (pokemons.length > 0) {
-      const canvasWidth = canvasRef.current?.width || 800;
-      const canvasHeight = canvasRef.current?.height || 600;
-      const spacing = canvasWidth / (5 + 2);
-
-      const mainPokemon = pokemons
-        .slice(0, 6)
-        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
-        .map((pokemon, index) => ({
-          ...pokemon,
-          x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
-          y: index < 5 ? 50 : canvasHeight - 80
-        }));
-
-      setPokemonData(mainPokemon);
-
-      if (!selectedPokemon && mainPokemon.length > 0) {
-        const lastIndex = mainPokemon.length - 1;
-        setSelectedPokemon(mainPokemon[lastIndex]);
-        setSelectedPokemonPos({ x: mainPokemon[lastIndex].x!, y: canvasHeight - 80 });
-      }
-    }
-  };
-  
   useEffect(() => {
     if (me?.id) {
       fetchUserPokemons(me.id);
     }
   }, [me]);
 
-    useEffect(() => {
-    mainPokemon();
-  }, [pokemons]);
+  useEffect(() => {
+    updatePokemons();
+  }, [userPokemons]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -139,6 +135,14 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [selectedPokemon]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <div className="text-center text-3xl">로딩중. . .</div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -149,7 +153,7 @@ export default function Home() {
         backgroundPosition: 'center'
       }}
     >
-      {pokemonData.map((pokemon, idx) => (
+      {pokemonList.map((pokemon, idx) => (
         <div
           key={idx}
           id={`pokemon-${idx}`}
