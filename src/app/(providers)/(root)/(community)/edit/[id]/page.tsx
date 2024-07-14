@@ -23,6 +23,10 @@ const EditPost = () => {
   const [profileImgUrl, setProfileImgUrl] = useState<string | null>(null);
   const [contentLength, setContentLength] = useState(0);
 
+  const toUrlSafeString = (filename: string) => {
+    return filename.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_\-\.]/g, '');
+  };
+
   useEffect(() => {
     async function fetchPost() {
       if (!id) return;
@@ -81,7 +85,7 @@ const EditPost = () => {
 
     if (newImage) {
       try {
-        const imageName = `${Date.now()}-${newImage.name}`;
+        const imageName = `${Date.now()}-${toUrlSafeString(newImage.name)}`;
 
         const { data: uploadData, error: uploadError } = await supabase.storage
           .from('sns')
