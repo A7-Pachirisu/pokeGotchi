@@ -16,6 +16,7 @@ const ShopDetailPage = async ({
   const res = await fetch(`http://localhost:3000/api/shop/${id}`);
   const pokemons: Pokemon = await res.json();
 
+  const pokemonGif = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`;
   return (
     <>
       <div className="mx-10 flex h-full flex-col items-center justify-center rounded-lg border bg-gray-200">
@@ -25,7 +26,7 @@ const ShopDetailPage = async ({
         </div>
         <div className="mt-3 h-[100] w-[100]">
           <Image
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`}
+            src={pokemonGif}
             alt={'pokemon_img'}
             width={100}
             height={100}
@@ -49,11 +50,7 @@ const ShopDetailPage = async ({
             );
           })}
         </div>
-        <PokemonConfirm
-          pokemonNumber={pokemons.id}
-          gifUrl={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`}
-          pokemonName={pokemons.korean_name}
-        />
+        <PokemonConfirm pokemonNumber={pokemons.id} gifUrl={pokemonGif} pokemonName={pokemons.korean_name} />
       </div>
       <Link href={'/shop/'}>
         <IoArrowBackCircleOutline className="fixed bottom-20 ml-5 text-5xl text-gray-600" />

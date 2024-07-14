@@ -7,14 +7,9 @@ import { insertType } from '@/types/insertType';
 import { BiCoinStack } from 'react-icons/bi';
 import GetPokemon from './getPokemon';
 import { useUserStore } from '@/store/userStore';
-import { useEffect } from 'react';
 
 const PokemonConfirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
-  const { fetchOwnedPokemons, ownedPokemons } = useUserStore();
-
-  useEffect(() => {
-    fetchOwnedPokemons();
-  }, [fetchOwnedPokemons]);
+  const { ownedPokemons } = useUserStore();
 
   const submit = () => {
     confirmAlert({
