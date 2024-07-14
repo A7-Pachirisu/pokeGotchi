@@ -54,7 +54,14 @@ const RankItem: React.FC = () => {
     queryFn: fetchAllUsers
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <div className="text-center text-3xl">로딩중. . .</div>
+      </div>
+    );
+  }
+  
   if (error) return <div>Error: {error.message}</div>;
 
   const rankedUsers = users
