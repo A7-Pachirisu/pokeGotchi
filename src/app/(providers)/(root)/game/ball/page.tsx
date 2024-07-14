@@ -25,6 +25,7 @@ const fetchUser = async () => {
 
 const updateScore = async (score: number, userId: string, userEmail: string) => {
   const { data, error } = await supabase.from('users').select('gameScore_ball, coins').eq('id', userId).single();
+
   if (error) {
     throw error;
   }
