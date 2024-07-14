@@ -4,7 +4,7 @@ import LobbyButton from './_components/LobbyButton';
 import { BiCoinStack } from 'react-icons/bi';
 import { useUserStore } from '@/store/userStore';
 
-interface User {
+type User = {
   profile_image: string | null;
   nickname: string | null;
   hashtags: string[] | null;
@@ -13,16 +13,19 @@ interface User {
   gameScore_fruit: number;
   coins: number;
   id: string;
-}
+};
 
 const GameLobbyPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
   const { nickname, coins, fetchUserAndCoinInfo, user } = useUserStore();
 
   useEffect(() => {
     fetchUserAndCoinInfo();
+    setIsLoading(false);
   }, []);
 
-  if (!user) {
+  if (isLoading) {
     <div className="flex min-h-full items-center justify-center">
       <div className="text-center text-3xl">로딩중. . .</div>
     </div>;
