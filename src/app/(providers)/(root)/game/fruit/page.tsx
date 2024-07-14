@@ -7,7 +7,8 @@ function FruitGamePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   return (
-    <div ref={containerRef} className="h-full w-full">
+    <div ref={containerRef} className="h-full w-full overflow-hidden">
+      <div className="text-2xl">Score : 11</div>
       <canvas ref={canvasRef}></canvas>
       <MatterRenderer containerRef={containerRef} canvasRef={canvasRef} />
     </div>
