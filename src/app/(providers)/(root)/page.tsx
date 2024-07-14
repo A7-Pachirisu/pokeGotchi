@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import _ from 'lodash';
@@ -97,26 +98,13 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    if (me?.id) {
-      fetchUserPokemons(me.id);
-    }
-  }, [me]);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [selectedPokemon]);
-
-  useEffect(() => {
+  const mainPokemon = () => {
     if (pokemons.length > 0) {
       const canvasWidth = canvasRef.current?.width || 800;
       const canvasHeight = canvasRef.current?.height || 600;
       const spacing = canvasWidth / (5 + 2);
 
-      const updatedData = pokemons
+      const mainPokemon = pokemons
         .slice(0, 6)
         .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
         .map((pokemon, index) => ({
@@ -125,15 +113,32 @@ export default function Home() {
           y: index < 5 ? 50 : canvasHeight - 80
         }));
 
-      setPokemonData(updatedData);
+      setPokemonData(mainPokemon);
 
-      if (!selectedPokemon && updatedData.length > 0) {
-        const lastIndex = updatedData.length - 1;
-        setSelectedPokemon(updatedData[lastIndex]);
-        setSelectedPokemonPos({ x: updatedData[lastIndex].x!, y: canvasHeight - 80 });
+      if (!selectedPokemon && mainPokemon.length > 0) {
+        const lastIndex = mainPokemon.length - 1;
+        setSelectedPokemon(mainPokemon[lastIndex]);
+        setSelectedPokemonPos({ x: mainPokemon[lastIndex].x!, y: canvasHeight - 80 });
       }
     }
+  };
+  
+  useEffect(() => {
+    if (me?.id) {
+      fetchUserPokemons(me.id);
+    }
+  }, [me]);
+
+    useEffect(() => {
+    mainPokemon();
   }, [pokemons]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedPokemon]);
 
   return (
     <div
