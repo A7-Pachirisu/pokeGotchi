@@ -25,7 +25,6 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
       return;
     }
 
-    console.log('전송할 업데이트 데이터:', { profile_image, nickname, hashtags });
 
     try {
       const updates = {
@@ -40,17 +39,12 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ user, isOpen, onClo
         .eq('id', user.id)
         .select();
 
-      console.log('API 응답 상태:', status, statusText);
-      console.log('API 응답 데이터:', data);
-      console.log('API 응답 오류:', error);
-
       if (error) {
         console.error('프로필 업데이트 중 오류 발생:', error.message);
       } else if (!data || data.length === 0) {
         console.warn('업데이트된 데이터가 반환되지 않았습니다.');
       } else {
-        console.log('프로필 업데이트 성공:', data);
-        onClose(); // 모달을 닫습니다.
+        onClose();
       }
     } catch (error: any) {
       console.error('요청 중 오류 발생:', error.message);
