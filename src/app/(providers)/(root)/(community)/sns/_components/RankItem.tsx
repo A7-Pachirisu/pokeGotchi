@@ -17,6 +17,7 @@ type UserProfileProps = {
   nickname: string | null;
   gameScore_ball: number;
   gameScore_quiz: number;
+  gameScore_fruit: number;
 };
 
 const imgPaths = [
@@ -37,7 +38,7 @@ const imgPaths = [
 const fetchAllUsers = async (): Promise<UserProfileProps[]> => {
   const { data, error } = await supabase
     .from('users')
-    .select('id, profile_image, nickname, gameScore_ball, gameScore_quiz');
+    .select('id, profile_image, nickname, gameScore_ball, gameScore_quiz,gameScore_fruit');
 
   if (error) throw new Error(error.message);
 
@@ -61,14 +62,14 @@ const RankItem: React.FC = () => {
       </div>
     );
   }
-  
+
   if (error) return <div>Error: {error.message}</div>;
 
   const rankedUsers = users
     ? users
         .map((user) => ({
           ...user,
-          totalScore: user.gameScore_ball + user.gameScore_quiz
+          totalScore: user.gameScore_ball + user.gameScore_quiz + user.gameScore_fruit
         }))
         .sort((a, b) => b.totalScore - a.totalScore)
         .slice(0, 3)
