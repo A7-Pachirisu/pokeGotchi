@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import _ from 'lodash';
@@ -97,11 +98,40 @@ export default function Home() {
     }
   };
 
+  const mainPokemon = () => {
+    if (pokemons.length > 0) {
+      const canvasWidth = canvasRef.current?.width || 800;
+      const canvasHeight = canvasRef.current?.height || 600;
+      const spacing = canvasWidth / (5 + 2);
+
+      const mainPokemon = pokemons
+        .slice(0, 6)
+        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
+        .map((pokemon, index) => ({
+          ...pokemon,
+          x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
+          y: index < 5 ? 50 : canvasHeight - 80
+        }));
+
+      setPokemonData(mainPokemon);
+
+      if (!selectedPokemon && mainPokemon.length > 0) {
+        const lastIndex = mainPokemon.length - 1;
+        setSelectedPokemon(mainPokemon[lastIndex]);
+        setSelectedPokemonPos({ x: mainPokemon[lastIndex].x!, y: canvasHeight - 80 });
+      }
+    }
+  };
+  
   useEffect(() => {
     if (me?.id) {
       fetchUserPokemons(me.id);
     }
   }, [me]);
+
+    useEffect(() => {
+    mainPokemon();
+  }, [pokemons]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -109,31 +139,6 @@ export default function Home() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [selectedPokemon]);
-
-  useEffect(() => {
-    if (pokemons.length > 0) {
-      const canvasWidth = canvasRef.current?.width || 800;
-      const canvasHeight = canvasRef.current?.height || 600;
-      const spacing = canvasWidth / (5 + 2);
-
-      const updatedData = pokemons
-        .slice(0, 6)
-        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
-        .map((pokemon, index) => ({
-          ...pokemon,
-          x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
-          y: index < 5 ? 50 : canvasHeight - 30
-        }));
-
-      setPokemonData(updatedData);
-
-      if (!selectedPokemon && updatedData.length > 0) {
-        const lastIndex = updatedData.length - 1;
-        setSelectedPokemon(updatedData[lastIndex]);
-        setSelectedPokemonPos({ x: updatedData[lastIndex].x!, y: canvasHeight - 30 });
-      }
-    }
-  }, [pokemons]);
 
   return (
     <div

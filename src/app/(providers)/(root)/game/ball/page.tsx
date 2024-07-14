@@ -25,6 +25,7 @@ const fetchUser = async () => {
 
 const updateScore = async (score: number, userId: string, userEmail: string) => {
   const { data, error } = await supabase.from('users').select('gameScore_ball, coins').eq('id', userId).single();
+
   if (error) {
     throw error;
   }
@@ -271,16 +272,20 @@ export default function PokeBallGamePage() {
     const animate = () => {
       const pokemon = pokemonRef.current;
       const pokeBall = pokeBallRef.current;
+
       ctx.clearRect(0, 0, W, H);
+
       if (pokemon) {
         updatePokemonPos(pos.pokemon);
         drawImage(ctx, pokemon, pos.pokemon);
       }
+
       if (pokeBall) {
         pos.pokeBalls.forEach((pokeBallPos, index) => {
           updatePokeBallPos(pokeBallPos, index);
           drawImage(ctx, pokeBall, pokeBallPos);
         });
+
         pos.pokeBalls.forEach((pokeBallPos, index) => {
           if (pokeBallPos.y >= H) {
             deletePokeBall(index);
@@ -289,6 +294,7 @@ export default function PokeBallGamePage() {
           }
         });
       }
+
       rafTimer = requestAnimationFrame(animate);
     };
 
@@ -340,7 +346,11 @@ export default function PokeBallGamePage() {
   }, [score]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <div className="text-center text-3xl">로딩중. . .</div>
+      </div>
+    );
   }
 
   if (error) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import img from '@/assets/random profile1.png';
 import { useAuth } from '@/contexts/auth.context/auth.context';
@@ -25,6 +25,7 @@ interface PostItemProps {
 
 const PostItem: React.FC<PostItemProps> = ({ posts }) => {
   const { me } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleDelete = async (postId: number) => {
     const confirmDelete = await Swal.fire({
@@ -48,6 +49,20 @@ const PostItem: React.FC<PostItemProps> = ({ posts }) => {
       }
     }
   };
+
+  useEffect(() => {
+    if (posts) {
+      setIsLoading(false);
+    }
+  }, [posts]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <div className="text-center text-3xl">로딩중. . .</div>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-5 flex w-full flex-col items-center">

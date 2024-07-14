@@ -126,6 +126,14 @@ const QuizGamePage: React.FC = () => {
       });
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <div className="text-center text-3xl">로딩중. . .</div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex max-h-screen flex-col items-center justify-center">
       <div className="relative h-[800px] w-[600px]">
