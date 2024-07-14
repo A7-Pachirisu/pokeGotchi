@@ -3,11 +3,11 @@ import { useRef, useState } from 'react';
 import MatterRenderer from './_components/MatterRenderer';
 
 function FruitGamePage() {
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState<number>(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const handleScore = (updateFn) => setScore((prev) => updateFn(prev));
+  const handleScore = (updateFn: (prev: number) => number) => setScore((prev) => updateFn(prev));
 
   return (
     <div ref={containerRef} className="flex h-full w-full flex-col items-center justify-center overflow-hidden">

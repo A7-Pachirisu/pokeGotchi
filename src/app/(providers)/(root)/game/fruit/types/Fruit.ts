@@ -7,7 +7,7 @@ export type Fruit = {
   color: string;
 };
 
-export type FruitBody = Matter.Body & { index?: number };
+export type FruitBody = Matter.Body & { index: number };
 
 export type AddFruitParams = {
   engine: Matter.Engine;

@@ -32,7 +32,8 @@ export const createWallsAndGround = ({ engine, canvasHeight }: createWallsAndGro
   const topLine = Bodies.rectangle(canvasWidth / 2, 100, canvasWidth, topLineHeight, {
     isStatic: true,
     isSensor: true, // 부딫히지 않고 감지
-    render: { fillStyle: '#E6B143' }
+    render: { fillStyle: '#E6B143' },
+    label: 'topLine'
   });
 
   World.add(engine.world, [leftWall, rightWall, ground, topLine]);

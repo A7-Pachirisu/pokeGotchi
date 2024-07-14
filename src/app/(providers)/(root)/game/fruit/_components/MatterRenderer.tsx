@@ -1,15 +1,17 @@
+import { Bodies, Body, Engine, Events, Render, Runner, World } from 'matter-js';
+import { RefObject, useEffect, useRef } from 'react';
+import { addFruit } from '../_utils/addFruit';
+import { createWallsAndGround } from '../_utils/createWallsAndGround';
 import { FRUITS_BASE as FRUITS } from '../_utils/fruites';
+import { handleKeyDown } from '../_utils/handleKeyDown';
+import { handleKeyUp } from '../_utils/handleKeyUp';
+import { Fruit, FruitBody } from '../types/Fruit';
 
 interface MatterRendererProps {
   containerRef: RefObject<HTMLDivElement>;
   canvasRef: RefObject<HTMLCanvasElement>;
   onUpdateScore: (updateFn: (prev: number) => number) => void;
 }
-
-import { Bodies, Body, Engine, Events, Render, Runner, World } from 'matter-js';
-import { RefObject, useEffect, useRef } from 'react';
-import { createWallsAndGround } from '../_utils/createWallsAndGround';
-import { Fruit } from '../types/Fruit';
 
 const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRendererProps) => {
   const engineRef = useRef(Engine.create()); // 물리 엔진
@@ -44,95 +46,28 @@ const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRender
     const canvasHeight = render.canvas.height;
     createWallsAndGround({ engine: engineRef.current, canvasHeight }); // 프레임을 그리고
 
-    const addFruit = () => {
-      const index = Math.floor(Math.random() * 5);
-      const fruit = FRUITS[index];
+    const addFruitHandler = () => addFruit({ world, currentBodyRef, currentFruitRef });
 
-      const body = Bodies.circle(300, 50, fruit.radius, {
-        isSleeping: true,
-        render: {
-          fillStyle: fruit.color
-        },
-        restitution: 0.3
+    addFruitHandler(); // 과일 추가 (첫번째 과일)
+
+    const keyDownHandler = (event: KeyboardEvent) =>
+      handleKeyDown({
+        event,
+        intervalRef,
+        currentBodyRef,
+        currentFruitRef,
+        disableActionRef,
+        addFruit: addFruitHandler
       });
 
-      body.index = index;
+    const keyUpHandler = (event: KeyboardEvent) =>
+      handleKeyUp({
+        event,
+        intervalRef
+      });
 
-      currentBodyRef.current = body;
-      currentFruitRef.current = fruit;
-
-      World.add(world, body);
-    };
-
-    addFruit(); // 과일 추가 (첫번째 과일)
-
-    // 키 눌렀을 때
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (disableActionRef.current) return;
-
-      switch (event.code) {
-        case 'KeyA':
-        case 'ArrowLeft':
-          if (intervalRef.current) return; // 타이머 있으면 종료
-
-          intervalRef.current = setInterval(() => {
-            if (
-              currentBodyRef.current &&
-              currentBodyRef.current.position.x - (currentFruitRef.current?.radius || 0) > 30
-            ) {
-              Body.setPosition(currentBodyRef.current, {
-                x: currentBodyRef.current.position.x - 1,
-                y: currentBodyRef.current.position.y
-              });
-            }
-          }, 5);
-          break;
-
-        case 'KeyD':
-        case 'ArrowRight':
-          if (intervalRef.current) return;
-
-          intervalRef.current = setInterval(() => {
-            if (
-              currentBodyRef.current &&
-              currentBodyRef.current.position.x + (currentFruitRef.current?.radius || 0) < 570
-            ) {
-              Body.setPosition(currentBodyRef.current, {
-                x: currentBodyRef.current.position.x + 1,
-                y: currentBodyRef.current.position.y
-              });
-            }
-          }, 5);
-          break;
-
-        case 'KeyS':
-        case 'Space':
-          if (currentBodyRef.current) {
-            currentBodyRef.current.isSleeping = false;
-            disableActionRef.current = true;
-
-            // 1초 뒤에 새로운 과일 그리기
-            setTimeout(() => {
-              addFruit();
-              disableActionRef.current = false;
-            }, 1000);
-          }
-          break;
-      }
-    };
-
-    // 키 때면 타이머 초기화
-    const handleKeyUp = (event: KeyboardEvent) => {
-      if (event.code === 'KeyA' || event.code === 'ArrowLeft' || event.code === 'KeyD' || event.code === 'ArrowRight') {
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('keyup', handleKeyUp);
+    window.addEventListener('keydown', keyDownHandler);
+    window.addEventListener('keyup', keyUpHandler);
 
     Events.on(engineRef.current, 'collisionStart', (event) => {
       if (collisionFlagRef.current) return; // 이미 충돌 처리 중이면 무시
@@ -140,8 +75,10 @@ const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRender
       collisionFlagRef.current = true; // 충돌 처리 시작
 
       event.pairs.forEach((collision) => {
-        const bodyAIndex = (collision.bodyA as any).index;
-        const bodyBIndex = (collision.bodyB as any).index;
+        const bodyA = collision.bodyA as FruitBody;
+        const bodyB = collision.bodyB as FruitBody;
+        const bodyAIndex = bodyA.index;
+        const bodyBIndex = bodyB.index;
 
         if (bodyAIndex !== undefined && bodyAIndex === bodyBIndex) {
           console.log(bodyAIndex, bodyBIndex);
@@ -167,9 +104,7 @@ const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRender
               },
               restitution: 0.2
             }
-          );
-
-          console.log(newFruit);
+          ) as FruitBody;
 
           newBody.index = index + 1;
 
@@ -191,8 +126,8 @@ const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRender
       Runner.stop(runner);
       World.clear(world, false);
       Engine.clear(engineRef.current);
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('keyup', handleKeyUp);
+      window.removeEventListener('keydown', keyDownHandler);
+      window.removeEventListener('keyup', keyUpHandler);
     };
   }, []);
 
