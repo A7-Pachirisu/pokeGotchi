@@ -153,25 +153,23 @@ export default function Home() {
         backgroundPosition: 'center'
       }}
     >
-      {pokemonList
-        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
-        .map((pokemon, idx) => (
-          <div
-            key={idx}
-            id={`pokemon-${idx}`}
-            className="z-1 absolute cursor-pointer transition-transform duration-1000 hover:drop-shadow-[0_0_20px_rgba(255,255,0,0.8)]"
-            style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
-            onClick={() => handlePokemonClick(idx)}
-          >
-            <Image
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.pokemonNumber}.gif`}
-              alt={`포켓몬 이미지 ${pokemon.korean_name}`}
-              width={100}
-              height={100}
-              onError={(e) => console.error('이미지를 불러올 수 없습니다:', e)}
-            />
-          </div>
-        ))}
+      {pokemonList.map((pokemon, idx) => (
+        <div
+          key={idx}
+          id={`pokemon-${idx}`}
+          className="z-1 absolute cursor-pointer transition-transform duration-1000 hover:drop-shadow-[0_0_20px_rgba(255,255,0,0.8)]"
+          style={{ transform: `translate(${pokemon.x}px, ${pokemon.y}px)` }}
+          onClick={() => handlePokemonClick(idx)}
+        >
+          <Image
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemon.pokemonNumber}.gif`}
+            alt={`포켓몬 이미지 ${pokemon.korean_name}`}
+            width={100}
+            height={100}
+            onError={(e) => console.error('이미지를 불러올 수 없습니다:', e)}
+          />
+        </div>
+      ))}
 
       {selectedPokemon && (
         <div
