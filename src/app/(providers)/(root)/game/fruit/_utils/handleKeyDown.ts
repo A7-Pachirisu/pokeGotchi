@@ -1,6 +1,6 @@
 import { Body } from 'matter-js';
 import { MutableRefObject } from 'react';
-import { Fruit } from '../types/Fruit';
+import { Fruit } from '../types/Fruit.type';
 
 interface HandleKeyDownProps {
   event: KeyboardEvent;

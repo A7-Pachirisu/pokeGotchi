@@ -1,5 +1,5 @@
 import { Bodies, Body, World } from 'matter-js';
-import { Fruit, FruitBody } from '../types/Fruit';
+import { Fruit, FruitBody } from '../types/Fruit.type';
 import { FRUITS_BASE as FRUITS } from './fruites';
 
 interface AddFruitParams {

@@ -14,14 +14,4 @@ export type AddFruitParams = {
   bodyRef: MutableRefObject<FruitBody | null>;
 };
 
-export type AddFruitParamsExtended = AddFruitParams & {
-  x?: number;
-  y?: number;
-  index?: number;
-};
-
 export type KeyDownParams = AddFruitParams & { isAbleRef: MutableRefObject<boolean> };
-
-export type moveOnProps = {
-  event: KeyboardEvent;
-} & KeyDownParams;

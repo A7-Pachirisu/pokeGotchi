@@ -5,7 +5,7 @@ import { createWallsAndGround } from '../_utils/createWallsAndGround';
 import { FRUITS_BASE as FRUITS } from '../_utils/fruites';
 import { handleKeyDown } from '../_utils/handleKeyDown';
 import { handleKeyUp } from '../_utils/handleKeyUp';
-import { Fruit, FruitBody } from '../types/Fruit';
+import { Fruit, FruitBody } from '../types/Fruit.type';
 
 interface MatterRendererProps {
   containerRef: RefObject<HTMLDivElement>;

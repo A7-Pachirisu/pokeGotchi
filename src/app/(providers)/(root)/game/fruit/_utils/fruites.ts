@@ -1,4 +1,4 @@
-import { Fruit } from '../types/Fruit';
+import { Fruit } from '../types/Fruit.type';
 
 export const FRUITS_BASE: Fruit[] = [
   {
