@@ -13,18 +13,6 @@ const GetPokemon = async (pokemonNumber: number, gifUrl: string, pokemonName: st
     return false;
   }
 
-  const { data } = await supabase
-    .from('user_pokemons')
-    .select('*')
-    .eq('userId', user.id)
-    .eq('pokemonNumber', pokemonNumber)
-    .single();
-
-  if (data) {
-    notify('소유하고 있는 포켓몬입니다');
-    return;
-  }
-
   const success = await deductCoins(pokemon_price);
 
   if (success) {

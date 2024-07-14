@@ -3,39 +3,32 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
-      purchase_history: {
+      posts: {
         Row: {
-          createdAt: string;
-          id: string;
-          pokemonId: string | null;
-          pokemonNumber: number | null;
-          userId: string | null;
+          content: string | null;
+          created_at: string;
+          id: number;
+          img_url: string | null;
+          user_id: string | null;
         };
         Insert: {
-          createdAt?: string;
-          id?: string;
-          pokemonId?: string | null;
-          pokemonNumber?: number | null;
-          userId?: string | null;
+          content?: string | null;
+          created_at?: string;
+          id?: number;
+          img_url?: string | null;
+          user_id?: string | null;
         };
         Update: {
-          createdAt?: string;
-          id?: string;
-          pokemonId?: string | null;
-          pokemonNumber?: number | null;
-          userId?: string | null;
+          content?: string | null;
+          created_at?: string;
+          id?: number;
+          img_url?: string | null;
+          user_id?: string | null;
         };
         Relationships: [
           {
-            foreignKeyName: 'purchase_history_pokemonId_fkey';
-            columns: ['pokemonId'];
-            isOneToOne: false;
-            referencedRelation: 'user_pokemons';
-            referencedColumns: ['pokemonId'];
-          },
-          {
-            foreignKeyName: 'purchase_history_userId_fkey';
-            columns: ['userId'];
+            foreignKeyName: 'fk_user';
+            columns: ['user_id'];
             isOneToOne: false;
             referencedRelation: 'users';
             referencedColumns: ['id'];
@@ -45,26 +38,26 @@ export type Database = {
       user_pokemons: {
         Row: {
           createdAt: string;
+          gifUrl: string | null;
           id: string;
-          pokemonId: string | null;
+          pokemonName: string | null;
           pokemonNumber: number | null;
-          status: Json | null;
           userId: string;
         };
         Insert: {
           createdAt?: string;
+          gifUrl?: string | null;
           id?: string;
-          pokemonId?: string | null;
+          pokemonName?: string | null;
           pokemonNumber?: number | null;
-          status?: Json | null;
           userId?: string;
         };
         Update: {
           createdAt?: string;
+          gifUrl?: string | null;
           id?: string;
-          pokemonId?: string | null;
+          pokemonName?: string | null;
           pokemonNumber?: number | null;
-          status?: Json | null;
           userId?: string;
         };
         Relationships: [
@@ -85,8 +78,10 @@ export type Database = {
           gameScore_ball: number | null;
           gameScore_fruit: number | null;
           gameScore_quiz: number | null;
+          hashtags: string[] | null;
           id: string;
           nickname: string | null;
+          profile_image: string | null;
         };
         Insert: {
           coins?: number | null;
@@ -95,8 +90,10 @@ export type Database = {
           gameScore_ball?: number | null;
           gameScore_fruit?: number | null;
           gameScore_quiz?: number | null;
+          hashtags?: string[] | null;
           id?: string;
           nickname?: string | null;
+          profile_image?: string | null;
         };
         Update: {
           coins?: number | null;
@@ -105,8 +102,10 @@ export type Database = {
           gameScore_ball?: number | null;
           gameScore_fruit?: number | null;
           gameScore_quiz?: number | null;
+          hashtags?: string[] | null;
           id?: string;
           nickname?: string | null;
+          profile_image?: string | null;
         };
         Relationships: [
           {

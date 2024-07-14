@@ -6,8 +6,16 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import { insertType } from '@/types/insertType';
 import { BiCoinStack } from 'react-icons/bi';
 import GetPokemon from './getPokemon';
+import { useUserStore } from '@/store/userStore';
+import { useEffect } from 'react';
 
 const PokemonConfirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
+  const { fetchOwnedPokemons, ownedPokemons } = useUserStore();
+
+  useEffect(() => {
+    fetchOwnedPokemons();
+  }, [fetchOwnedPokemons]);
+
   const submit = () => {
     confirmAlert({
       customUI: ({ onClose }) => (
@@ -43,15 +51,18 @@ const PokemonConfirm = ({ pokemonNumber, gifUrl, pokemonName }: insertType) => {
       )
     });
   };
+  const isOwned = ownedPokemons?.includes(pokemonNumber);
 
   return (
     <div className="flex justify-center gap-10">
-      <button
-        className="mt-4 w-32 rounded-md bg-custom-yellow p-3 text-lg font-bold hover:brightness-95"
-        onClick={submit}
-      >
-        데려오기
-      </button>
+      {!isOwned && (
+        <button
+          className="mt-4 w-32 rounded-md bg-custom-yellow p-3 text-lg font-bold hover:brightness-95"
+          onClick={submit}
+        >
+          데려오기
+        </button>
+      )}
     </div>
   );
 };
