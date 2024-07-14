@@ -149,7 +149,7 @@ const EditPost = () => {
           </label>
           <textarea
             id="content"
-            className="mt-3 h-[180px] w-[100%] resize-none border pl-[10px] pt-5"
+            className="mt-3 h-[180px] w-[100%] resize-none rounded-md border pl-[10px] pt-5"
             value={content}
             onChange={handleContentChange}
           />
@@ -165,7 +165,7 @@ const EditPost = () => {
                 src={previewImage}
                 alt="Post Image"
                 style={{ maxWidth: '100%', maxHeight: '300px' }}
-                className="mb-3"
+                className="mb-3 rounded-lg"
               />
             )}
             <input type="file" id="image" onChange={handleImageChange} />
