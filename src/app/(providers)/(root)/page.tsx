@@ -17,9 +17,9 @@ type Pokemon = {
 };
 
 type SupabasePokemon = {
+  id: string;
   createdAt: string;
   gifUrl: string | null;
-  id: string;
   pokemonName: string | null;
   pokemonNumber: number | null;
   userId: string;
@@ -51,11 +51,11 @@ export default function Home() {
 
       const displayedPokemons = userPokemons
         .slice(0, 6)
-        .filter((pokemon) => pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
+        .filter((pokemon) => !selectedPokemon || pokemon.pokemonNumber !== selectedPokemon?.pokemonNumber)
         .map((pokemon, index) => ({
           ...pokemon,
           x: index < 5 ? spacing * (index + 1) - 90 : canvasWidth / 2 - 200,
-          y: index < 5 ? 50 : canvasHeight - 80
+          y: 50
         }));
 
       setPokemonList(displayedPokemons);
@@ -63,7 +63,7 @@ export default function Home() {
       if (!selectedPokemon && displayedPokemons.length > 0) {
         const lastIndex = displayedPokemons.length - 1;
         setSelectedPokemon(displayedPokemons[lastIndex]);
-        setSelectedPokemonPos({ x: displayedPokemons[lastIndex].x!, y: canvasHeight - 80 });
+        setSelectedPokemonPos({ x: displayedPokemons[lastIndex].x!, y: canvasHeight - 30 });
       }
     }
   };
@@ -127,7 +127,7 @@ export default function Home() {
 
   useEffect(() => {
     updatePokemons();
-  }, [userPokemons]);
+  }, [userPokemons, selectedPokemon]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
