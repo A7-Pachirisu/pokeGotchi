@@ -8,6 +8,10 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/auth.context/auth.context';
 import Swal from 'sweetalert2';
 
+const toUrlSafeString = (filename: string) => {
+  return filename.replace(/\s/g, '_').replace(/[^a-zA-Z0-9_\-\.]/g, '');
+};
+
 function Page() {
   const router = useRouter();
   const { isLoggedIn, me } = useAuth();
@@ -35,7 +39,7 @@ function Page() {
       return;
     }
 
-    const fileName = `${Date.now()}_${selectedFile.name.replace(/\s/g, '_')}`;
+    const fileName = `${Date.now()}_${toUrlSafeString(selectedFile.name)}`;
     const key = `images/${encodeURIComponent(fileName)}`;
 
     try {
