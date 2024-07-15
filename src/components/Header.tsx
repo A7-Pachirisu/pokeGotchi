@@ -7,7 +7,7 @@ import Button from './Button';
 
 const Header = () => {
   const { me, logOut } = useAuth();
-  // console.log('여기는 헤더', me);
+  
   const handleClick = async () => {
     await logOut();
   };

@@ -11,9 +11,10 @@ interface MatterRendererProps {
   containerRef: RefObject<HTMLDivElement>;
   canvasRef: RefObject<HTMLCanvasElement>;
   onUpdateScore: (updateFn: (prev: number) => number) => void;
+  onGameOver: () => void;
 }
 
-const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRendererProps) => {
+const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore, onGameOver }: MatterRendererProps) => {
   const engineRef = useRef(Engine.create()); // 물리 엔진
   const world = engineRef.current.world;
   const currentBodyRef = useRef<Body | null>(null); // 현재 생성된 과일
@@ -81,7 +82,6 @@ const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRender
         const bodyBIndex = bodyB.index;
 
         if (bodyAIndex !== undefined && bodyAIndex === bodyBIndex) {
-          console.log(bodyAIndex, bodyBIndex);
           const index = bodyAIndex;
 
           //수박이면 리턴
@@ -102,7 +102,7 @@ const MatterRenderer = ({ containerRef, canvasRef, onUpdateScore }: MatterRender
               render: {
                 fillStyle: newFruit.color
               },
-              restitution: 0.2
+              restitution: 0.3
             }
           ) as FruitBody;
 

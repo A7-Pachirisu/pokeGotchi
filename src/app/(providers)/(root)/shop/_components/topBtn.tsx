@@ -1,4 +1,4 @@
-const topBtn = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
+const TopBtn = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
   const mainContent = document.getElementById('main-content');
 
   if (mainContent && mainContent.scrollTop !== 0) {
@@ -9,4 +9,4 @@ const topBtn = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
   }
 };
 
-export default topBtn;
+export default TopBtn;

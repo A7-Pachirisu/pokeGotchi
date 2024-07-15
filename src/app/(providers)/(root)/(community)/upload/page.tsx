@@ -63,10 +63,8 @@ function Page() {
       ]);
 
       if (insertError) {
-        console.error('게시물 업로드 에러:', insertError.message);
         Swal.fire('에러', '게시물 업로드 중 오류가 발생했습니다.', 'error');
       } else {
-        console.log('게시물이 성공적으로 업로드 되었습니다:', insertData);
         Swal.fire('성공', '게시물이 성공적으로 업로드 되었습니다.', 'success').then(() => {
           setContent('');
           setSelectedFile(null);

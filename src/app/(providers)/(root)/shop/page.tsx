@@ -1,16 +1,16 @@
 'use client';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { Pokemon } from '@/types/pokemonType';
-import { IoArrowUpCircleOutline } from 'react-icons/io5';
-import topBtn from './_components/topBtn';
-import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
-import PokeCard from './_components/PokeCard';
-import { useInView } from 'react-intersection-observer';
+import { Pokemon } from '@/types/pokemonType';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { BiCoinStack } from 'react-icons/bi';
+import { IoArrowUpCircleOutline } from 'react-icons/io5';
+import { useInView } from 'react-intersection-observer';
+import PokeCard from './_components/PokeCard';
+import TopBtn from './_components/topBtn';
 
 const getPokemons = async ({ pageParam = 1 }) => {
-  const res = await fetch(`http://localhost:3000/api/shop?page=${pageParam}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/shop?page=${pageParam}`);
   const data = await res.json();
   return data;
 };
@@ -24,9 +24,10 @@ const ShopPage = () => {
 
   const {
     data: pokemons,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage
+    fetchNextPage, // 다음 페이지 데이터 가져옴
+    hasNextPage, // 다음 페이지 있는지 확인
+    isFetchingNextPage, // 다음 페이지를 가져오는 중인지 확인
+    isLoading
   } = useInfiniteQuery({
     queryKey: ['pokemonsQuery'],
     queryFn: getPokemons,
@@ -34,7 +35,7 @@ const ShopPage = () => {
     initialPageParam: 1
   });
 
-  const { ref, inView } = useInView();
+  const { ref, inView } = useInView(); // 스크롤 감지
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -42,14 +43,13 @@ const ShopPage = () => {
     }
   }, [inView, fetchNextPage, hasNextPage]);
 
-  if (!pokemons) {
+  if (isLoading) {
     return (
       <div className="flex min-h-full items-center justify-center">
         <div className="text-center text-3xl">로딩중. . .</div>
       </div>
     );
   }
-
   return (
     <>
       <div className="relative mx-auto h-screen w-[600px]">
@@ -62,14 +62,14 @@ const ShopPage = () => {
           </div>
         </div>
         <div className="mx-auto mt-10 grid grid-cols-3 gap-1 text-center">
-          {pokemons.pages.map((page) =>
+          {pokemons?.pages.map((page) =>
             page.result.map((pokemon: Pokemon) => <PokeCard key={pokemon.id} pokemon={pokemon} />)
           )}
         </div>
         {isFetchingNextPage ? <div className="my-2 text-center text-2xl">로딩중...</div> : <div ref={ref}></div>}
         <IoArrowUpCircleOutline
           className="fixed bottom-20 right-[calc(50%-300px)] mr-5 cursor-pointer text-5xl text-gray-600"
-          onClick={topBtn}
+          onClick={TopBtn}
         />
       </div>
     </>

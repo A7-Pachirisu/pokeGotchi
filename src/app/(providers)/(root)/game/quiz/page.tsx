@@ -21,9 +21,8 @@ const fetchUser = async () => {
 
 const updateQuizScore = async (score: number, userId: string, userEmail: string) => {
   const { data, error } = await supabase.from('users').select('gameScore_quiz, coins').eq('id', userId).single();
-  if (error) {
-    throw error;
-  }
+
+  if (error) throw new Error(error.message);
 
   const currentScore = data?.gameScore_quiz ?? 0;
   const currentCoins = data?.coins ?? 0;
@@ -37,13 +36,12 @@ const updateQuizScore = async (score: number, userId: string, userEmail: string)
       { onConflict: 'id' }
     );
 
-  if (upsertError) {
-    throw upsertError;
-  }
+  if (upsertError) throw new Error(upsertError.message);
 };
 
 const QuizGamePage: React.FC = () => {
   const queryClient = useQueryClient();
+
   const {
     data: user,
     error,
@@ -77,7 +75,7 @@ const QuizGamePage: React.FC = () => {
     const response = await fetch(`/api/quiz?amount=${TOTAL_QUESTIONS}&difficulty=${Difficulty.EASY}`);
     if (!response.ok) {
       setLoading(false);
-      throw new Error('Failed to fetch questions');
+      throw new Error(error?.message);
     }
 
     const newQuestions = await response.json();
@@ -125,6 +123,14 @@ const QuizGamePage: React.FC = () => {
         setQuestions([]);
       });
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <div className="text-center text-3xl">로딩중. . .</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex max-h-screen flex-col items-center justify-center">
