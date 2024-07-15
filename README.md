@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🐾 pokeGotchi - 포켓몬 다마고치
 
-## Getting Started
+<img alt="image" width="400" src="https://github.com/user-attachments/assets/cef1bbe5-9b14-4d4b-8e28-d68b188397a7">
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**pokeGotchi**는 다양한 미니게임을 통해 코인을 모르고 포켓몬을 구입해 수집할 수 있는 사이트입니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<br />
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🌟 소개
+- **한 줄 정리:** 미니게임으로 포켓몬을 모으고, 키우는 포켓몬 다마고치
+- **내용:**
+  - 포켓몬을 다마고치처럼 키우는 게임
+  - 미니게임으로 포켓몬을 키울 수 있는 코인을 얻습니다
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<br />
 
-## Learn More
+## 📜 페이지 구성
 
-To learn more about Next.js, take a look at the following resources:
+### 🔐 로그인/회원가입 페이지
+사용자는 로그인하거나 새로운 계정을 생성할 수 있습니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🏠 메인 페이지
+- 포켓몬이 화면에 떠다니는 모습을 볼 수 있습니다.
+- 구매한 포켓몬 중 자신이 원하는 포켓몬을 골라 좌우로 이동하고 점프할 수 있습니다.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 🛒 상점 페이지
+- 게임에서 모은 코인으로 포켓몬을 구매할 수 있습니다.
 
-## Deploy on Vercel
+### 📸 SNS(게임 자랑) 페이지
+- 다른 사용자들과 포켓몬을 자랑하고 소통할 수 있습니다.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🎮 게임 페이지
+- **포켓볼 피하기 게임:** 빠르게 움직이는 포켓볼을 피해 코인을 모으세요!
+- **퀴즈 게임:** 포켓몬에 관한 퀴즈를 풀어보세요!
+- **수박 게임:** 포켓몬과 함께 수박을 던져 맞추는 재미있는 게임.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### 🏠 마이 페이지
+- **포켓몬 정보 모달:**
+  - 포켓몬의 레벨업 스탯을 확인할 수 있는 progress bar
+  - 진화 버튼을 통해 사용자가 직접 포켓몬을 진화시킬 수 있습니다.
+- **상태창:** 현재 포켓몬의 상태를 보여줍니다.
+- **현재 코인:** 사용자가 보유한 코인 수를 표시합니다.
+
+<br />
+
+## 🎥 실행 화면
+
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/8e3edfaf-594d-4a29-a634-76ee709f1450" alt="screenshot1" width="250"/></td>
+    <td><img src="https://github.com/user-attachments/assets/89773cfb-45db-4051-b601-a46b7199b75a" alt="screenshot2" width="250"/></td>
+    <td><img src="https://github.com/user-attachments/assets/941bd3c7-4ae5-4594-a34c-2073f888f701" alt="screenshot3" width="250"/></td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/3877c61b-b538-43fa-a415-92b5b992992c" alt="screenshot4" width="250"/></td>
+    <td><img src="https://github.com/user-attachments/assets/075edb3d-ea99-460b-b9bb-0e22ac6239ce" alt="screenshot5" width="250"/></td>
+    <td><img src="https://github.com/user-attachments/assets/f8191220-7cef-41f2-afa1-58eb36bdb41d" alt="screenshot6" width="250"/></td>
+  </tr>
+</table>
+
+<br />
+
+## 💙 팀원 소개
+
+<img alt="image" width="400" src="https://github.com/user-attachments/assets/cef1bbe5-9b14-4d4b-8e28-d68b188397a7">
+
+| 김선민(팀장) | 신상준(팀원) | 김휘진(팀원) | 이하얀(팀원) | 한효림(팀원) | 황승현(팀원) |
+
+
+
+
+
+
