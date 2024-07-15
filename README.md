@@ -7,6 +7,15 @@
 
 <br />
 
+## 🛠️ 기술 스택
+![React](https://img.shields.io/badge/React-61DAFB?logo=react&logoColor=black&style=flat-square)
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white&style=flat-square)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white&style=flat-square)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?logo=tailwind-css&logoColor=white&style=flat-square)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white&style=flat-square)
+
+<br />
+
 ## 🌟 소개
 - **한 줄 정리:** 미니게임으로 포켓몬을 모으고, 키우는 포켓몬 다마고치
 - **내용:**
@@ -41,6 +50,7 @@
   - 진화 버튼을 통해 사용자가 직접 포켓몬을 진화시킬 수 있습니다.
 - **상태창:** 현재 포켓몬의 상태를 보여줍니다.
 - **현재 코인:** 사용자가 보유한 코인 수를 표시합니다.
+
 
 <br />
 
