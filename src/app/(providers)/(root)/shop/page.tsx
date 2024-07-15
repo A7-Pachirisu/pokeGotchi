@@ -1,16 +1,16 @@
 'use client';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { Pokemon } from '@/types/pokemonType';
-import { IoArrowUpCircleOutline } from 'react-icons/io5';
-import TopBtn from './_components/topBtn';
-import { useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
-import PokeCard from './_components/PokeCard';
-import { useInView } from 'react-intersection-observer';
+import { Pokemon } from '@/types/pokemonType';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { BiCoinStack } from 'react-icons/bi';
+import { IoArrowUpCircleOutline } from 'react-icons/io5';
+import { useInView } from 'react-intersection-observer';
+import PokeCard from './_components/PokeCard';
+import TopBtn from './_components/topBtn';
 
 const getPokemons = async ({ pageParam = 1 }) => {
-  const res = await fetch(`http://localhost:3000/api/shop?page=${pageParam}`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/shop?page=${pageParam}`);
   const data = await res.json();
   return data;
 };
