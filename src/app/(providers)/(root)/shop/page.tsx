@@ -10,7 +10,7 @@ import PokeCard from './_components/PokeCard';
 import TopBtn from './_components/topBtn';
 
 const getPokemons = async ({ pageParam = 1 }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/shop?page=${pageParam}`);
+  const res = await fetch(`/api/shop?page=${pageParam}`);
   const data = await res.json();
   return data;
 };

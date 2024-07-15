@@ -13,7 +13,7 @@ const ShopDetailPage = async ({
   };
 }) => {
   const { id } = params;
-  const res = await fetch(`http://localhost:3000/api/shop/${id}`);
+  const res = await fetch(`/api/shop/${id}`);
   const pokemons: Pokemon = await res.json();
 
   const pokemonGif = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemons.id}.gif`;
