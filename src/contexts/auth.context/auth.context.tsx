@@ -9,8 +9,8 @@ import {
 import { logInForm, signUpForm } from '@/types/formType';
 import { performToast } from '@/utils/performToast';
 import { validateForm } from '@/utils/validateForm';
-import { useRouter } from 'next/navigation';
-import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
+import { createContext, PropsWithChildren, useCallback, useContext, useEffect, useState } from 'react';
 import { AuthContextValue } from './authContextType';
 
 const initialValue: AuthContextValue = {
@@ -29,12 +29,14 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isInitialized, setIsInitialized] = useState<AuthContextValue['isInitialized']>(false);
   const [me, setMe] = useState<AuthContextValue['me']>(null);
   const isLoggedIn = !!me;
 
-  const logIn: AuthContextValue['logIn'] = async (logInData: logInForm) => {
+  // 로그인
+  const logIn: AuthContextValue['logIn'] = useCallback(async (logInData: logInForm) => {
     if (me) {
       performToast({ msg: '이미 로그인이 되었습니다', type: 'warning' });
       return;
@@ -43,7 +45,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     if (validateForm(logInData)) {
       try {
         const { user } = await logInService(logInData);
-        router.replace('/');
+
         performToast({ msg: '로그인 성공!', type: 'success' });
         setMe(user);
       } catch {
@@ -51,7 +53,14 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
       }
       setIsInitialized(true);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isInitialized && me && pathname === '/log-in') {
+      router.replace('/');
+      console.log('라우터 호출하고 다음 줄');
+    }
+  }, [isInitialized, me, pathname, router]);
 
   const logOut: AuthContextValue['logOut'] = async () => {
     if (!me) {
@@ -64,7 +73,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     init();
   };
 
-  const signUp: AuthContextValue['signUp'] = async (signUpData: signUpForm) => {
+  const signUp: AuthContextValue['signUp'] = useCallback(async (signUpData: signUpForm) => {
     if (validateForm(signUpData)) {
       try {
         const data = await signUpService(signUpData);
@@ -74,8 +83,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         return performToast({ msg: '잘못된 회원가입 정보입니다', type: 'error' });
       }
     }
-  };
+  }, []);
 
+  // 카카오 로그인
   const logInWithKakao: AuthContextValue['logInWithKakao'] = async () => {
     try {
       const data = await logInWithKaKaoService();
@@ -94,7 +104,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     (async () => {
       const user = await getUserService();
-      if (user) setMe(user);
+      if (!user.error && user) setMe(user);
     })();
     setIsInitialized(true);
   }, []);
