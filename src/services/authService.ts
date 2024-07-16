@@ -26,6 +26,6 @@ export const getUserService = async () => {
     const response = await axios.get('/api/auth/me');
     return response.data;
   } catch (err) {
-    if (err instanceof Error) throw new Error(err.message);
+    // if (err instanceof Error) throw new Error(err.message);
   }
 };

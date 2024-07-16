@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
+import { Difficulty, Question, QuestionsState } from '@/app/(providers)/(root)/game/quiz/quizTypes';
 import type { NextRequest } from 'next/server';
-import { Question, Difficulty, QuestionsState } from '@/app/(providers)/(root)/game/quiz/quizTypes';
+import { NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -25,6 +25,6 @@ export async function GET(req: NextRequest) {
     const questions = await fetchQuizQuestions(Number(amount), difficulty as Difficulty);
     return NextResponse.json(questions, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch questions' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to fetch questions' });
   }
 }

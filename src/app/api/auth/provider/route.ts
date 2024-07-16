@@ -12,9 +12,9 @@ export async function GET(request: NextRequest) {
       }
     });
 
-    if (error) return NextResponse.json({ error: '로그인 실패', details: error.message }, { status: 401 });
+    if (error) return NextResponse.json({ error: '로그인 실패', details: error.message });
     if (data) return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: '로그인 처리 중 네트워크 오류', details: error }, { status: 500 });
+    return NextResponse.json({ error: '로그인 처리 중 네트워크 오류', details: error });
   }
 }

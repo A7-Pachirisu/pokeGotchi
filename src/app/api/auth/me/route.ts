@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (error) {
-      return NextResponse.json({ error: '유저 정보 가져오기 오류', details: error.message }, { status: 500 });
+      return NextResponse.json({ error: '유저 정보 가져오기 오류', details: error.message }, { status: 501 });
     }
 
     if (!user) {
@@ -19,6 +19,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(user);
   } catch (error) {
-    return NextResponse.json({ error: '유저 정보 fetch 중 네트워크 오류', details: (error as Error).message }, { status: 500 });
+    return NextResponse.json({ error: '유저 정보 fetch 중 네트워크 오류', details: (error as Error).message });
   }
 }

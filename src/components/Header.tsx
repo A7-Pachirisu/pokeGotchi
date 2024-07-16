@@ -7,14 +7,14 @@ import Button from './Button';
 
 const Header = () => {
   const { me, logOut } = useAuth();
-  
+
   const handleClick = async () => {
     await logOut();
   };
 
   return (
     <header className="relative flex h-[70px] w-full items-center justify-center bg-bar-color px-4">
-      <Link href="/">
+      <Link href="/" prefetch={false}>
         <Image src={img} alt="" width={40} height={40} />
       </Link>
       {me && (
